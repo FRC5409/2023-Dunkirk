@@ -60,4 +60,12 @@ public final class Constants {
 
         public final static PneumaticsModuleType kPneumaticsModuleType = PneumaticsModuleType.REVPH;
     }
+
+    public static class kElevator {
+        public final static int kLeftCAN = 20;
+        public final static int kRightCAN = 21;
+
+        public final static int kMagSwitchDIO = 8;
+
+    }
 }

@@ -5,7 +5,10 @@
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -20,8 +23,10 @@ import frc.robot.commands.SetCoastMode;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-
   private RobotContainer m_robotContainer;
+  TalonSRX _talon0 = new TalonFX[0]; // 0 equals device ID
+  Joystick _joystick = new Joystick(0);
+
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -84,6 +89,8 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    double stick = _joystick.getRawAxis(1);
+    _talon0.set(ControlMode.PercenOutput, stick);
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

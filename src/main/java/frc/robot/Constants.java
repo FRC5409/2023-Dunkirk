@@ -114,4 +114,12 @@ public final class Constants {
         public final static double targetHeight = 140;
         public final static double heightOffFloor = 70;
     }
+
+    public static class kElevator {
+        public final static int kLeftCAN = 20;
+        public final static int kRightCAN = 21;
+
+        public final static int kMagSwitchDIO = 8;
+
+    }
 }

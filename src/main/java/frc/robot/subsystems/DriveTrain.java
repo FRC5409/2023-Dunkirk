@@ -157,19 +157,13 @@ public class DriveTrain extends SubsystemBase {
     // -------------------------
 
     // Gear shifting ----------
-    public void shiftGear() {
-        // If off, go to high gear
-        // If high gear, go to low gear
-        // If low gear, go to high gear
-
+    /**
+     * Change gear
+     * @param newGear set to gear
+     */
+    public void changeGear(DoubleSolenoid.Value newGear) {
         try {
-            if (m_gearShiftValue == DoubleSolenoid.Value.kOff)
-                m_gearShiftValue = DoubleSolenoid.Value.kForward;
-            else if (m_gearShiftValue == DoubleSolenoid.Value.kForward)
-                m_gearShiftValue = DoubleSolenoid.Value.kReverse;
-            else if (m_gearShiftValue == DoubleSolenoid.Value.kReverse)
-                m_gearShiftValue = DoubleSolenoid.Value.kForward;
-
+            m_gearShiftValue = newGear;
             m_doubleSolenoid.set(m_gearShiftValue);
         } catch (NullPointerException exception) {
             DriverStation.reportError("Solenoids are null", exception.getStackTrace());

@@ -7,11 +7,10 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DefaultDrive;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.GearShift;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Gyro;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Pneumatics;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -29,7 +28,7 @@ public class RobotContainer {
     public final DriveTrain sys_driveTrain;
     private final Gyro sys_gyro;
     private final Pneumatics sys_pneumatics;
-    private final ExampleSubsystem sys_example;
+    private final Intake sys_intake;
 
     // Controller
     private final XboxController sys_controller;
@@ -39,7 +38,6 @@ public class RobotContainer {
     // Commands
     private final DefaultDrive cmd_defaultDrive;
     private final GearShift cmd_gearShift;
-    private final ExampleCommand cmd_example;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -48,7 +46,7 @@ public class RobotContainer {
         sys_driveTrain = new DriveTrain();
         sys_gyro = new Gyro();
         sys_pneumatics = new Pneumatics();
-        sys_example = new ExampleSubsystem();
+        sys_intake = new Intake();
         
         // Controller
         sys_controller = new XboxController(0);
@@ -66,7 +64,6 @@ public class RobotContainer {
         // Commands
         cmd_defaultDrive = new DefaultDrive(sys_driveTrain, sys_controller);
         cmd_gearShift = new GearShift(sys_driveTrain);
-        cmd_example = new ExampleCommand(sys_example);
 
         sys_driveTrain.setDefaultCommand(cmd_defaultDrive);
 
@@ -94,6 +91,6 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        return cmd_example;
+        return cmd_defaultDrive;    // There was "cmd_example" here b4
     }
 }

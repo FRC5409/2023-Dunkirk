@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
 
-  private final WPI_TalonFX rollerMotor = new WPI_TalonFX(0); // Not sure which number to use so I used 0
+  private final WPI_TalonFX rollerMotor = new WPI_TalonFX(7); // Not sure which number to use so I used 0
 
   public Intake() {
 

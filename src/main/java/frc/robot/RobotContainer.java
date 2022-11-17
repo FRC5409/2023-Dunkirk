@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.GearShift;
+import frc.robot.commands.TakeInTheBall;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.Intake;
@@ -38,6 +39,7 @@ public class RobotContainer {
     // Commands
     private final DefaultDrive cmd_defaultDrive;
     private final GearShift cmd_gearShift;
+    private final TakeInTheBall cmd_takeInTheBall;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -64,6 +66,7 @@ public class RobotContainer {
         // Commands
         cmd_defaultDrive = new DefaultDrive(sys_driveTrain, sys_controller);
         cmd_gearShift = new GearShift(sys_driveTrain);
+        cmd_takeInTheBall = new TakeInTheBall(sys_intake);
 
         sys_driveTrain.setDefaultCommand(cmd_defaultDrive);
 
@@ -79,6 +82,7 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         but_main_RBumper.whenPressed(cmd_gearShift);
+        but_main_X.whenPressed(cmd_takeInTheBall);
 
         but_main_A.whenPressed(() -> sys_pneumatics.enable());
         but_main_B.whenPressed(() -> sys_pneumatics.disable());
@@ -91,6 +95,6 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        return cmd_defaultDrive;    // There was "cmd_example" here b4
+        return cmd_takeInTheBall;    // There was "cmd_example" here b4
     }
 }

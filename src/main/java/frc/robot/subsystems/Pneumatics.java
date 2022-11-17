@@ -88,15 +88,14 @@ public class Pneumatics extends SubsystemBase {
     public void periodic() {
         // This method will be called once per scheduler run
 
-        SmartDashboard.putNumber("Pressure", getPressure());
+        SmartDashboard.putNumber("Compressor pressure", getPressure());
+        SmartDashboard.putNumber("Compressor current", getCurrent());
         
     }
 
     @Override
     public void simulationPeriodic() {
         // This method will be called once per scheduler run during simulation
-
-        SmartDashboard.putNumber("Pressure", getPressure());
         
     }
 

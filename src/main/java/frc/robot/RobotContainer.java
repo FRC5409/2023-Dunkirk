@@ -6,12 +6,14 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.ClimberMove;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.IntakeBall;
 import frc.robot.commands.ShooterSpeed;
 import frc.robot.commands.ToggleGear;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Gyro;
@@ -40,6 +42,7 @@ public class RobotContainer {
     private final Shooter sys_shooter;
     private final Feeder sys_feeder;
     private final Limelight sys_limelight;
+    private final Elevator sys_elevator;
 
     // Controller
     private final XboxController sys_controller;
@@ -47,11 +50,23 @@ public class RobotContainer {
         but_main_LAnalog, but_main_RAnalog, but_main_Back, but_main_Start;
 
     // Commands
-    private final DefaultDrive cmd_defaultDrive;
-    private final ToggleGear cmd_toggleGear;
     private final ExampleCommand cmd_example;
-    private final IntakeBall cmd_intakeBall;
-    private final ShooterSpeed cmd_shooterSpeed;
+        
+        //Intake
+        private final IntakeBall cmd_intakeBall;
+    
+        //Shooter
+        private final ShooterSpeed cmd_shooterSpeed;
+        
+        //Drivetrain
+        private final ToggleGear cmd_toggleGear;
+        private final DefaultDrive cmd_defaultDrive;
+        private final GearShift cmd_gearShift
+
+        //Elevator
+        private final ClimberMove cmd_climberMove;
+
+
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -61,13 +76,11 @@ public class RobotContainer {
         sys_gyro = new Gyro();
         sys_pneumatics = new Pneumatics();
         sys_example = new ExampleSubsystem();
-        sys_intake = new Intake();
         sys_shooter = new Shooter();
         sys_feeder = new Feeder();
         sys_limelight = new Limelight();
-        
+        sys_elevator = new Elevator();
         // Controller
-        sys_controller = new XboxController(0);
         but_main_A = new JoystickButton(sys_controller, XboxController.Button.kA.value);
         but_main_B = new JoystickButton(sys_controller, XboxController.Button.kB.value);
         but_main_X = new JoystickButton(sys_controller, XboxController.Button.kX.value);
@@ -87,7 +100,12 @@ public class RobotContainer {
         cmd_shooterSpeed = new ShooterSpeed(sys_shooter, sys_controller, sys_feeder);
         
 
+        cmd_climberMove = new ClimberMove(sys_elevator, sys_controller);
+
+        sys_elevator.setDefaultCommand(cmd_climberMove);
+
         sys_driveTrain.setDefaultCommand(cmd_defaultDrive);
+
 
         // Configure the button bindings
         configureButtonBindings();

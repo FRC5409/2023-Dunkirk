@@ -7,18 +7,21 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.kElevator;
 
 public class Elevator extends SubsystemBase {
 
-    private static CANSparkMax m_left;
+    public static CANSparkMax m_left;
     private static CANSparkMax m_right;
 
     private static RelativeEncoder s_encoder;
 
     private static DigitalInput s_magSwitch;
+
+    private static DifferentialDrive m_elevator;
 
     public Elevator() {
         m_left = new CANSparkMax(kElevator.kLeftCAN, MotorType.kBrushless);
@@ -27,18 +30,22 @@ public class Elevator extends SubsystemBase {
 
         m_right = new CANSparkMax(kElevator.kRightCAN, MotorType.kBrushless);
             m_right.follow(m_left, true);
-
+            m_right.setIdleMode(IdleMode.kBrake);
+        
         s_encoder = m_left.getEncoder();
         zeroEncoder();
 
         s_magSwitch = new DigitalInput(kElevator.kMagSwitchDIO);
-
         }
 
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
         
+        if (detectLimSwitch()) {
+            zeroEncoder();
+        }
+
     }
 
     @Override
@@ -47,7 +54,15 @@ public class Elevator extends SubsystemBase {
         
     }
 
-    private static void zeroEncoder() {
+    public void zeroEncoder() {
         s_encoder.setPosition(0);
+    }
+
+    public double getPosition() {
+        return s_encoder.getPosition();
+    }
+
+    public boolean detectLimSwitch() {
+        return !s_magSwitch.get();
     }
 }

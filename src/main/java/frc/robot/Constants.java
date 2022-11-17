@@ -51,10 +51,13 @@ public final class Constants {
         public final static int kMountPoseYaw = 0;
     }
 
+    public static class kIntake {
+        public final static int kIntakeMotorID = 11;
+    }
+
     public static class kPneumatics {
         public final static int kHubModuleID = 2;
 
-        // TODO: Adjust values as needed
         public final static int kMinPressure = 90;
         public final static int kMaxPressure = 120;
 

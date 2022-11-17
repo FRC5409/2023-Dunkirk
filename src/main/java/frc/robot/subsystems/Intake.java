@@ -9,11 +9,12 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
 
-  private final WPI_TalonFX rollerMotor = new WPI_TalonFX(7); // Not sure which number to use so I used 0
+  private final WPI_TalonFX rollerMotor = new WPI_TalonFX(Constants.kIntake.kIntakeMotorID);
 
   public Intake() {
 
@@ -21,7 +22,7 @@ public class Intake extends SubsystemBase {
     addChild("Roller Motor", rollerMotor);
   }
 
-  /** Rolling in the ball by making the motor rotate CW */
+  /** Rolling in the ball by making he motor rotate CW */
   public void startRolling() {
     rollerMotor.set(ControlMode.PercentOutput, 1.0);
   }

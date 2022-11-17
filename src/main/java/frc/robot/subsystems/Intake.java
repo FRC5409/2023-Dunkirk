@@ -24,7 +24,7 @@ public class Intake extends SubsystemBase {
 
   /** Rolling in the ball by making he motor rotate CW */
   public void startRolling() {
-    rollerMotor.set(ControlMode.PercentOutput, 1.0);
+    rollerMotor.set(ControlMode.PercentOutput, 0.4);
   }
 
   /** Stop rolling the rollers */

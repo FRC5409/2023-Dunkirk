@@ -62,5 +62,7 @@ public final class Constants {
     }
     public static class kIntake{
         public final static int kRollarMotor = 7;
+        public final static double kForward = 0.5;
+        public final static double kBackward = 0.5;
     }
 }

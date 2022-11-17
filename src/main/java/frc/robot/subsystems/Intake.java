@@ -14,26 +14,22 @@ import frc.robot.Constants;
 public class Intake extends SubsystemBase {
 
   private final WPI_TalonFX rollarMotor;
-   = new WPI_TalonFX(7)
 
   public Intake() {
-
+    rollarMotor = new WPI_TalonFX(Constants.kIntake.kRollarMotor);
   }
 
   public void forward(){
-    rollarMotor.set(-1); // makes motor move forward
+    rollarMotor.set(Constants.kIntake.kForward * -1); // makes motor move forward
   }
 
-	public void backwards(){
-    rollarMotor.set(1); // makes motor move backwards
+	public void backward(){
+    rollarMotor.set(Constants.kIntake.kBackward); // makes motor move backwards
   }
 
   public void stop (){
     rollarMotor.set(0); // stops motor
   }
-
-  
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

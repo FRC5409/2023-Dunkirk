@@ -6,10 +6,12 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.ClimberMove;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.GearShift;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.Pneumatics;
@@ -30,6 +32,7 @@ public class RobotContainer {
     private final Gyro sys_gyro;
     private final Pneumatics sys_pneumatics;
     private final ExampleSubsystem sys_example;
+    private final Elevator sys_elevator;
 
     // Controller
     private final XboxController sys_controller;
@@ -37,9 +40,15 @@ public class RobotContainer {
         but_main_LAnalog, but_main_RAnalog, but_main_Back, but_main_Start;
 
     // Commands
-    private final DefaultDrive cmd_defaultDrive;
-    private final GearShift cmd_gearShift;
     private final ExampleCommand cmd_example;
+        //Drivetrain
+        private final DefaultDrive cmd_defaultDrive;
+        private final GearShift cmd_gearShift;
+
+        //Elevator
+        private final ClimberMove cmd_climberMove;
+
+
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -49,6 +58,7 @@ public class RobotContainer {
         sys_gyro = new Gyro();
         sys_pneumatics = new Pneumatics();
         sys_example = new ExampleSubsystem();
+        sys_elevator = new Elevator();
         
         // Controller
         sys_controller = new XboxController(0);
@@ -68,7 +78,12 @@ public class RobotContainer {
         cmd_gearShift = new GearShift(sys_driveTrain);
         cmd_example = new ExampleCommand(sys_example);
 
+        cmd_climberMove = new ClimberMove(sys_elevator, sys_controller);
+
+        sys_elevator.setDefaultCommand(cmd_climberMove);
+
         sys_driveTrain.setDefaultCommand(cmd_defaultDrive);
+
 
         // Configure the button bindings
         configureButtonBindings();

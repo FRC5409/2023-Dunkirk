@@ -148,7 +148,7 @@ public class DriveTrain extends SubsystemBase {
     }
 
     public double getLeftCANCoderVelocity() {
-        return m_cancoderLeft.getVelocity();
+        return -m_cancoderLeft.getVelocity();
     }
 
     public double getRightCANCoderVelocity() {

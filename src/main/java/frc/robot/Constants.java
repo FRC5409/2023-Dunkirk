@@ -60,4 +60,7 @@ public final class Constants {
 
         public final static PneumaticsModuleType kPneumaticsModuleType = PneumaticsModuleType.REVPH;
     }
+    public static class kIntake{
+        public final static int kRollarMotor = 7;
+    }
 }

@@ -21,6 +21,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pneumatics;
 import frc.robot.subsystems.Shooter;
+import io.github.oblarg.oblog.Logger;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -61,7 +62,7 @@ public class RobotContainer {
         //Drivetrain
         private final ToggleGear cmd_toggleGear;
         private final DefaultDrive cmd_defaultDrive;
-        private final GearShift cmd_gearShift
+        // private final GearShift cmd_gearShift
 
         //Elevator
         private final ClimberMove cmd_climberMove;
@@ -80,7 +81,9 @@ public class RobotContainer {
         sys_feeder = new Feeder();
         sys_limelight = new Limelight();
         sys_elevator = new Elevator();
+        
         // Controller
+        sys_controller = new XboxController(0);
         but_main_A = new JoystickButton(sys_controller, XboxController.Button.kA.value);
         but_main_B = new JoystickButton(sys_controller, XboxController.Button.kB.value);
         but_main_X = new JoystickButton(sys_controller, XboxController.Button.kX.value);
@@ -109,6 +112,9 @@ public class RobotContainer {
 
         // Configure the button bindings
         configureButtonBindings();
+
+        Logger.configureLoggingAndConfig(this, true);
+        Logger.updateEntries();
     }
 
     /**

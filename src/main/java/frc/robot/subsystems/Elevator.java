@@ -1,18 +1,19 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.kElevator;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Config;
 
-public class Elevator extends SubsystemBase {
+public class Elevator extends SubsystemBase implements Loggable {
 
     public static CANSparkMax m_left;
     private static CANSparkMax m_right;
@@ -21,7 +22,14 @@ public class Elevator extends SubsystemBase {
 
     private static DigitalInput s_magSwitch;
 
-    private static DifferentialDrive m_elevator;
+
+    private static double kP;
+    private static double kI;
+    private static double kD;
+    private static double kF;
+
+    public static SparkMaxPIDController c_pidController;
+
 
     public Elevator() {
         m_left = new CANSparkMax(kElevator.kLeftCAN, MotorType.kBrushless);
@@ -36,6 +44,8 @@ public class Elevator extends SubsystemBase {
         zeroEncoder();
 
         s_magSwitch = new DigitalInput(kElevator.kMagSwitchDIO);
+
+        c_pidController = m_left.getPIDController();
         }
 
     @Override
@@ -54,15 +64,33 @@ public class Elevator extends SubsystemBase {
         
     }
 
+    
     public void zeroEncoder() {
         s_encoder.setPosition(0);
     }
-
+    
     public double getPosition() {
         return s_encoder.getPosition();
     }
-
+    
     public boolean detectLimSwitch() {
         return !s_magSwitch.get();
+    }
+
+    public void setPID() {
+        c_pidController.setP(kP);
+        c_pidController.setI(kI);
+        c_pidController.setD(kD);
+        c_pidController.setFF(kF);
+    }
+
+    @Config
+    public void PIDConfigField(double kP, double kI, double kD, double kF) {
+        Elevator.kP = kP;
+        Elevator.kI = kI;
+        Elevator.kD = kD;
+        Elevator.kF = kF;
+    
+        setPID();
     }
 }

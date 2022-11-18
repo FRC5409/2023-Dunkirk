@@ -15,6 +15,7 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.Pneumatics;
+import io.github.oblarg.oblog.Logger;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -87,6 +88,9 @@ public class RobotContainer {
 
         // Configure the button bindings
         configureButtonBindings();
+
+        Logger.configureLoggingAndConfig(this, true);
+        Logger.updateEntries();
     }
 
     /**

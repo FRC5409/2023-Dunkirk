@@ -12,42 +12,41 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
-  /** Creates a new Intake. */
+	/** Creates a new Intake. */
 
-  private final WPI_TalonFX rollerMotor = new WPI_TalonFX(Constants.kIntake.kIntakeMotorID);
+	private final WPI_TalonFX rollerMotor = new WPI_TalonFX(Constants.kIntake.kRollers.kIntakeMotorID);
 
-  public Intake() {
+	public Intake() {
 
-    // Sendables
-    addChild("Roller Motor", rollerMotor);
-  }
+		// addChild("Roller Motor", rollerMotor);
+	}
 
-  /** Rolling in the ball by making he motor rotate CW */
-  public void startRolling() {
-    rollerMotor.set(ControlMode.PercentOutput, 0.4);
-  }
+	/** Rolling in the ball by making he motor rotate CW */
+	public void startRolling() {
+		rollerMotor.set(ControlMode.PercentOutput, Constants.kIntake.kRollers.kIntakeRollersSpeed);
+	}
 
-  /** Stop rolling the rollers */
-  public void stopRolling() {
-    rollerMotor.set(ControlMode.PercentOutput, 0.0);
-  }
+	/** Stop rolling the rollers */
+	public void stopRolling() {
+		rollerMotor.set(ControlMode.PercentOutput, 0.0);
+	}
 
-  /** Checks if the roller motor is rolling */
-  public boolean isRolling() {
-    return rollerMotor.get() == 1.0;
-  }
+	/** Checks if the roller motor is rolling */
+	public boolean isRolling() {
+		return rollerMotor.get() > 0.0;
+	}
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+	@Override
+	public void periodic() {
+		// This method will be called once per scheduler run
 
-    SmartDashboard.putBoolean("isRolling", isRolling());
-  }
+		SmartDashboard.putBoolean("isRolling", isRolling());
+	}
 
-  @Override
-  public void simulationPeriodic() {
-    // This method will be called once per scheduler run during a simulation
+	@Override
+	public void simulationPeriodic() {
+		// This method will be called once per scheduler run during a simulation
 
-    SmartDashboard.putBoolean("isRolling", isRolling());
-  }
+		SmartDashboard.putBoolean("isRolling", isRolling());
+	}
 }

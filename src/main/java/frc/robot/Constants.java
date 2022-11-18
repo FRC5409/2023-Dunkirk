@@ -28,7 +28,7 @@ public final class Constants {
             public final static int kRightCANCoder = 6;
 
             public final static double kCountsPerRevolution = 4096;
-            // TODO: Find this value, this is a placeholder
+
             public final static double kWheelDiameterInch = 3.937008; // 100mm to in
             public final static double kSensorCoefficient = 2 * Math.PI / 4096.0;
             public final static String kUnitString = "rad";
@@ -52,7 +52,10 @@ public final class Constants {
     }
 
     public static class kIntake {
-        public final static int kIntakeMotorID = 11;
+        public static class kRollers {
+            public final static int kIntakeMotorID = 11;
+            public final static double kIntakeRollersSpeed = 0.4;
+        }
     }
 
     public static class kPneumatics {

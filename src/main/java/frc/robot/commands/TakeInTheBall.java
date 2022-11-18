@@ -9,47 +9,47 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
 public class TakeInTheBall extends CommandBase {
-  /** Creates a new TakeInTheBall. */
+	/** Creates a new TakeInTheBall. */
 
-  private final Intake m_intake;
-  // private final XboxController m_controller;
-  Timer timer;
+	private final Intake m_intake;
+	// private final XboxController m_controller;
+	Timer timer;
 
-  public TakeInTheBall(Intake intake) {
+	public TakeInTheBall(Intake intake) {
 
-    this.m_intake = intake;
-    // this.m_controller = controller;
-    this.timer = new Timer();
+		this.m_intake = intake;
+		// this.m_controller = controller;
+		this.timer = new Timer();
 
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_intake);
-  }
+		// Use addRequirements() here to declare subsystem dependencies.
+		addRequirements(m_intake);
+	}
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    m_intake.stopRolling();
-    timer.reset();
-    timer.start();
-  }
+	// Called when the command is initially scheduled.
+	@Override
+	public void initialize() {
+		m_intake.stopRolling();
+		timer.reset();
+		timer.start();
+	}
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    m_intake.startRolling();
-  }
+	// Called every time the scheduler runs while the command is scheduled.
+	@Override
+	public void execute() {
+		m_intake.startRolling();
+	}
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    m_intake.stopRolling();
-    timer.stop();
-    timer.reset();
-  }
+	// Called once the command ends or is interrupted.
+	@Override
+	public void end(boolean interrupted) {
+		m_intake.stopRolling();
+		timer.stop();
+		timer.reset();
+	}
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return timer.hasElapsed(7);
-  }
+	// Returns true when the command should end.
+	@Override
+	public boolean isFinished() {
+		return timer.hasElapsed(7);
+	}
 }

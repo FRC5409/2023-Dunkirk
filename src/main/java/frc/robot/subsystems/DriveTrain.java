@@ -139,12 +139,28 @@ public class DriveTrain extends SubsystemBase {
         m_cancoderRight.setPosition(0);
     }
 
-    public double getLeftCANCoder() {
+    public double getLeftWheelPosition() {
         return -m_cancoderLeft.getPosition();
     }
 
-    public double getRightCANCoder() {
+    public double getRightWheelPosition() {
         return m_cancoderRight.getPosition();
+    }
+
+    /**
+     * (diameter / 2) * position in radians
+     * @return left distance in mm
+     */
+    public double getLeftDistance() {
+        return (Constants.kDriveTrain.kWheel.kWheelDiameter / 2) * getLeftWheelPosition(); // mm
+    }
+
+    /**
+     * (diameter / 2) * position in radians
+     * @return right distance in mm
+     */
+    public double getRightDistance() {
+        return (Constants.kDriveTrain.kWheel.kWheelDiameter / 2) * getRightWheelPosition(); // mm
     }
 
     public double getLeftCANCoderVelocity() {
@@ -195,9 +211,9 @@ public class DriveTrain extends SubsystemBase {
         // This method will be called once per scheduler run
         
         SmartDashboard.putNumber("CANCoder L Vel", getLeftCANCoderVelocity());
-        SmartDashboard.putNumber("CANCoder L Pos", getLeftCANCoder());
         SmartDashboard.putNumber("CANCoder R Vel", getRightCANCoderVelocity());
-        SmartDashboard.putNumber("CANCoder R Pos", getRightCANCoder());
+        SmartDashboard.putNumber("CANCoder L Dist", getLeftDistance());
+        SmartDashboard.putNumber("CANCoder R Dist", getRightDistance());
 
         // Update odometry
         m_odometry.update(m_gyro.getRotation2d(), m_cancoderLeft.getPosition(), m_cancoderRight.getPosition());

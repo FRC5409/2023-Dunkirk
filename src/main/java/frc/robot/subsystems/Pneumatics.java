@@ -10,6 +10,7 @@ import frc.robot.Constants;
 public class Pneumatics extends SubsystemBase {
 
     private Compressor m_compressor;
+    private boolean m_shuffleboardEnabled;
 
     /**
      * Pneumatics control subsystem
@@ -24,6 +25,7 @@ public class Pneumatics extends SubsystemBase {
 
         try {
             m_compressor = new Compressor(Constants.kPneumatics.kHubModuleID, Constants.kPneumatics.kPneumaticsModuleType);
+            m_shuffleboardEnabled = m_compressor.enabled();
 
             enable();
         } catch (NullPointerException exception) {
@@ -88,8 +90,18 @@ public class Pneumatics extends SubsystemBase {
     public void periodic() {
         // This method will be called once per scheduler run
 
-        SmartDashboard.putNumber("Pressure", getPressure());
-        
+        SmartDashboard.putNumber("Compressor pressure", getPressure());
+        SmartDashboard.putNumber("Compressor current", getCurrent());
+        SmartDashboard.putBoolean("Compressor enabled", m_shuffleboardEnabled);
+
+        // Shuffleboard compressor control
+        if (m_shuffleboardEnabled && !getEnabled()) {
+            // if enabled in shuffleboard, enable compressor
+            enable();
+        } else if (!m_shuffleboardEnabled && getEnabled()) {
+            // if disabled in shuffleboard, disable compressor
+            disable();
+        }
     }
 
     @Override

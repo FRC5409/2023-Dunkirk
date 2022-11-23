@@ -55,6 +55,14 @@ public final class Constants {
         public static class kRollers {
             public final static int kIntakeMotorID = 11;
             public final static double kIntakeRollersSpeed = 0.4;
+            public final static double kIntakeRollersStopped = 0.0;
+        }
+
+        public static class kDoubleSolenoids {
+            public final static int kLeftFwdChannel = 4;
+            public final static int kLeftBwdChannel = 5;
+            public final static int kRightFwdChannel = 10;
+            public final static int kRightBwdChannel = 11;
         }
     }
 

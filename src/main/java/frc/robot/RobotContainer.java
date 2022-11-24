@@ -82,7 +82,7 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         but_main_RBumper.whenPressed(cmd_gearShift);
-        but_main_X.whenPressed(cmd_takeInTheBall);
+        but_main_X.whileHeld(cmd_takeInTheBall);
 
         but_main_A.whenPressed(() -> sys_pneumatics.enable());
         but_main_B.whenPressed(() -> sys_pneumatics.disable());
@@ -95,6 +95,6 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        return cmd_takeInTheBall;    // There was "cmd_example" here b4
+        return cmd_defaultDrive;    // There was "cmd_example" here b4
     }
 }

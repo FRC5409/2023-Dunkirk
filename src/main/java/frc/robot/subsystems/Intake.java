@@ -38,7 +38,7 @@ public class Intake extends SubsystemBase {
 
 	/** Rolling the wheels backward by making the motor rotate CCW */
 	public void rollBackward() {
-		rollerMotor.set(-1 * Constants.kIntake.kRollers.kIntakeRollersSpeed);
+		rollerMotor.set(-Constants.kIntake.kRollers.kIntakeRollersSpeed);
 	}
 
 	/** Stop rolling the rollers */
@@ -46,46 +46,36 @@ public class Intake extends SubsystemBase {
 		rollerMotor.set(Constants.kIntake.kRollers.kIntakeRollersStopped);
 	}
 
-	/** Makes the left arm of the intake go fwd, bwd or stop
+	/** Makes the arm of the intake go fwd, bwd or stop
 	 * 
 	 * @param state One of the three int values 0 (kOff), 1 (kForward) & -1 (kReverse)
 	*/
-	public void leftSolSet(int state) {
+	public void intakeArmSet(int state) {
 		switch (state) {
-			case 0:
+			case Constants.kIntake.kDoubleSolenoids.kOffInt:
 				intakeLeft.set(Value.kOff);
+				intakeRight.set(Value.kOff);
 				break;
-			case 1:
+			case Constants.kIntake.kDoubleSolenoids.kForwardInt:
 				intakeLeft.set(Value.kForward);
+				intakeRight.set(Value.kForward);
 				break;
-			case -1:
+			case Constants.kIntake.kDoubleSolenoids.kReverseInt:
 				intakeLeft.set(Value.kReverse);
+				intakeRight.set(Value.kReverse);
 				break;
 			default:
 				intakeLeft.set(Value.kOff);
+				intakeRight.set(Value.kOff);
 				break;
 		}
 	}
 
-	/** Makes the right arm of the intake go fwd, bwd or stop
-	 * 
-	 * @param state One of the three int values 0 (kOff), 1 (kForward) & -1 (kReverse) 
-	*/
-	public void rightSolSet(int state) {
-		switch (state) {
-			case 0:
-				intakeRight.set(Value.kOff);
-				break;
-			case 1:
-				intakeRight.set(Value.kForward);
-				break;
-			case -1:
-				intakeRight.set(Value.kReverse);
-				break;
-			default:
-				intakeRight.set(Value.kOff);
-				break;
-		}
+	public int getRightIntake() {
+		if (intakeRight.get() == Value.kOff) {return 0;} 
+		else if (intakeRight.get() == Value.kForward) {return 1;} 
+		else if (intakeRight.get() == Value.kReverse) {return -1;} 
+		else {return 7;}
 	}
 
 	@Override

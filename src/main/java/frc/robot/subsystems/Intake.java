@@ -21,10 +21,12 @@ public class Intake extends SubsystemBase {
 
 	// The solenoids on either side of the intake
 	private final DoubleSolenoid intakeLeft = new DoubleSolenoid(
+		Constants.kPneumatics.kHubModuleID,
 		Constants.kPneumatics.kPneumaticsModuleType,
 		Constants.kIntake.kDoubleSolenoids.kLeftFwdChannel,
 		Constants.kIntake.kDoubleSolenoids.kLeftBwdChannel);
 	private final DoubleSolenoid intakeRight = new DoubleSolenoid(
+		Constants.kPneumatics.kHubModuleID,
 		Constants.kPneumatics.kPneumaticsModuleType,
 		Constants.kIntake.kDoubleSolenoids.kRightFwdChannel,
 		Constants.kIntake.kDoubleSolenoids.kRightBwdChannel);

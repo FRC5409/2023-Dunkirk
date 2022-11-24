@@ -28,6 +28,7 @@ public class TakeInTheBall extends CommandBase {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
+		m_intake.intakeArmSet(1);
 		m_intake.stopRolling();
 		//timer.reset();
 		//timer.start();
@@ -36,12 +37,11 @@ public class TakeInTheBall extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		m_intake.intakeArmSet(1);
-		System.out.println(m_intake.getRightIntake());
+		//System.out.println(m_intake.getRightIntake());
 		m_intake.rollForward();
 	}
 
-	// Called once the command ends or is interrupted.k
+	// Called once the command ends or is interrupted
 	@Override
 	public void end(boolean interrupted) {
 		m_intake.stopRolling();

@@ -139,28 +139,12 @@ public class DriveTrain extends SubsystemBase {
         m_cancoderRight.setPosition(0);
     }
 
-    public double getLeftWheelPosition() {
-        return -m_cancoderLeft.getPosition();
-    }
-
-    public double getRightWheelPosition() {
-        return m_cancoderRight.getPosition();
-    }
-
-    /**
-     * (diameter / 2) * position in radians
-     * @return left distance in mm
-     */
     public double getLeftDistance() {
-        return (Constants.kDriveTrain.kWheel.kWheelDiameter / 2) * getLeftWheelPosition(); // mm
+        return m_cancoderLeft.getPosition();
     }
 
-    /**
-     * (diameter / 2) * position in radians
-     * @return right distance in mm
-     */
     public double getRightDistance() {
-        return (Constants.kDriveTrain.kWheel.kWheelDiameter / 2) * getRightWheelPosition(); // mm
+        return m_cancoderRight.getPosition();
     }
 
     public double getLeftCANCoderVelocity() {

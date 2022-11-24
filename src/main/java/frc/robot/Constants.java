@@ -28,8 +28,8 @@ public final class Constants {
             public final static int kRightCANCoder = 6;
 
             public final static double kCountsPerRevolution = 4096;
-            public final static double kSensorCoefficient = 2 * Math.PI / kCountsPerRevolution;
-            public final static String kUnitString = "rad";
+            public final static double kSensorCoefficient = (Math.PI * kDriveTrain.kWheel.kWheelDiameter) / kCountsPerRevolution;
+            public final static String kUnitString = "mm";
         }
 
         public static class kWheel {

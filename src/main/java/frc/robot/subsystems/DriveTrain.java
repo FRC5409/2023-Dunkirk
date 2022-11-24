@@ -140,7 +140,7 @@ public class DriveTrain extends SubsystemBase {
     }
 
     public double getLeftDistance() {
-        return m_cancoderLeft.getPosition();
+        return -m_cancoderLeft.getPosition();
     }
 
     public double getRightDistance() {
@@ -148,7 +148,7 @@ public class DriveTrain extends SubsystemBase {
     }
 
     public double getLeftCANCoderVelocity() {
-        return m_cancoderLeft.getVelocity();
+        return -m_cancoderLeft.getVelocity();
     }
 
     public double getRightCANCoderVelocity() {

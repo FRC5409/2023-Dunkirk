@@ -147,22 +147,6 @@ public class DriveTrain extends SubsystemBase {
         return m_cancoderRight.getPosition();
     }
 
-    /**
-     * (diameter / 2) * position in radians
-     * @return left distance in mm
-     */
-    public double getLeftDistance() {
-        return (Constants.kDriveTrain.kWheel.kWheelDiameter / 2) * getLeftWheelPosition(); // mm
-    }
-
-    /**
-     * (diameter / 2) * position in radians
-     * @return right distance in mm
-     */
-    public double getRightDistance() {
-        return (Constants.kDriveTrain.kWheel.kWheelDiameter / 2) * getRightWheelPosition(); // mm
-    }
-
     public double getLeftCANCoderVelocity() {
         return -m_cancoderLeft.getVelocity();
     }

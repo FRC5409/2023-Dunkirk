@@ -8,6 +8,8 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
+import frc.robot.Constants;
+
 public class TakeInTheBall extends CommandBase {
 	/** Creates a new TakeInTheBall. */
 
@@ -28,7 +30,7 @@ public class TakeInTheBall extends CommandBase {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
-		m_intake.intakeArmSet(1);
+		m_intake.intakeArmSet(Constants.kIntake.kDoubleSolenoids.kReverseInt);
 		m_intake.stopRolling();
 		//timer.reset();
 		//timer.start();
@@ -45,7 +47,7 @@ public class TakeInTheBall extends CommandBase {
 	@Override
 	public void end(boolean interrupted) {
 		m_intake.stopRolling();
-		m_intake.intakeArmSet(-1);
+		m_intake.intakeArmSet(Constants.kIntake.kDoubleSolenoids.kForwardInt);
 		//timer.stop();
 		//timer.reset();
 	}

@@ -44,7 +44,6 @@ public class Pneumatics extends SubsystemBase {
     public void enable() {
         try {
             m_compressor.enableAnalog(Constants.kPneumatics.kMinPressure, Constants.kPneumatics.kMaxPressure);
-            System.out.println("enabled compressor");
         } catch (NullPointerException exception) {
             DriverStation.reportError("Compressor is null", exception.getStackTrace());
         }
@@ -53,7 +52,6 @@ public class Pneumatics extends SubsystemBase {
     public void disable() {
         try {
             m_compressor.disable();
-            System.out.println("disabled compressor");
         } catch (NullPointerException exception) {
             DriverStation.reportError("Compressor are null", exception.getStackTrace());
         }
@@ -122,10 +120,7 @@ public class Pneumatics extends SubsystemBase {
         SmartDashboard.putNumber("Compressor current", getCurrent());
 
         // Shuffleboard compressor control
-        boolean userEnabledCompressor = nt_compressorEnabled.getValue().getBoolean();
-        System.out.println(userEnabledCompressor);
-        System.out.println(getEnabled());
-        System.out.println("");
+        boolean userEnabledCompressor = nt_compressorEnabled.getBoolean(getEnabled());
 
         if (userEnabledCompressor && !getEnabled()) {
             // enabled from shuffleboard
@@ -133,8 +128,7 @@ public class Pneumatics extends SubsystemBase {
         } else if (!userEnabledCompressor && getEnabled()) {
             // disabled from shuffleboard
             disable();
-        }
-        
+        } 
     }
 
 }

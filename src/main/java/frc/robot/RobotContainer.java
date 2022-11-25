@@ -4,6 +4,11 @@
 
 package frc.robot;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import org.json.simple.parser.ParseException;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ClimberMove;
@@ -13,7 +18,6 @@ import frc.robot.commands.IntakeBall;
 import frc.robot.commands.ShooterSpeed;
 import frc.robot.commands.ToggleGear;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Gyro;
@@ -21,6 +25,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pneumatics;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.elevator.Elevator;
 import io.github.oblarg.oblog.Logger;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -69,8 +74,14 @@ public class RobotContainer {
 
 
 
-    /** The container for the robot. Contains subsystems, OI devices, and commands. */
-    public RobotContainer() {
+    /* The container for the robot. Contains subsystems, OI devices, and commands. 
+     * @throws ParseException
+     * @throws IOException
+     * @throws FileNotFoundException
+     * @throws SecurityException
+     * @throws NoSuchFieldException*/
+
+    public RobotContainer() throws NoSuchFieldException, SecurityException, FileNotFoundException, IOException, ParseException {
 
         // Subsystems
         sys_driveTrain = new DriveTrain();
@@ -107,8 +118,6 @@ public class RobotContainer {
 
         sys_elevator.setDefaultCommand(cmd_climberMove);
 
-        sys_driveTrain.setDefaultCommand(cmd_defaultDrive);
-
 
         // Configure the button bindings
         configureButtonBindings();
@@ -117,7 +126,7 @@ public class RobotContainer {
         Logger.updateEntries();
     }
 
-    /**
+    /*
      * Use this method to define your button->command mappings. Buttons can be created by
      * instantiating a {@link GenericHID} or one of its subclasses ({@link
      * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link

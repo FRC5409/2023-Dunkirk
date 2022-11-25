@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
@@ -15,6 +14,8 @@ public class Pneumatics extends SubsystemBase {
     private Compressor m_compressor;
     private final ShuffleboardTab sb_pneumaticsTab;
     private final NetworkTableEntry nt_compressorEnabled;
+    private final NetworkTableEntry nt_pressure;
+    private final NetworkTableEntry nt_current;
 
     /**
      * Pneumatics control subsystem
@@ -38,6 +39,8 @@ public class Pneumatics extends SubsystemBase {
         // Shuffleboard
         sb_pneumaticsTab = Shuffleboard.getTab("Compressor");
         nt_compressorEnabled = sb_pneumaticsTab.add("Compressor enabled", getEnabled()).getEntry();
+        nt_pressure = sb_pneumaticsTab.add("Pressure", getPressure()).getEntry();
+        nt_current = sb_pneumaticsTab.add("Current", getCurrent()).getEntry();
         
     }
 
@@ -97,8 +100,8 @@ public class Pneumatics extends SubsystemBase {
     public void periodic() {
         // This method will be called once per scheduler run
 
-        SmartDashboard.putNumber("Compressor pressure", getPressure());
-        SmartDashboard.putNumber("Compressor current", getCurrent());
+        nt_pressure.setDouble(getPressure());
+        nt_current.setDouble(getCurrent());
 
         // Shuffleboard compressor control
         boolean userEnabledCompressor = nt_compressorEnabled.getBoolean(getEnabled());
@@ -116,8 +119,8 @@ public class Pneumatics extends SubsystemBase {
     public void simulationPeriodic() {
         // This method will be called once per scheduler run during simulation
 
-        SmartDashboard.putNumber("Compressor pressure", getPressure());
-        SmartDashboard.putNumber("Compressor current", getCurrent());
+        nt_pressure.setDouble(getPressure());
+        nt_current.setDouble(getCurrent());
 
         // Shuffleboard compressor control
         boolean userEnabledCompressor = nt_compressorEnabled.getBoolean(getEnabled());
@@ -128,7 +131,7 @@ public class Pneumatics extends SubsystemBase {
         } else if (!userEnabledCompressor && getEnabled()) {
             // disabled from shuffleboard
             disable();
-        } 
+        }
     }
 
 }

@@ -1,7 +1,10 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -10,7 +13,8 @@ import frc.robot.Constants;
 public class Pneumatics extends SubsystemBase {
 
     private Compressor m_compressor;
-    private boolean m_shuffleboardEnabled;
+    private final ShuffleboardTab sb_pneumaticsTab;
+    private final NetworkTableEntry nt_compressorEnabled;
 
     /**
      * Pneumatics control subsystem
@@ -25,18 +29,22 @@ public class Pneumatics extends SubsystemBase {
 
         try {
             m_compressor = new Compressor(Constants.kPneumatics.kHubModuleID, Constants.kPneumatics.kPneumaticsModuleType);
-            m_shuffleboardEnabled = m_compressor.enabled();
 
             enable();
         } catch (NullPointerException exception) {
             DriverStation.reportError("Error creating Compressor", exception.getStackTrace());
         }
+
+        // Shuffleboard
+        sb_pneumaticsTab = Shuffleboard.getTab("Compressor");
+        nt_compressorEnabled = sb_pneumaticsTab.add("Compressor enabled", getEnabled()).getEntry();
         
     }
 
     public void enable() {
         try {
             m_compressor.enableAnalog(Constants.kPneumatics.kMinPressure, Constants.kPneumatics.kMaxPressure);
+            System.out.println("enabled compressor");
         } catch (NullPointerException exception) {
             DriverStation.reportError("Compressor is null", exception.getStackTrace());
         }
@@ -45,6 +53,7 @@ public class Pneumatics extends SubsystemBase {
     public void disable() {
         try {
             m_compressor.disable();
+            System.out.println("disabled compressor");
         } catch (NullPointerException exception) {
             DriverStation.reportError("Compressor are null", exception.getStackTrace());
         }
@@ -92,14 +101,15 @@ public class Pneumatics extends SubsystemBase {
 
         SmartDashboard.putNumber("Compressor pressure", getPressure());
         SmartDashboard.putNumber("Compressor current", getCurrent());
-        SmartDashboard.putBoolean("Compressor enabled", m_shuffleboardEnabled);
 
         // Shuffleboard compressor control
-        if (m_shuffleboardEnabled && !getEnabled()) {
-            // if enabled in shuffleboard, enable compressor
+        boolean userEnabledCompressor = nt_compressorEnabled.getBoolean(getEnabled());
+
+        if (userEnabledCompressor && !getEnabled()) {
+            // enabled from shuffleboard
             enable();
-        } else if (!m_shuffleboardEnabled && getEnabled()) {
-            // if disabled in shuffleboard, disable compressor
+        } else if (!userEnabledCompressor && getEnabled()) {
+            // disabled from shuffleboard
             disable();
         }
     }
@@ -108,7 +118,22 @@ public class Pneumatics extends SubsystemBase {
     public void simulationPeriodic() {
         // This method will be called once per scheduler run during simulation
 
-        SmartDashboard.putNumber("Pressure", getPressure());
+        SmartDashboard.putNumber("Compressor pressure", getPressure());
+        SmartDashboard.putNumber("Compressor current", getCurrent());
+
+        // Shuffleboard compressor control
+        boolean userEnabledCompressor = nt_compressorEnabled.getValue().getBoolean();
+        System.out.println(userEnabledCompressor);
+        System.out.println(getEnabled());
+        System.out.println("");
+
+        if (userEnabledCompressor && !getEnabled()) {
+            // enabled from shuffleboard
+            enable();
+        } else if (!userEnabledCompressor && getEnabled()) {
+            // disabled from shuffleboard
+            disable();
+        }
         
     }
 

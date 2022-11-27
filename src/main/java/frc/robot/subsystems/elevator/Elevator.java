@@ -63,24 +63,22 @@ public class Elevator extends SubsystemBase implements Loggable{
         zeroEncoder();
 
         s_magSwitch = new DigitalInput(kElevator.kMagSwitchDIO);
+   
+        parser = new JSONParser();
+        jsonObject = getJsonFile();
+        
+        jsonFile = (JSONObject) jsonObject;        
 
         c_pidController = m_left.getPIDController();
         c_pidController.setOutputRange(-1, 1);
+        
         setPIDFValues();
 
-        pidLayout = Shuffleboard.getTab("Elevator").getLayout("PID Config", BuiltInLayouts.kList);
+        shuffleboardFields = new HashMap<String, NetworkTableEntry>();
 
-        shuffleboardFields.put("kPConfig", pidLayout.add("Proportional Gain Config", (double) jsonFile.get("kP")).withWidget(BuiltInWidgets.kTextView).getEntry());
-        shuffleboardFields.put("kIConfig", pidLayout.add("Integral Gain Config", (double) jsonFile.get("kI")).withWidget(BuiltInWidgets.kTextView).getEntry());
-        shuffleboardFields.put("kDConfig", pidLayout.add("Derivative Gain Config", (double) jsonFile.get("kD")).withWidget(BuiltInWidgets.kTextView).getEntry());
-        shuffleboardFields.put("kFConfig", pidLayout.add("Feedforward Gain Config", (double) jsonFile.get("kF")).withWidget(BuiltInWidgets.kTextView).getEntry());
+        pidLayout = Shuffleboard.getTab("Elevator").getLayout("PID Config", BuiltInLayouts.kList).withSize(5, 5);
 
-        shuffleboardFields.put("Enable Config", pidLayout.add("Enable Configuration", false).withWidget(BuiltInWidgets.kToggleSwitch).getEntry());
-
-        parser = new JSONParser();
-        jsonObject = getJsonFile();
-
-        jsonFile = (JSONObject) jsonObject;
+        shuffleboardFields.put("Enable Config", pidLayout.add("Enable Configuration", false).withWidget(BuiltInWidgets.kToggleButton).getEntry());
     }
 
     @Override
@@ -88,47 +86,55 @@ public class Elevator extends SubsystemBase implements Loggable{
         // This method will be called once per scheduler run
         if (shuffleboardFields.get("Enable Config").getBoolean(false) == true && configEnabled == false) {
             configEnabled = true;
-            shuffleboardFields.put("kPConfig", pidLayout.add("Proportional Gain Config", (double) jsonFile.get("kP")).withWidget(BuiltInWidgets.kTextView).getEntry());
-            shuffleboardFields.put("kIConfig", pidLayout.add("Integral Gain Config", (double) jsonFile.get("kI")).withWidget(BuiltInWidgets.kTextView).getEntry());
-            shuffleboardFields.put("kDConfig", pidLayout.add("Derivative Gain Config", (double) jsonFile.get("kD")).withWidget(BuiltInWidgets.kTextView).getEntry());
-            shuffleboardFields.put("kFConfig", pidLayout.add("Feedforward Gain Config", (double) jsonFile.get("kF")).withWidget(BuiltInWidgets.kTextView).getEntry());
+            shuffleboardFields.put("kPConfig", pidLayout.add("Proportional Gain Config", Double.valueOf(jsonFile.get("kP").toString())).withWidget(BuiltInWidgets.kTextView).getEntry());
+            shuffleboardFields.put("kIConfig", pidLayout.add("Integral Gain Config", Double.valueOf(jsonFile.get("kI").toString())).withWidget(BuiltInWidgets.kTextView).getEntry());
+            shuffleboardFields.put("kDConfig", pidLayout.add("Derivative Gain Config", Double.valueOf(jsonFile.get("kD").toString())).withWidget(BuiltInWidgets.kTextView).getEntry());
+            shuffleboardFields.put("kFConfig", pidLayout.add("Feedforward Gain Config", Double.valueOf(jsonFile.get("kF").toString())).withWidget(BuiltInWidgets.kTextView).getEntry());
         }
 
         if (shuffleboardFields.get("Enable Config").getBoolean(true) == false && configEnabled == true) {
             configEnabled = false;
+            shuffleboardFields.get("kPConfig").delete();
+            shuffleboardFields.get("kIConfig").delete();
+            shuffleboardFields.get("kDConfig").delete();
+            shuffleboardFields.get("kFConfig").delete();
+            shuffleboardFields.remove("kPConfig");
+            shuffleboardFields.remove("kIConfig");
+            shuffleboardFields.remove("kDConfig");
+            shuffleboardFields.remove("kFConfig");
         }
 
         if (configEnabled == true) {
 
-            if (shuffleboardFields.get("kPConfig").getDouble(0) != (double) jsonFile.get("kP")) {
+            if (shuffleboardFields.get("kPConfig").getDouble(0) != Double.valueOf(jsonFile.get("kP").toString())) {
                 jsonFile.put("kP", shuffleboardFields.get("kPConfig").getDouble(0));
                 jsonFile = (JSONObject) getJsonFile();
             }
-            if (shuffleboardFields.get("kIConfig").getDouble(0) != (double) jsonFile.get("kI")) {
+            if (shuffleboardFields.get("kIConfig").getDouble(0) != Double.valueOf(jsonFile.get("kI").toString())) {
                 jsonFile.put("kI", shuffleboardFields.get("kIConfig").getDouble(0));
                 jsonFile = (JSONObject) getJsonFile();
             }
-            if (shuffleboardFields.get("kDConfig").getDouble(0) != (double) jsonFile.get("kD")) {
+            if (shuffleboardFields.get("kDConfig").getDouble(0) != Double.valueOf(jsonFile.get("kD").toString())) {
                 jsonFile.put("kD", shuffleboardFields.get("kDConfig").getDouble(0));
                 jsonFile = (JSONObject) getJsonFile();
             }
-            if (shuffleboardFields.get("kFConfig").getDouble(0) != (double) jsonFile.get("kF")) {
+            if (shuffleboardFields.get("kFConfig").getDouble(0) != Double.valueOf(jsonFile.get("kF").toString())) {
                 jsonFile.put("kF", shuffleboardFields.get("kFConfig").getDouble(0));
                 jsonFile = (JSONObject) getJsonFile();
             }
             
 
-            if (c_pidController.getP() != (double) jsonFile.get("kP")) {
-                c_pidController.setP((double) jsonFile.get("kP"));
+            if (c_pidController.getP() != Double.valueOf(jsonFile.get("kP").toString())) {
+                c_pidController.setP(Double.valueOf(jsonFile.get("kP").toString()));
             } 
-            if (c_pidController.getI() != (double) jsonFile.get("kI")) {
-                c_pidController.setI((double) jsonFile.get("kI"));
+            if (c_pidController.getI() != Double.valueOf(jsonFile.get("kI").toString())) {
+                c_pidController.setI(Double.valueOf(jsonFile.get("kI").toString()));
             } 
-            if (c_pidController.getD() != (double) jsonFile.get("kD")) {
-                c_pidController.setD((double) jsonFile.get("kD"));
+            if (c_pidController.getD() != Double.valueOf(jsonFile.get("kD").toString())) {
+                c_pidController.setD(Double.valueOf(jsonFile.get("kD").toString()));
             }  
-            if (c_pidController.getFF() != (double) jsonFile.get("kF")) {
-                c_pidController.setFF((double) jsonFile.get("kF"));
+            if (c_pidController.getFF() != Double.valueOf(jsonFile.get("kF").toString())) {
+                c_pidController.setFF(Double.valueOf(jsonFile.get("kF").toString()));
             }
         }
     }
@@ -150,20 +156,20 @@ public class Elevator extends SubsystemBase implements Loggable{
         return !s_magSwitch.get();
     }
 
-    public void setPIDFValues() {
-        c_pidController.setP((double) jsonFile.get("kP"));
-        c_pidController.setI((double) jsonFile.get("kI"));
-        c_pidController.setD((double) jsonFile.get("kD"));
-        c_pidController.setFF((double) jsonFile.get("kF"));
-    }
-
     public Object getJsonFile() {
         try {
-            return parser.parse(new FileReader("ElevatorPID.json"));
+            return parser.parse(new FileReader("src/main/java/frc/robot/subsystems/elevator/ElevatorPID.json"));
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void setPIDFValues() {
+        c_pidController.setP(Double.valueOf(jsonFile.get("kP").toString()));
+        c_pidController.setD(Double.valueOf(jsonFile.get("kI").toString()));
+        c_pidController.setI(Double.valueOf(jsonFile.get("kD").toString()));
+        c_pidController.setFF(Double.valueOf(jsonFile.get("kF").toString()));
     }
     
     public void moveElevator(double setpoint) {

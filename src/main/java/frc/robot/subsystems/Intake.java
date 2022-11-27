@@ -26,6 +26,9 @@ public class Intake extends SubsystemBase {
 	public Intake() {
 		rollerMotor = new WPI_TalonFX(Constants.kIntake.kRollers.kIntakeMotorID);
 
+		// Invert the motor
+		// rollerMotor.setInverted(true);
+
 		intakeLeft = new DoubleSolenoid(
 			Constants.kPneumatics.kHubModuleID,
 			Constants.kPneumatics.kPneumaticsModuleType,
@@ -55,29 +58,16 @@ public class Intake extends SubsystemBase {
 		rollerMotor.set(Constants.kIntake.kRollers.kIntakeRollersStopped);
 	}
 
-	/** Makes the arm of the intake go up, down or stop
-	 * 
-	 * @param state One of the three int values 0 (kOff), 1 (kForward) & -1 (kReverse)
-	*/
-	public void intakeArmSet(int state) {
-		switch (state) {
-			case Constants.kIntake.kDoubleSolenoids.kOffInt:
-				intakeLeft.set(Value.kOff);
-				intakeRight.set(Value.kOff);
-				break;
-			case Constants.kIntake.kDoubleSolenoids.kDownInt:
-				intakeLeft.set(Value.kReverse);
-				intakeRight.set(Value.kReverse);
-				break;
-			case Constants.kIntake.kDoubleSolenoids.kUpInt:
-				intakeLeft.set(Value.kForward);
-				intakeRight.set(Value.kForward);
-				break;
-			default:
-				intakeLeft.set(Value.kOff);
-				intakeRight.set(Value.kOff);
-				break;
-		}
+	/** Makes the intake go down */
+	public void intakeDown() {
+		intakeLeft.set(Value.kReverse);
+		intakeRight.set(Value.kReverse);
+	}
+
+	/** Makes the intake go up */
+	public void intakeUp() {
+		intakeLeft.set(Value.kForward);
+		intakeRight.set(Value.kReverse);
 	}
 
 	@Override

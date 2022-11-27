@@ -63,10 +63,6 @@ public final class Constants {
             public final static int kLeftBwdChannel = 5;
             public final static int kRightFwdChannel = 10;
             public final static int kRightBwdChannel = 11;
-
-            public final static int kOffInt = 0;
-            public final static int kUpInt = 1; // intake up
-            public final static int kDownInt = -1; // intake down
         }
     }
 

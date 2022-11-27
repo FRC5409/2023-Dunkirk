@@ -4,11 +4,7 @@
 
 package frc.robot;
 
-import java.io.IOException;
-
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-
-import org.json.simple.parser.ParseException;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -36,12 +32,8 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    try {
       m_robotContainer = new RobotContainer();
-    } catch (NoSuchFieldException | SecurityException | IOException | ParseException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+
 
     // Enter coast mode after 5 seconds disabled
     new Trigger(this::isEnabled)

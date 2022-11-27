@@ -14,24 +14,31 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
-	/** Creates a new Intake. */
 
 	// The motor for the rollers
-	private final WPI_TalonFX rollerMotor = new WPI_TalonFX(Constants.kIntake.kRollers.kIntakeMotorID);
+	private final WPI_TalonFX rollerMotor;
 
 	// The solenoids on either side of the intake
-	private final DoubleSolenoid intakeLeft = new DoubleSolenoid(
-		Constants.kPneumatics.kHubModuleID,
-		Constants.kPneumatics.kPneumaticsModuleType,
-		Constants.kIntake.kDoubleSolenoids.kLeftFwdChannel,
-		Constants.kIntake.kDoubleSolenoids.kLeftBwdChannel);
-	private final DoubleSolenoid intakeRight = new DoubleSolenoid(
-		Constants.kPneumatics.kHubModuleID,
-		Constants.kPneumatics.kPneumaticsModuleType,
-		Constants.kIntake.kDoubleSolenoids.kRightFwdChannel,
-		Constants.kIntake.kDoubleSolenoids.kRightBwdChannel);
+	private final DoubleSolenoid intakeLeft;
+	private final DoubleSolenoid intakeRight;
 
-	public Intake() {}
+	/** Creates a new Intake. */
+	public Intake() {
+		rollerMotor = new WPI_TalonFX(Constants.kIntake.kRollers.kIntakeMotorID);
+
+		intakeLeft = new DoubleSolenoid(
+			Constants.kPneumatics.kHubModuleID,
+			Constants.kPneumatics.kPneumaticsModuleType,
+			Constants.kIntake.kDoubleSolenoids.kLeftFwdChannel,
+			Constants.kIntake.kDoubleSolenoids.kLeftBwdChannel);
+
+		intakeRight = new DoubleSolenoid(
+			Constants.kPneumatics.kHubModuleID,
+			Constants.kPneumatics.kPneumaticsModuleType,
+			Constants.kIntake.kDoubleSolenoids.kRightFwdChannel,
+			Constants.kIntake.kDoubleSolenoids.kRightBwdChannel);
+
+	}
 
 	/** Rolling the wheels forward by making the motor rotate CW */
 	public void rollForward() {
@@ -48,7 +55,7 @@ public class Intake extends SubsystemBase {
 		rollerMotor.set(Constants.kIntake.kRollers.kIntakeRollersStopped);
 	}
 
-	/** Makes the arm of the intake go fwd, bwd or stop
+	/** Makes the arm of the intake go up, down or stop
 	 * 
 	 * @param state One of the three int values 0 (kOff), 1 (kForward) & -1 (kReverse)
 	*/
@@ -58,26 +65,19 @@ public class Intake extends SubsystemBase {
 				intakeLeft.set(Value.kOff);
 				intakeRight.set(Value.kOff);
 				break;
-			case Constants.kIntake.kDoubleSolenoids.kForwardInt:
-				intakeLeft.set(Value.kForward);
-				intakeRight.set(Value.kForward);
-				break;
-			case Constants.kIntake.kDoubleSolenoids.kReverseInt:
+			case Constants.kIntake.kDoubleSolenoids.kDownInt:
 				intakeLeft.set(Value.kReverse);
 				intakeRight.set(Value.kReverse);
+				break;
+			case Constants.kIntake.kDoubleSolenoids.kUpInt:
+				intakeLeft.set(Value.kForward);
+				intakeRight.set(Value.kForward);
 				break;
 			default:
 				intakeLeft.set(Value.kOff);
 				intakeRight.set(Value.kOff);
 				break;
 		}
-	}
-
-	public int getRightIntake() {
-		if (intakeRight.get() == Value.kOff) {return 0;} 
-		else if (intakeRight.get() == Value.kForward) {return 1;} 
-		else if (intakeRight.get() == Value.kReverse) {return -1;} 
-		else {return 7;}
 	}
 
 	@Override

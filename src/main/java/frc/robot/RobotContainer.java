@@ -7,9 +7,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DefaultDrive;
+import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.GearShift;
-import frc.robot.commands.TakeInTheBall;
+import frc.robot.commands.IntakeBall;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Pneumatics;
@@ -29,6 +31,7 @@ public class RobotContainer {
     public final DriveTrain sys_driveTrain;
     private final Gyro sys_gyro;
     private final Pneumatics sys_pneumatics;
+    private final ExampleSubsystem sys_example;
     private final Intake sys_intake;
 
     // Controller
@@ -39,7 +42,8 @@ public class RobotContainer {
     // Commands
     private final DefaultDrive cmd_defaultDrive;
     private final GearShift cmd_gearShift;
-    private final TakeInTheBall cmd_takeInTheBall;
+    private final ExampleCommand cmd_example;
+    private final IntakeBall cmd_intakeBall;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -48,6 +52,7 @@ public class RobotContainer {
         sys_driveTrain = new DriveTrain();
         sys_gyro = new Gyro();
         sys_pneumatics = new Pneumatics();
+        sys_example = new ExampleSubsystem();
         sys_intake = new Intake();
         
         // Controller
@@ -66,7 +71,8 @@ public class RobotContainer {
         // Commands
         cmd_defaultDrive = new DefaultDrive(sys_driveTrain, sys_controller);
         cmd_gearShift = new GearShift(sys_driveTrain);
-        cmd_takeInTheBall = new TakeInTheBall(sys_intake);
+        cmd_example = new ExampleCommand(sys_example);
+        cmd_intakeBall = new IntakeBall(sys_intake);
 
         sys_driveTrain.setDefaultCommand(cmd_defaultDrive);
 
@@ -82,7 +88,7 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         but_main_RBumper.whenPressed(cmd_gearShift);
-        but_main_X.whileHeld(cmd_takeInTheBall);
+        but_main_X.whileHeld(cmd_intakeBall);
 
         but_main_A.whenPressed(() -> sys_pneumatics.enable());
         but_main_B.whenPressed(() -> sys_pneumatics.disable());
@@ -94,7 +100,7 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        // An ExampleCommand will run in autonomous
-        return cmd_defaultDrive;    // There was "cmd_example" here b4
+        // An ExampleCommand will run in autonomous (placeholder)
+        return cmd_example;
     }
 }

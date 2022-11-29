@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -38,7 +39,9 @@ public class Pneumatics extends SubsystemBase {
 
         // Shuffleboard
         sb_pneumaticsTab = Shuffleboard.getTab("Compressor");
-        nt_compressorEnabled = sb_pneumaticsTab.add("Compressor enabled", getEnabled()).getEntry();
+        nt_compressorEnabled = sb_pneumaticsTab.add("Enabled", getEnabled())
+            .withWidget(BuiltInWidgets.kToggleSwitch)
+            .getEntry();
         nt_pressure = sb_pneumaticsTab.add("Pressure", getPressure()).getEntry();
         nt_current = sb_pneumaticsTab.add("Current", getCurrent()).getEntry();
         

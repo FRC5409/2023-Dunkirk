@@ -41,6 +41,9 @@ public class Intake extends SubsystemBase {
 			Constants.kIntake.kDoubleSolenoids.kRightFwdChannel,
 			Constants.kIntake.kDoubleSolenoids.kRightBwdChannel);
 
+		stopRolling();
+		intakeUp();
+
 	}
 
 	/** Rolling the wheels forward by making the motor rotate CW */

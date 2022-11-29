@@ -1,8 +1,11 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
@@ -10,6 +13,10 @@ import frc.robot.Constants;
 public class Pneumatics extends SubsystemBase {
 
     private Compressor m_compressor;
+    private final ShuffleboardTab sb_pneumaticsTab;
+    private final NetworkTableEntry nt_compressorEnabled;
+    private final NetworkTableEntry nt_pressure;
+    private final NetworkTableEntry nt_current;
 
     /**
      * Pneumatics control subsystem
@@ -29,6 +36,14 @@ public class Pneumatics extends SubsystemBase {
         } catch (NullPointerException exception) {
             DriverStation.reportError("Error creating Compressor", exception.getStackTrace());
         }
+
+        // Shuffleboard
+        sb_pneumaticsTab = Shuffleboard.getTab("Compressor");
+        nt_compressorEnabled = sb_pneumaticsTab.add("Enabled", getEnabled())
+            .withWidget(BuiltInWidgets.kToggleSwitch)
+            .getEntry();
+        nt_pressure = sb_pneumaticsTab.add("Pressure", getPressure()).getEntry();
+        nt_current = sb_pneumaticsTab.add("Current", getCurrent()).getEntry();
         
     }
 
@@ -88,16 +103,38 @@ public class Pneumatics extends SubsystemBase {
     public void periodic() {
         // This method will be called once per scheduler run
 
-        SmartDashboard.putNumber("Pressure", getPressure());
-        
+        nt_pressure.setDouble(getPressure());
+        nt_current.setDouble(getCurrent());
+
+        // Shuffleboard compressor control
+        boolean userEnabledCompressor = nt_compressorEnabled.getBoolean(getEnabled());
+
+        if (userEnabledCompressor && !getEnabled()) {
+            // enabled from shuffleboard
+            enable();
+        } else if (!userEnabledCompressor && getEnabled()) {
+            // disabled from shuffleboard
+            disable();
+        }
     }
 
     @Override
     public void simulationPeriodic() {
         // This method will be called once per scheduler run during simulation
 
-        SmartDashboard.putNumber("Pressure", getPressure());
-        
+        nt_pressure.setDouble(getPressure());
+        nt_current.setDouble(getCurrent());
+
+        // Shuffleboard compressor control
+        boolean userEnabledCompressor = nt_compressorEnabled.getBoolean(getEnabled());
+
+        if (userEnabledCompressor && !getEnabled()) {
+            // enabled from shuffleboard
+            enable();
+        } else if (!userEnabledCompressor && getEnabled()) {
+            // disabled from shuffleboard
+            disable();
+        }
     }
 
 }

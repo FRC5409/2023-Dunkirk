@@ -61,8 +61,13 @@ public final class Constants {
         public final static PneumaticsModuleType kPneumaticsModuleType = PneumaticsModuleType.REVPH;
     }
     public static class kIntake{
-        public final static int kRollarMotor = 7;
-        public final static double kForward = 0.5;
-        public final static double kBackward = 0.5;
+        public final static int kRollarMotor = 11;
+        public final static double kmotorForward = 0.5;
+        public final static double kmotorBackward = 0.5;
+
+        public final static int kleftSolenoidForward = 4;
+        public final static int kleftSolenoidBackward = 5;
+        public final static int krightSolenoidForward = 10;
+        public final static int krightSolenoidBackward = 11;
     }
 }

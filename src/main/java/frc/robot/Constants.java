@@ -28,12 +28,13 @@ public final class Constants {
             public final static int kRightCANCoder = 6;
 
             public final static double kCountsPerRevolution = 4096;
-            // TODO: Find this value, this is a placeholder
-            public final static double kWheelDiameterInch = 3.937008; // 100mm to in
-            public final static double kSensorCoefficient = 2 * Math.PI / 4096.0;
-            public final static String kUnitString = "rad";
-            // public final static double kSensorCoefficient = (Math.PI * kWheelDiameterInch) / kCountsPerRevolution;
-            // public final static String kUnitString = "in";
+            public final static double kSensorCoefficient = (Math.PI * kDriveTrain.kWheel.kWheelDiameter) / kCountsPerRevolution;
+            public final static String kUnitString = "mm";
+        }
+
+        public static class kWheel {
+            public final static double kWheelDiameter = 94.04; // mm
+            public final static double kWheelCircumference = Math.PI * kWheelDiameter; // mm
         }
 
         public static class Solenoids {
@@ -51,10 +52,24 @@ public final class Constants {
         public final static int kMountPoseYaw = 0;
     }
 
+    public static class kIntake {
+        public static class kRollers {
+            public final static int kIntakeMotorID = 11;
+            public final static double kIntakeRollersSpeed = 0.4;
+            public final static double kIntakeRollersStopped = 0.0;
+        }
+
+        public static class kDoubleSolenoids {
+            public final static int kLeftFwdChannel = 4;
+            public final static int kLeftBwdChannel = 5;
+            public final static int kRightFwdChannel = 10;
+            public final static int kRightBwdChannel = 11;
+        }
+    }
+
     public static class kPneumatics {
         public final static int kHubModuleID = 2;
 
-        // TODO: Adjust values as needed
         public final static int kMinPressure = 90;
         public final static int kMaxPressure = 120;
 

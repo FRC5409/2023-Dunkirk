@@ -67,7 +67,7 @@ public class Intake extends SubsystemBase {
 	/** Makes the intake go up */
 	public void intakeUp() {
 		intakeLeft.set(Value.kForward);
-		intakeRight.set(Value.kReverse);
+		intakeRight.set(Value.kForward);
 	}
 
 	@Override

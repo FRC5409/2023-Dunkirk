@@ -21,6 +21,9 @@ public final class Constants {
             public final static int kLeft2CAN = 2;
             public final static int kRight1CAN = 3;
             public final static int kRight2CAN = 4;
+
+            public final static int currentLimit = 90;
+            public final static double rampRate = 0.5;
         }
 
         public static class kCANCoder {

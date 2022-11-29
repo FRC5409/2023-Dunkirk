@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.SensorTimeBase;
@@ -15,6 +16,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.kDriveTrain;
 
 public class DriveTrain extends SubsystemBase {
 
@@ -60,6 +62,11 @@ public class DriveTrain extends SubsystemBase {
 
         m_motorRight1.setInverted(true);
         m_motorRight2.setInverted(true);
+
+        m_motorLeft1.configOpenloopRamp(kDriveTrain.kMotors.rampRate);
+        m_motorLeft2.configOpenloopRamp(kDriveTrain.kMotors.rampRate);
+        m_motorRight1.configOpenloopRamp(kDriveTrain.kMotors.rampRate);
+        m_motorRight2.configOpenloopRamp(kDriveTrain.kMotors.rampRate);
 
         diff_drive = new DifferentialDrive(m_motorLeft1, m_motorRight1);
 

@@ -52,6 +52,14 @@ public final class Constants {
         public final static int kMountPoseYaw = 0;
     }
 
+    public static class kIndexer {
+        public static class kRollers {
+            public final static int kIndexerMotorID = 8;
+            public final static double kIndexerRollersSpeed = 0.5;
+            public final static double kIndexerRollersStopped = 0.0;
+        }
+    }
+
     public static class kIntake {
         public static class kRollers {
             public final static int kIntakeMotorID = 11;

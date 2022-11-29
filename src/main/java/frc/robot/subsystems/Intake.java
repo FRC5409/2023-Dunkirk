@@ -26,6 +26,8 @@ public class Intake extends SubsystemBase {
 	public Intake() {
 		rollerMotor = new WPI_TalonFX(Constants.kIntake.kRollers.kIntakeMotorID);
 
+		rollerMotor.setInverted(true);
+
 		// Invert the motor
 		// rollerMotor.setInverted(true);
 

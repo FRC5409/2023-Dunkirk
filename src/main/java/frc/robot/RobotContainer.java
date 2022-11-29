@@ -8,8 +8,8 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.GearShift;
 import frc.robot.commands.IntakeBall;
+import frc.robot.commands.ToggleGear;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Gyro;
@@ -41,7 +41,7 @@ public class RobotContainer {
 
     // Commands
     private final DefaultDrive cmd_defaultDrive;
-    private final GearShift cmd_gearShift;
+    private final ToggleGear cmd_toggleGear;
     private final ExampleCommand cmd_example;
     private final IntakeBall cmd_intakeBall;
 
@@ -70,7 +70,7 @@ public class RobotContainer {
 
         // Commands
         cmd_defaultDrive = new DefaultDrive(sys_driveTrain, sys_controller);
-        cmd_gearShift = new GearShift(sys_driveTrain);
+        cmd_toggleGear = new ToggleGear(sys_driveTrain);
         cmd_example = new ExampleCommand(sys_example);
         cmd_intakeBall = new IntakeBall(sys_intake);
 
@@ -87,8 +87,8 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        but_main_RBumper.whenPressed(cmd_gearShift);
         but_main_X.whileHeld(cmd_intakeBall);
+        but_main_RBumper.whenPressed(cmd_toggleGear);
 
         but_main_A.whenPressed(() -> sys_pneumatics.enable());
         but_main_B.whenPressed(() -> sys_pneumatics.disable());

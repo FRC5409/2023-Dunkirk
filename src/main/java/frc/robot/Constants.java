@@ -28,12 +28,13 @@ public final class Constants {
             public final static int kRightCANCoder = 6;
 
             public final static double kCountsPerRevolution = 4096;
+            public final static double kSensorCoefficient = (Math.PI * kDriveTrain.kWheel.kWheelDiameter) / kCountsPerRevolution;
+            public final static String kUnitString = "mm";
+        }
 
-            public final static double kWheelDiameterInch = 3.937008; // 100mm to in
-            public final static double kSensorCoefficient = 2 * Math.PI / 4096.0;
-            public final static String kUnitString = "rad";
-            // public final static double kSensorCoefficient = (Math.PI * kWheelDiameterInch) / kCountsPerRevolution;
-            // public final static String kUnitString = "in";
+        public static class kWheel {
+            public final static double kWheelDiameter = 94.04; // mm
+            public final static double kWheelCircumference = Math.PI * kWheelDiameter; // mm
         }
 
         public static class Solenoids {

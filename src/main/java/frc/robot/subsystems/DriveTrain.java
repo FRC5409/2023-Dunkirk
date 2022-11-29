@@ -139,16 +139,16 @@ public class DriveTrain extends SubsystemBase {
         m_cancoderRight.setPosition(0);
     }
 
-    public double getLeftCANCoder() {
+    public double getLeftDistance() {
         return -m_cancoderLeft.getPosition();
     }
 
-    public double getRightCANCoder() {
+    public double getRightDistance() {
         return m_cancoderRight.getPosition();
     }
 
     public double getLeftCANCoderVelocity() {
-        return m_cancoderLeft.getVelocity();
+        return -m_cancoderLeft.getVelocity();
     }
 
     public double getRightCANCoderVelocity() {
@@ -157,19 +157,13 @@ public class DriveTrain extends SubsystemBase {
     // -------------------------
 
     // Gear shifting ----------
-    public void shiftGear() {
-        // If off, go to high gear
-        // If high gear, go to low gear
-        // If low gear, go to high gear
-
+    /**
+     * Change gear
+     * @param newGear set to gear
+     */
+    public void changeGear(DoubleSolenoid.Value newGear) {
         try {
-            if (m_gearShiftValue == DoubleSolenoid.Value.kOff)
-                m_gearShiftValue = DoubleSolenoid.Value.kForward;
-            else if (m_gearShiftValue == DoubleSolenoid.Value.kForward)
-                m_gearShiftValue = DoubleSolenoid.Value.kReverse;
-            else if (m_gearShiftValue == DoubleSolenoid.Value.kReverse)
-                m_gearShiftValue = DoubleSolenoid.Value.kForward;
-
+            m_gearShiftValue = newGear;
             m_doubleSolenoid.set(m_gearShiftValue);
         } catch (NullPointerException exception) {
             DriverStation.reportError("Solenoids are null", exception.getStackTrace());
@@ -201,9 +195,9 @@ public class DriveTrain extends SubsystemBase {
         // This method will be called once per scheduler run
         
         SmartDashboard.putNumber("CANCoder L Vel", getLeftCANCoderVelocity());
-        SmartDashboard.putNumber("CANCoder L Pos", getLeftCANCoder());
         SmartDashboard.putNumber("CANCoder R Vel", getRightCANCoderVelocity());
-        SmartDashboard.putNumber("CANCoder R Pos", getRightCANCoder());
+        SmartDashboard.putNumber("CANCoder L Dist", getLeftDistance());
+        SmartDashboard.putNumber("CANCoder R Dist", getRightDistance());
 
         // Update odometry
         m_odometry.update(m_gyro.getRotation2d(), m_cancoderLeft.getPosition(), m_cancoderRight.getPosition());

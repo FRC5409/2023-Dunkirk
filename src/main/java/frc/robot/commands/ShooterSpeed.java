@@ -1,12 +1,18 @@
 package frc.robot.commands;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.kShooter;
 import frc.robot.subsystems.Shooter;
 
 public class ShooterSpeed extends CommandBase {
+
+    private ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
+    private NetworkTableEntry distanceEntry = tab.add("Distance to the target", 0).getEntry();
 
     private final Shooter m_shooter;
     private final XboxController m_joystick;
@@ -43,9 +49,10 @@ public class ShooterSpeed extends CommandBase {
             shooterSpeed = m_shooter.getInterpolatedSpeed(kShooter.kShooterData.shooterDataX[index], kShooter.kShooterData.shooterDataY[index], kShooter.kShooterData.shooterDataX[index + 1], kShooter.kShooterData.shooterDataY[index + 1], distance);
         }   catch (Exception e) {
             //if its outside the data use the highest point of data
+            DriverStation.reportError("Distance outside shooter data", true);
             shooterSpeed = kShooter.kShooterData.shooterDataY[index];
         }
-        SmartDashboard.putNumber("Shooter speed: ", shooterSpeed);
+        distanceEntry.setDouble(shooterSpeed);
         //spinning the motor
         m_shooter.spinMotAtSpeed(shooterSpeed);
         //if its reached its speed

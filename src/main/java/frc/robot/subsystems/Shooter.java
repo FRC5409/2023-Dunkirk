@@ -3,12 +3,16 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.playingwithfusion.TimeOfFlight;
-
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.kShooter;
 
 public class Shooter extends SubsystemBase {
+
+    private ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
+    private NetworkTableEntry shooterSpeedEntry = tab.add("Shooter Speed", 0).getEntry();
 
     private final WPI_TalonFX leftMot;
     private final WPI_TalonFX rightMot;
@@ -24,11 +28,13 @@ public class Shooter extends SubsystemBase {
         ToFFeeder = new TimeOfFlight(kShooter.ToFID);
 
         configMots();
+
+        
     }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Velocity", getVelocity());
+        shooterSpeedEntry.setDouble(getVelocity());
     }
 
     @Override
@@ -92,7 +98,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean cargo() {
-        return ToFFeeder.getRange() >= kShooter.cargoIsThere - 10;//sees if cargo is in the indexer
+        return ToFFeeder.getRange() <= kShooter.cargoIsThere;//sees if cargo is in the indexer
     }
 
 }

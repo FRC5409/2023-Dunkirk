@@ -9,8 +9,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.kShooter;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.playingwithfusion.TimeOfFlight;
-
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.kShooter;
 
@@ -51,7 +52,6 @@ public class Shooter extends SubsystemBase {
         if (Math.abs(m_joystick.getRightY()) >= 0.01) {//joystick drift
             distance -= m_joystick.getRightY() * 0.3;//changed the distance for teseting
         }
-        SmartDashboard.putNumber("Velocity", getAverageSpeed());
     }
 
     @Override
@@ -141,7 +141,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean cargo() {
-        return ToFFeeder.getRange() >= kShooter.cargoIsThere - 10;//sees if cargo is in the indexer
+        return ToFFeeder.getRange() <= kShooter.cargoIsThere;//sees if cargo is in the indexer
     }
 
 }

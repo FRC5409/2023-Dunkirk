@@ -5,7 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -98,7 +97,7 @@ public final class Constants {
 
         // public final static double cargoIsThere = 30;
 
-        public final static double cargoIsThere = 40;//TODO: find value
+        public final static double cargoIsThere = 30;//TODO: find value (distance the cargo should be in mm)
 
         public static class kShooterData {
             public final static double[] shooterDataX = {  15,   30,   45,   60,   75,   80,  105,  120,  135,  150};//distance to target

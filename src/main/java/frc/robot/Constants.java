@@ -21,6 +21,8 @@ public final class Constants {
             public final static int kLeft2CAN = 2;
             public final static int kRight1CAN = 3;
             public final static int kRight2CAN = 4;
+
+            public final static double rampRate = 0.5;
         }
 
         public static class kCANCoder {
@@ -74,5 +76,22 @@ public final class Constants {
         public final static int kMaxPressure = 120;
 
         public final static PneumaticsModuleType kPneumaticsModuleType = PneumaticsModuleType.REVPH;
+    }
+
+    public static class kShooter {
+        public final static int leftMotID = 5;
+        public final static int rightMotID = 8;
+        public final static int feederID = 33;//TODO: find value
+
+        public final static double feedSpeed = 0.4;
+
+        public final static double shooterPlay = 25;
+
+        public final static double feedTime = 50;
+
+        public static class kShooterData {
+            public static double[] shooterDataX = {15, 30, 45, 60, 75, 80, 105, 120, 135, 150};//distance to target
+            public static double[] shooterDataY = {100, 160, 240, 360, 480, 580, 700, 960, 1040, 1200};//speed to spin at
+        }
     }
 }

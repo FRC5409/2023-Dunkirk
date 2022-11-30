@@ -9,12 +9,14 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.IntakeBall;
+import frc.robot.commands.ShooterSpeed;
 import frc.robot.commands.ToggleGear;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Pneumatics;
+import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -33,6 +35,7 @@ public class RobotContainer {
     private final Pneumatics sys_pneumatics;
     private final ExampleSubsystem sys_example;
     private final Intake sys_intake;
+    private final Shooter sys_shooter;
 
     // Controller
     private final XboxController sys_controller;
@@ -44,6 +47,7 @@ public class RobotContainer {
     private final ToggleGear cmd_toggleGear;
     private final ExampleCommand cmd_example;
     private final IntakeBall cmd_intakeBall;
+    private final ShooterSpeed cmd_shooterSpeed;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -54,6 +58,7 @@ public class RobotContainer {
         sys_pneumatics = new Pneumatics();
         sys_example = new ExampleSubsystem();
         sys_intake = new Intake();
+        sys_shooter = new Shooter();
         
         // Controller
         sys_controller = new XboxController(0);
@@ -73,6 +78,8 @@ public class RobotContainer {
         cmd_toggleGear = new ToggleGear(sys_driveTrain);
         cmd_example = new ExampleCommand(sys_example);
         cmd_intakeBall = new IntakeBall(sys_intake);
+        cmd_shooterSpeed = new ShooterSpeed(sys_shooter, sys_controller);
+        
 
         sys_driveTrain.setDefaultCommand(cmd_defaultDrive);
 
@@ -92,6 +99,8 @@ public class RobotContainer {
 
         but_main_A.whenPressed(() -> sys_pneumatics.enable());
         but_main_B.whenPressed(() -> sys_pneumatics.disable());
+
+        but_main_LBumper.whenPressed(cmd_shooterSpeed);
     }
 
     /**

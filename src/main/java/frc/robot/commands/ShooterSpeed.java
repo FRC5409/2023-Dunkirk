@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.kShooter;
-import frc.robot.Constants.kShooter.kShooterData;
 import frc.robot.subsystems.Shooter;
 
 public class ShooterSpeed extends CommandBase {
@@ -52,8 +51,10 @@ public class ShooterSpeed extends CommandBase {
         //if its reached its speed
         if (m_shooter.getVelocity() >= shooterSpeed - kShooter.shooterPlay && m_shooter.getVelocity() <= shooterSpeed + kShooter.shooterPlay) {
             //feed
-            time++;
-            m_shooter.feed();
+            if (m_shooter.cargo()) {
+                time++;
+                m_shooter.feed();
+            }
         }
     }
 

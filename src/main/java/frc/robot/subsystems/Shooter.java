@@ -7,6 +7,12 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.kShooter;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.kShooter;
+import frc.robot.Constants.kShooter.kShooterData;
 
 public class Shooter extends SubsystemBase {
 
@@ -41,6 +47,7 @@ public class Shooter extends SubsystemBase {
         if (Math.abs(m_joystick.getRightY()) >= 0.01) {//joystick drift
             distance -= m_joystick.getRightY() * 0.3;//changed the distance for teseting
         }
+        SmartDashboard.putNumber("Velocity", getAverageSpeed());
     }
 
     @Override
@@ -67,10 +74,6 @@ public class Shooter extends SubsystemBase {
         leftMot.config_kI(0, i, kShooter.timeOutMs);
         leftMot.config_kD(0, d, kShooter.timeOutMs);
         leftMot.config_kF(0, f, kShooter.timeOutMs);
-    }
-
-    public double getVelocity() {
-        return getAverageSpeed();
     }
 
     public double getAverageSpeed() {
@@ -100,7 +103,24 @@ public class Shooter extends SubsystemBase {
 
     public int closestPoint() {//finds the closest point at index x
         return (int) Math.round(distance / 15) - 1;//going up by 15 inches per step
+        //not sure if I should implement current limiting
     }
+
+
+    // public int closestPoint() {//finds the closest point at index x
+    //     double closest = 999999;
+    //     int index = -1;
+    //     double dis = 120;
+    //     for (int i = 0; i < kShooter.kShooterData.shooterDataX.length; i++) {
+    //         if (Math.abs(kShooter.kShooterData.shooterDataX[i] - dis) < closest) {
+    //             closest = Math.abs(kShooter.kShooterData.shooterDataX[i] - dis);
+    //             index = i;
+    //         } else {// data must be in order for this part to work, if not in order remove this
+    //             break;
+    //         }
+    //     }
+    //     return index;
+    // }
 
     public double getInterpolatedSpeed(double x1, double y1, double x2, double y2, double x) {//gets the new interpolated speed
         // Y = ( ( X - X1 )( Y2 - Y1) / ( X2 - X1) ) + Y1
@@ -115,9 +135,5 @@ public class Shooter extends SubsystemBase {
     public double getTargetDistance() {
         return distance;
     }
-
-    // public boolean cargo() {
-    //     return ToFFeeder.getRange() <= kShooter.cargoIsThere;//sees if cargo is in the indexer
-    // }
 
 }

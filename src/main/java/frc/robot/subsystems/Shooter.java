@@ -8,11 +8,11 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.kShooter;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.playingwithfusion.TimeOfFlight;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.kShooter;
-import frc.robot.Constants.kShooter.kShooterData;
 
 public class Shooter extends SubsystemBase {
 
@@ -27,6 +27,8 @@ public class Shooter extends SubsystemBase {
 
     private boolean isFeeding = false;
 
+    private final TimeOfFlight ToFFeeder;
+
     public Shooter() {
         leftMot = new WPI_TalonFX(kShooter.leftMotID);
         rightMot = new WPI_TalonFX(kShooter.rightMotID); 
@@ -34,6 +36,8 @@ public class Shooter extends SubsystemBase {
         // ToFFeeder = new TimeOfFlight(kShooter.ToFID);
 
         m_joystick = new XboxController(0);
+
+        ToFFeeder = new TimeOfFlight(kShooter.ToFID);
 
         configMots();
 
@@ -134,6 +138,10 @@ public class Shooter extends SubsystemBase {
 
     public double getTargetDistance() {
         return distance;
+    }
+
+    public boolean cargo() {
+        return ToFFeeder.getRange() >= kShooter.cargoIsThere - 10;//sees if cargo is in the indexer
     }
 
 }

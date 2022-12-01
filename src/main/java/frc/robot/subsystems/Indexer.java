@@ -7,32 +7,35 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Indexer extends SubsystemBase {
   /** Creates a new Indexer. */
 
-  // The motor for the rollers
-  private final CANSparkMax rollerMotor;
+  // The NEO motors involved
+  private final CANSparkMax feederMotor;
 
   public Indexer() {
-    rollerMotor = new CANSparkMax(Constants.kIndexer.kRollers.kIndexerMotorID, MotorType.kBrushless);
 
-  }
+		feederMotor = new CANSparkMax(Constants.kIndexer.kMotors.kFeederMotorID, MotorType.kBrushless);
+	}
 
-  /** Makes the rollers roll forward */
-  public void rollForward() {
-      rollerMotor.set(Constants.kIndexer.kRollers.kIndexerRollersSpeed);
-  }
+	/** Makes the feeder roll forward */
+	public void feederForward() {
+		feederMotor.set(Constants.kIndexer.kMotors.kFeederSpeed);
+	}
 
-  /** Makes the rollers stop rolling */
-  public void stopRolling() {
-      rollerMotor.set(Constants.kIndexer.kRollers.kIndexerRollersStopped);
-  }
+	/** Makes the feeder stop */
+	public void feederStop() {
+		feederMotor.set(Constants.kIndexer.kMotors.kFeederStopped);
+	}
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+	@Override
+	public void periodic() {
+		// This method will be called once per scheduler run
+
+		SmartDashboard.putNumber("Feeder Speed", feederMotor.get());
+	}
 }

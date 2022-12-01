@@ -52,11 +52,17 @@ public final class Constants {
         public final static int kMountPoseYaw = 0;
     }
 
+    public static class kMiddleRollers {
+        public final static int kRollerMotorID = 8;
+        public final static double kRollersSpeed = 0.4;
+        public final static double kRollersStopped = 0.0;
+    }
+
     public static class kIndexer {
-        public static class kRollers {
-            public final static int kIndexerMotorID = 8;
-            public final static double kIndexerRollersSpeed = 0.5;
-            public final static double kIndexerRollersStopped = 0.0;
+        public static class kMotors {
+            public final static int kFeederMotorID = 9;
+            public final static double kFeederSpeed = 0.4;
+            public final static double kFeederStopped = 0.0;
         }
     }
 

@@ -6,18 +6,21 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.MiddleRollers;
 
 public class IntakeBall extends CommandBase {
 	/** Creates a new intakeBall */
 
 	private final Intake m_intake;
+	private final MiddleRollers m_middleRollers;
 
-	public IntakeBall(Intake intake) {
+	public IntakeBall(Intake intake, MiddleRollers middleRollers) {
 
 		m_intake = intake;
+		m_middleRollers = middleRollers;
 
 		// Use addRequirements() here to declare subsystem dependencies.
-		addRequirements(m_intake);
+		addRequirements(m_intake, m_middleRollers);
 	}
 
 	// Called when the command is initially scheduled.
@@ -31,6 +34,7 @@ public class IntakeBall extends CommandBase {
 	@Override
 	public void execute() {
 		m_intake.rollForward();
+		m_middleRollers.rollersForward();
 	}
 
 	// Called once the command ends or is interrupted
@@ -38,6 +42,7 @@ public class IntakeBall extends CommandBase {
 	public void end(boolean interrupted) {
 		m_intake.stopRolling();
 		m_intake.intakeUp();
+		m_middleRollers.stopRollers();
 	}
 
 	// Returns true when the command should end.

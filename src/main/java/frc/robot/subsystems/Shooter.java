@@ -3,8 +3,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.playingwithfusion.TimeOfFlight;
-
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.kShooter;
@@ -74,19 +72,18 @@ public class Shooter extends SubsystemBase {
     }
 
     public int closestPoint() {//finds the closest point at index x
-        double closest = 999999999;
-        int index = -1;
-        for (int i = 0; i < kShooter.kShooterData.shooterDataX.length; i++) {
-            if (Math.abs(kShooter.kShooterData.shooterDataX[i] - distance) < closest) {
-                closest = Math.abs(kShooter.kShooterData.shooterDataX[i] - distance);
-                index = i;
-            } else {// data must be in order for this part to work, if not in order remove this
-                break;
-            }
-        }
-        DriverStation.reportError(Integer.toString(index), true);
-        DriverStation.reportError(Double.toString(kShooter.kShooterData.shooterDataX[index]), true);
-        return index;
+        // double closest = 999999999;
+        // int index = -1;
+        // for (int i = 0; i < kShooter.kShooterData.shooterDataX.length; i++) {
+        //     if (Math.abs(kShooter.kShooterData.shooterDataX[i] - distance) < closest) {
+        //         closest = Math.abs(kShooter.kShooterData.shooterDataX[i] - distance);
+        //         index = i;
+        //     } else {// data must be in order for this part to work, if not in order remove this
+        //         break;
+        //     }
+        // }
+        // return index;
+        return (int) Math.round(distance / 15) - 1;//going up by 15 inches per step
     }
 
     public double getInterpolatedSpeed(double x1, double y1, double x2, double y2, double x) {//gets the new interpolated speed

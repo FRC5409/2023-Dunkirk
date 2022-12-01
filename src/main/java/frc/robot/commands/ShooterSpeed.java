@@ -41,16 +41,16 @@ public class ShooterSpeed extends CommandBase {
         int index = m_shooter.closestPoint();
         indexEntry.setDouble(index);
         
-        double shooterSpeed;
+        double shooterSpeed = 0;
         //getting interpolated data
         try {
             shooterSpeed = m_shooter.getInterpolatedSpeed(kShooter.kShooterData.shooterDataX[index], kShooter.kShooterData.shooterDataY[index], kShooter.kShooterData.shooterDataX[index + 1], kShooter.kShooterData.shooterDataY[index + 1], distance);
         }   catch (Exception e) {
             //if its outside the data use the highest point of data
             DriverStation.reportError("Distance outside shooter data", true);
-            shooterSpeed = kShooter.kShooterData.shooterDataY[index];
+            shooterSpeed = kShooter.kShooterData.shooterDataY[kShooter.kShooterData.shooterDataY.length - 1];
         }
-        distanceEntry.setDouble(shooterSpeed);
+        distanceEntry.setDouble(distance);
         //spinning the motor 
         m_shooter.spinMotAtSpeed(shooterSpeed);
         shooterSpeedEntry.setDouble(shooterSpeed);

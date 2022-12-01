@@ -97,7 +97,7 @@ public final class Constants {
 
         // public final static double cargoIsThere = 30;
 
-        public final static double cargoIsThere = 30;//TODO: find value (distance the cargo should be in mm)
+        // public final static double cargoIsThere = 30;
 
         public static class kShooterData {
             public final static double[] shooterDataX = {  15,   30,   45,   60,   75,   80,  105,  120,  135,  150};//distance to target

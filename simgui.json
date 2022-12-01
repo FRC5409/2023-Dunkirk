@@ -41,6 +41,12 @@
     }
   },
   "NetworkTables": {
+    "Shuffleboard": {
+      "Shooter": {
+        "open": true
+      },
+      "open": true
+    },
     "SmartDashboard": {
       "Left Solenoid": {
         "open": true

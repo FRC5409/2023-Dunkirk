@@ -3,22 +3,23 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.playingwithfusion.TimeOfFlight;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.kShooter;
 
 public class Shooter extends SubsystemBase {
 
-    private ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
-    private NetworkTableEntry shooterSpeedEntry = tab.add("Shooter Speed", 0).getEntry();
+    private final XboxController m_joystick;
 
     private final WPI_TalonFX leftMot;
     private final WPI_TalonFX rightMot;
     private final WPI_TalonFX feederMot;//TODO: Find act motor
 
     private final TimeOfFlight ToFFeeder;
+
+    private double distance;
 
     public Shooter() {
         leftMot = new WPI_TalonFX(kShooter.leftMotID);
@@ -27,14 +28,18 @@ public class Shooter extends SubsystemBase {
 
         ToFFeeder = new TimeOfFlight(kShooter.ToFID);
 
+        m_joystick = new XboxController(0);
+
         configMots();
 
-        
+        distance = 10;
     }
 
     @Override
     public void periodic() {
-        shooterSpeedEntry.setDouble(getVelocity());
+        if (Math.abs(m_joystick.getRightY()) >= 0.01) {//joystick drift
+            distance -= m_joystick.getRightY() * 0.1;
+        }
     }
 
     @Override
@@ -69,17 +74,18 @@ public class Shooter extends SubsystemBase {
     }
 
     public int closestPoint() {//finds the closest point at index x
-        double closest = 999999;
+        double closest = 999999999;
         int index = -1;
-        double dis = 120;
         for (int i = 0; i < kShooter.kShooterData.shooterDataX.length; i++) {
-            if (Math.abs(kShooter.kShooterData.shooterDataX[i] - dis) < closest) {
-                closest = Math.abs(kShooter.kShooterData.shooterDataX[i] - dis);
+            if (Math.abs(kShooter.kShooterData.shooterDataX[i] - distance) < closest) {
+                closest = Math.abs(kShooter.kShooterData.shooterDataX[i] - distance);
                 index = i;
             } else {// data must be in order for this part to work, if not in order remove this
                 break;
             }
         }
+        DriverStation.reportError(Integer.toString(index), true);
+        DriverStation.reportError(Double.toString(kShooter.kShooterData.shooterDataX[index]), true);
         return index;
     }
 
@@ -94,7 +100,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getTargetDistance() {
-        return 120;
+        return distance;
     }
 
     public boolean cargo() {

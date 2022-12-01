@@ -78,7 +78,7 @@ public class RobotContainer {
         cmd_toggleGear = new ToggleGear(sys_driveTrain);
         cmd_example = new ExampleCommand(sys_example);
         cmd_intakeBall = new IntakeBall(sys_intake);
-        cmd_shooterSpeed = new ShooterSpeed(sys_shooter, sys_controller);
+        cmd_shooterSpeed = new ShooterSpeed(sys_shooter);
         
 
         sys_driveTrain.setDefaultCommand(cmd_defaultDrive);

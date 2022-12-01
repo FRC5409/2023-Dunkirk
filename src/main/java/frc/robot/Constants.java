@@ -81,7 +81,7 @@ public final class Constants {
     public static class kShooter {
         public final static int leftMotID = 5;
         public final static int rightMotID = 8;
-        public final static int feederID = 33;//TODO: find value
+        public final static int feederID = 9;
         public final static int ToFID = 11;
 
         public final static double feedSpeed = 0.4;
@@ -90,11 +90,12 @@ public final class Constants {
 
         public final static double feedTime = 50;
 
-        public final static double cargoIsThere = 30;//TODO: find value (distance the cargo should be in mm)
+        // public final static double cargoIsThere = 30;
 
         public static class kShooterData {
             public static double[] shooterDataX = {15, 30, 45, 60, 75, 80, 105, 120, 135, 150};//distance to target
-            public static double[] shooterDataY = {100, 160, 240, 360, 480, 580, 700, 960, 1040, 1200};//speed to spin at
+            // public static double[] shooterDataY = {100, 160, 240, 360, 480, 580, 700, 960, 1040, 1200};//speed to spin at
+            public static double[] shooterDataY = {10, 16, 24, 36, 48, 58, 70, 96, 104, 120};//speed to spin at
         }
     }
 }

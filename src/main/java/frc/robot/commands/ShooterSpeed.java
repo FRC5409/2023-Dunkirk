@@ -13,8 +13,12 @@ public class ShooterSpeed extends CommandBase {
     private ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
     private NetworkTableEntry distanceEntry = tab.add("Distance to the target", 0).getEntry();
     private NetworkTableEntry shooterSpeedEntry = tab.add("Shooter Speed", 0).getEntry();
-    private NetworkTableEntry timeEntry = tab.add("Time: ", 0).getEntry();//debugging
-    private NetworkTableEntry indexEntry = tab.add("Index: ", 0).getEntry();//debugging
+    private NetworkTableEntry kP = tab.add("kP", 0).getEntry();
+    private NetworkTableEntry kI = tab.add("kI", 0).getEntry();
+    private NetworkTableEntry kD = tab.add("kD", 0).getEntry();
+    private NetworkTableEntry kF = tab.add("kF", 0).getEntry();
+    // private NetworkTableEntry timeEntry = tab.add("Time: ", 0).getEntry();//debugging
+    // private NetworkTableEntry indexEntry = tab.add("Index: ", 0).getEntry();//debugging
 
     private final Shooter m_shooter;
     // private final Limelight m_limelight;
@@ -39,7 +43,7 @@ public class ShooterSpeed extends CommandBase {
     public void execute() {
         distance = m_shooter.getTargetDistance(); //inches
         int index = m_shooter.closestPoint();
-        indexEntry.setDouble(index);
+        // indexEntry.setDouble(index);
         
         double shooterSpeed = 0;
         //getting interpolated data
@@ -55,14 +59,14 @@ public class ShooterSpeed extends CommandBase {
         m_shooter.spinMotAtSpeed(shooterSpeed);
         shooterSpeedEntry.setDouble(shooterSpeed);
         //if its reached its speed
-        if (m_shooter.getVelocity() >= shooterSpeed - kShooter.shooterPlay && m_shooter.getVelocity() <= shooterSpeed + kShooter.shooterPlay) {
+        // if (m_shooter.getVelocity() >= shooterSpeed - kShooter.shooterPlay && m_shooter.getVelocity() <= shooterSpeed + kShooter.shooterPlay) {
             //feed
-            if (m_shooter.cargo()) {
-                time++;
-                m_shooter.feed();
-            }
-        }
-        timeEntry.setDouble(time);
+            time++;
+            m_shooter.feed();
+        // }
+        // timeEntry.setDouble(time);
+        m_shooter.setPIDFvalues(kP.getDouble(-1), kI.getDouble(-1), kD.getDouble(-1), kF.getDouble(-1));
+        m_shooter.spinMotAtSpeed(kShooter.kShooterData.shooterDataY[index]);
     }
 
     // Called once the command ends or is interrupted.

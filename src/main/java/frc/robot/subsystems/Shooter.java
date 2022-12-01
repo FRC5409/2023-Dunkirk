@@ -2,7 +2,11 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.playingwithfusion.TimeOfFlight;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+// import com.playingwithfusion.TimeOfFlight;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.kShooter;
@@ -13,18 +17,18 @@ public class Shooter extends SubsystemBase {
 
     private final WPI_TalonFX leftMot;
     private final WPI_TalonFX rightMot;
-    private final WPI_TalonFX feederMot;//TODO: Find act motor
+    private final CANSparkMax feederMot;//TODO: Find act motor
 
-    private final TimeOfFlight ToFFeeder;
+    // private final TimeOfFlight ToFFeeder;
 
     private double distance;
 
     public Shooter() {
         leftMot = new WPI_TalonFX(kShooter.leftMotID);
         rightMot = new WPI_TalonFX(kShooter.rightMotID);
-        feederMot = new WPI_TalonFX(kShooter.feederID);
+        feederMot = new CANSparkMax(kShooter.feederID, MotorType.kBrushless);
 
-        ToFFeeder = new TimeOfFlight(kShooter.ToFID);
+        // ToFFeeder = new TimeOfFlight(kShooter.ToFID);
 
         m_joystick = new XboxController(0);
 
@@ -46,20 +50,33 @@ public class Shooter extends SubsystemBase {
     public void configMots() {
         leftMot.setNeutralMode(NeutralMode.Brake);
         rightMot.setNeutralMode(NeutralMode.Brake);
-        feederMot.setNeutralMode(NeutralMode.Brake);
+        feederMot.setIdleMode(IdleMode.kBrake);
     
         rightMot.follow(leftMot);//following to shoot at the same speed
         rightMot.setInverted(true);
 
+        // leftMot.sensor
+
         //not sure if I should implement current limiting
     }
 
+    public void setPIDFvalues(double p, double i, double d, double f) {
+        leftMot.config_kP(0, p);
+        leftMot.config_kI(1, i);
+        leftMot.config_kD(2, d);
+        leftMot.config_kF(3, f);
+    }
+
     public double getVelocity() {
-        return leftMot.get();//TODO: find the velocity
+        return getAverageSpeed();//couldn't find sensor coffiecent
+    }
+
+    public double getAverageSpeed() {
+        return (Math.abs(leftMot.getSelectedSensorVelocity()) + Math.abs(rightMot.getSelectedSensorVelocity())) / 2;
     }
 
     public void spinMotAtSpeed(double RPM) {
-        
+        leftMot.setVoltage(3);
     }
 
     public void feed() {
@@ -100,8 +117,8 @@ public class Shooter extends SubsystemBase {
         return distance;
     }
 
-    public boolean cargo() {
-        return ToFFeeder.getRange() <= kShooter.cargoIsThere;//sees if cargo is in the indexer
-    }
+    // public boolean cargo() {
+    //     return ToFFeeder.getRange() <= kShooter.cargoIsThere;//sees if cargo is in the indexer
+    // }
 
 }

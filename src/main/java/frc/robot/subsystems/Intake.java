@@ -30,11 +30,11 @@ public class Intake extends SubsystemBase {
   }
   
   public void motorForward(){
-    rollarMotor.set(Constants.kIntake.kmotorForward * -1); // makes motor move forward
+    rollarMotor.set(Constants.kIntake.kmotorForward*-1); // makes motor move forward
   }
 
 	public void motorBackward(){
-    rollarMotor.set(-Constants.kIntake.kmotorBackward); // makes motor move backwards
+    rollarMotor.set(Constants.kIntake.kmotorBackward* -1); // makes motor move backwards
   }
 
   public void motorStop (){
@@ -50,14 +50,6 @@ public class Intake extends SubsystemBase {
     leftDoubleSolenoid.set(kForward);
     rightDoubleSolenoid.set(kForward);
   }
-
-
-  //public void set(){
-    //leftDoubleSolenoid.set(kOff);
-    //leftDoubleSolenoid.set(kForward);
-    //leftDoubleSolenoid.set(kReverse);
-
-  //}
 
   @Override
   public void periodic() {

@@ -70,4 +70,13 @@ public final class Constants {
         public final static int krightSolenoidForward = 10;
         public final static int krightSolenoidBackward = 11;
     }
+    public static class kIndex{
+        public final static int kindexNeo1 = 8;
+        public final static int kindexNeo2 = 9;
+        public final static double kindexNeo1Forward = 0.4;
+        public final static double kindexNeo1Backward = 0.4;
+        public final static double kindexNeo2Forward = 0.4;
+        public final static double kindexNeo2Backward = 0.4;
+
+    }
 }

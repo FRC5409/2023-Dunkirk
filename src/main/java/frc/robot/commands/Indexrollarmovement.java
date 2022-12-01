@@ -5,41 +5,36 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Index;
 
-public class IntakeMovement extends CommandBase {
-
-  private final Intake m_intake;
-
-
-  /** Creates a new solenoidsmovement. */
-  public IntakeMovement(Intake intake) {
-    m_intake = intake;
-
-    addRequirements(m_intake);
+public class Indexrollarmovement extends CommandBase {
+  private final Index m_index;
 
 
+  /** Creates a new Indexrollarmovement. */
+  public Indexrollarmovement(Index index) {
+    m_index = index;
+
+    addRequirements(m_index);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_intake.doubleSoldnoidDown();
-    m_intake.motorStop();
+    m_index.indexNeo1Stop();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intake.motorForward();
+    m_index.indexNeo1forward();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_intake.doubleSoldnoidUp();
-    m_intake.motorStop();
+    m_index.indexNeo1Stop();
   }
 
   // Returns true when the command should end.

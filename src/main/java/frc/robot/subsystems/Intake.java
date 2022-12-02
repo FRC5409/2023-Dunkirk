@@ -102,8 +102,5 @@ public class Intake extends SubsystemBase {
 	public void simulationPeriodic() {
 		// This method will be called once per scheduler run during a simulation
 
-		SmartDashboard.putData("Roller Motor", rollerMotor);
-		SmartDashboard.putData("Left Solenoid", intakeLeft);
-		SmartDashboard.putData("Right Solenoid", intakeRight);
 	}
 }

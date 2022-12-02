@@ -61,7 +61,7 @@ public class ShooterSpeed extends CommandBase {
         //if its reached its speed
         // if (m_shooter.getVelocity() >= shooterSpeed - kShooter.shooterPlay && m_shooter.getVelocity() <= shooterSpeed + kShooter.shooterPlay) {
             //feed
-            time++;
+            time++;//TODO: Fix this if condition
             m_shooter.feed();
         // }
         // timeEntry.setDouble(time);

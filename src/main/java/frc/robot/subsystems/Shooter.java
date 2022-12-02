@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -61,10 +62,10 @@ public class Shooter extends SubsystemBase {
     }
 
     public void setPIDFvalues(double p, double i, double d, double f) {
-        leftMot.config_kP(0, p);
-        leftMot.config_kI(1, i);
-        leftMot.config_kD(2, d);
-        leftMot.config_kF(3, f);
+        leftMot.config_kP(0, p, 30);
+        leftMot.config_kI(0, i, 30);
+        leftMot.config_kD(0, d, 30);
+        leftMot.config_kF(0, f, 30);
     }
 
     public double getVelocity() {
@@ -76,7 +77,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public void spinMotAtSpeed(double RPM) {
-        leftMot.setVoltage(3);
+        leftMot.set(TalonFXControlMode.Velocity, RPM * 2048.0 / 600.0);
     }
 
     public void feed() {

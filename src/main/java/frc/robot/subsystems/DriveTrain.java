@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.SensorTimeBase;
@@ -10,10 +9,12 @@ import com.ctre.phoenix.sensors.WPI_CANCoder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.kDriveTrain;
@@ -42,6 +43,13 @@ public class DriveTrain extends SubsystemBase {
     // Gyro + odometry for tracking robot pose
     private final Gyro m_gyro;
     private final DifferentialDriveOdometry m_odometry;
+
+    // Shuffleboard
+    private final ShuffleboardTab sb_drivetrainTab;
+    private final NetworkTableEntry nt_distLeft;
+    private final NetworkTableEntry nt_distRight;
+    private final NetworkTableEntry nt_velLeft;
+    private final NetworkTableEntry nt_velRight;
 
     /**
      * Drive train
@@ -103,6 +111,13 @@ public class DriveTrain extends SubsystemBase {
         // Gyro and odometry
         m_gyro = new Gyro(); // new gyro? or take in parameter
         m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());
+
+        // Shuffleboard
+        sb_drivetrainTab = Shuffleboard.getTab("DriveTrain");
+        nt_distLeft = sb_drivetrainTab.add("L Distance", getLeftDistance()).getEntry();
+        nt_distRight = sb_drivetrainTab.add("R Distance", getRightDistance()).getEntry();
+        nt_velLeft = sb_drivetrainTab.add("L Velocity", getLeftCANCoderVelocity()).getEntry();
+        nt_velRight = sb_drivetrainTab.add("R Velocity", getRightCANCoderVelocity()).getEntry();
     }
 
     /**
@@ -200,11 +215,11 @@ public class DriveTrain extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        
-        SmartDashboard.putNumber("CANCoder L Vel", getLeftCANCoderVelocity());
-        SmartDashboard.putNumber("CANCoder R Vel", getRightCANCoderVelocity());
-        SmartDashboard.putNumber("CANCoder L Dist", getLeftDistance());
-        SmartDashboard.putNumber("CANCoder R Dist", getRightDistance());
+
+        nt_distLeft.setDouble(getLeftDistance());
+        nt_distRight.setDouble(getRightDistance());
+        nt_velLeft.setDouble(getLeftCANCoderVelocity());
+        nt_velRight.setDouble(getRightCANCoderVelocity());
 
         // Update odometry
         m_odometry.update(m_gyro.getRotation2d(), m_cancoderLeft.getPosition(), m_cancoderRight.getPosition());

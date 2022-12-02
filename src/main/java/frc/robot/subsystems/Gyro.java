@@ -5,7 +5,9 @@ import com.ctre.phoenix.sensors.Pigeon2Configuration;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -16,6 +18,15 @@ public class Gyro extends SubsystemBase {
 
     // Config Pigeon
     private final Pigeon2Configuration pigeon_config;
+
+    // Shuffleboard
+    private final ShuffleboardTab sb_gyroTab;
+    private final NetworkTableEntry nt_angle;
+    private final NetworkTableEntry nt_rate;
+    private final NetworkTableEntry nt_rotationDegrees;
+    private final NetworkTableEntry nt_yaw;
+    private final NetworkTableEntry nt_pitch;
+    private final NetworkTableEntry nt_roll;
 
     /**
      * Wrapper for the Pigeon gyro.
@@ -41,6 +52,15 @@ public class Gyro extends SubsystemBase {
         pigeon_config.MountPoseYaw = Constants.kGyro.kMountPoseYaw;
 
         m_pigeon.configAllSettings(pigeon_config);
+
+        // Shuffleboard
+        sb_gyroTab = Shuffleboard.getTab("Gyro");
+        nt_angle = sb_gyroTab.add("Angle", getAngle()).getEntry();
+        nt_rate = sb_gyroTab.add("Rate", getRate()).getEntry();
+        nt_rotationDegrees = sb_gyroTab.add("Rotation degrees", getRotation2d().getDegrees()).getEntry();
+        nt_yaw = sb_gyroTab.add("Yaw", getYaw()).getEntry();
+        nt_pitch = sb_gyroTab.add("Pitch", getPitch()).getEntry();
+        nt_roll = sb_gyroTab.add("Roll", getRoll()).getEntry();
 
     }
 
@@ -89,13 +109,13 @@ public class Gyro extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        
-        SmartDashboard.putNumber("Gyro Angle", getAngle());
-        SmartDashboard.putNumber("Gyro Rate", getRate());
-        SmartDashboard.putNumber("Gyro Rotation", getRotation2d().getDegrees());
-        SmartDashboard.putNumber("Gyro Yaw", getYaw());
-        SmartDashboard.putNumber("Gyro Pitch", getPitch());
-        SmartDashboard.putNumber("Gyro Roll", getRoll());
+
+        nt_angle.setDouble(getAngle());
+        nt_rate.setDouble(getRate());
+        nt_rotationDegrees.setDouble(getRotation2d().getDegrees());
+        nt_yaw.setDouble(getYaw());
+        nt_pitch.setDouble(getPitch());
+        nt_roll.setDouble(getRoll());
     }
 
     @Override

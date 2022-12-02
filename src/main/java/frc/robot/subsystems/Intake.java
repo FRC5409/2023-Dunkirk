@@ -6,9 +6,11 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -21,6 +23,12 @@ public class Intake extends SubsystemBase {
 	// The solenoids on either side of the intake
 	private final DoubleSolenoid intakeLeft;
 	private final DoubleSolenoid intakeRight;
+
+	// Shuffleboard
+	private final ShuffleboardTab sb_intakeTab;
+	private final NetworkTableEntry nt_rollerMotors;
+	private final NetworkTableEntry nt_leftSolenoid;
+	private final NetworkTableEntry nt_rightSolenoid;
 
 	/** Creates a new Intake. */
 	public Intake() {
@@ -45,6 +53,12 @@ public class Intake extends SubsystemBase {
 
 		stopRolling();
 		intakeUp();
+
+		// Shuffleboard
+		sb_intakeTab = Shuffleboard.getTab("Intake");
+		nt_rollerMotors = sb_intakeTab.add("Roller motors", rollerMotor.get()).getEntry();
+		nt_leftSolenoid = sb_intakeTab.add("L solenoid", intakeLeft.get().toString()).getEntry();
+		nt_rightSolenoid = sb_intakeTab.add("R solenoid", intakeLeft.get().toString()).getEntry();
 
 	}
 
@@ -79,17 +93,14 @@ public class Intake extends SubsystemBase {
 	public void periodic() {
 		// This method will be called once per scheduler run
 
-		SmartDashboard.putData("Roller Motor", rollerMotor);
-		SmartDashboard.putData("Left Solenoid", intakeLeft);
-		SmartDashboard.putData("Right Solenoid", intakeRight);
+		nt_rollerMotors.setDouble(rollerMotor.get());
+		nt_leftSolenoid.setString(intakeLeft.get().toString());
+		nt_rightSolenoid.setString(intakeRight.get().toString());
 	}
 
 	@Override
 	public void simulationPeriodic() {
 		// This method will be called once per scheduler run during a simulation
 
-		SmartDashboard.putData("Roller Motor", rollerMotor);
-		SmartDashboard.putData("Left Solenoid", intakeLeft);
-		SmartDashboard.putData("Right Solenoid", intakeRight);
 	}
 }

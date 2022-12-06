@@ -49,8 +49,8 @@ public class Shooter extends SubsystemBase {
     public void simulationPeriodic() {}
 
     public void configMots() {
-        leftMot.setNeutralMode(NeutralMode.Brake);
-        rightMot.setNeutralMode(NeutralMode.Brake);
+        leftMot.setNeutralMode(NeutralMode.Coast);
+        rightMot.setNeutralMode(NeutralMode.Coast);
         feederMot.setIdleMode(IdleMode.kBrake);
     
         rightMot.follow(leftMot);//following to shoot at the same speed
@@ -66,6 +66,9 @@ public class Shooter extends SubsystemBase {
         leftMot.config_kI(0, i, 30);
         leftMot.config_kD(0, d, 30);
         leftMot.config_kF(0, f, 30);
+
+        //pc = 0.25;
+        //kc = 0.8
     }
 
     public double getVelocity() {
@@ -73,7 +76,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getAverageSpeed() {
-        return (Math.abs(leftMot.getSelectedSensorVelocity()) + Math.abs(rightMot.getSelectedSensorVelocity())) / 2;
+        return (Math.abs(leftMot.getSelectedSensorVelocity()) + Math.abs(rightMot.getSelectedSensorVelocity())) / 2 / 2048.0 * 600;
     }
 
     public void spinMotAtSpeed(double RPM) {

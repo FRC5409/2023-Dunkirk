@@ -12,6 +12,7 @@ public class ShooterSpeed extends CommandBase {
 
     private ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
     private NetworkTableEntry distanceEntry = tab.add("Distance to the target", 0).getEntry();
+    private NetworkTableEntry targetSpeedEntry = tab.add("Target Speed", 0).getEntry();
     private NetworkTableEntry shooterSpeedEntry = tab.add("Shooter Speed", 0).getEntry();
     private NetworkTableEntry kP = tab.add("kP", 0).getEntry();
     private NetworkTableEntry kI = tab.add("kI", 0).getEntry();
@@ -54,19 +55,19 @@ public class ShooterSpeed extends CommandBase {
             DriverStation.reportError("Distance outside shooter data", true);
             shooterSpeed = kShooter.kShooterData.shooterDataY[kShooter.kShooterData.shooterDataY.length - 1];
         }
-        distanceEntry.setDouble(distance);
-        //spinning the motor 
-        m_shooter.spinMotAtSpeed(shooterSpeed);
-        shooterSpeedEntry.setDouble(shooterSpeed);
         //if its reached its speed
         // if (m_shooter.getVelocity() >= shooterSpeed - kShooter.shooterPlay && m_shooter.getVelocity() <= shooterSpeed + kShooter.shooterPlay) {
             //feed
             time++;//TODO: Fix this if condition
             m_shooter.feed();
         // }
-        // timeEntry.setDouble(time);
-        m_shooter.setPIDFvalues(kP.getDouble(-1), kI.getDouble(-1), kD.getDouble(-1), kF.getDouble(-1));
-        m_shooter.spinMotAtSpeed(kShooter.kShooterData.shooterDataY[index]);
+
+
+        m_shooter.setPIDFvalues(kP.getDouble(0), kI.getDouble(0), kD.getDouble(0), kF.getDouble(0));
+        m_shooter.spinMotAtSpeed(shooterSpeed);
+        distanceEntry.setDouble(distance);
+        targetSpeedEntry.setDouble(shooterSpeed);
+        shooterSpeedEntry.setDouble(m_shooter.getAverageSpeed());
     }
 
     // Called once the command ends or is interrupted.

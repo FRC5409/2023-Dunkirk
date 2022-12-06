@@ -88,17 +88,20 @@ public final class Constants {
 
         public final static double shooterPlay = 25;
 
-        public final static double feedTime = 1000;
+        public final static double feedTime = 200;
 
-        //kf = 0.0505
-        //kp = 0.4
+        public static class kPID {
+            public final static double kP = 0.42;
+            public final static double kI = 0;
+            public final static double kD = 0;
+            public final static double kF = 0.0505;
+        }
 
         // public final static double cargoIsThere = 30;
 
         public static class kShooterData {
             public final static double[] shooterDataX = {15, 30, 45, 60, 75, 80, 105, 120, 135, 150};//distance to target
             public static double[] shooterDataY = {1800, 1900, 2000, 2100, 2600, 3000, 3800, 4300, 4600, 5000};//speed to spin at
-            // public final static double[] shooterDataY = {10, 16, 24, 36, 48, 58, 70, 96, 104, 120};//speed to spin at
         }
     }
 }

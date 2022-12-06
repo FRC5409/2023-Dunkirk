@@ -14,10 +14,10 @@ public class ShooterSpeed extends CommandBase {
     private NetworkTableEntry distanceEntry = tab.add("Distance to the target", 0).getEntry();
     private NetworkTableEntry targetSpeedEntry = tab.add("Target Speed", 0).getEntry();
     private NetworkTableEntry shooterSpeedEntry = tab.add("Shooter Speed", 0).getEntry();
-    private NetworkTableEntry kP = tab.add("kP", 0).getEntry();
-    private NetworkTableEntry kI = tab.add("kI", 0).getEntry();
-    private NetworkTableEntry kD = tab.add("kD", 0).getEntry();
-    private NetworkTableEntry kF = tab.add("kF", 0).getEntry();
+    // private NetworkTableEntry kP = tab.add("kP", 0).getEntry();
+    // private NetworkTableEntry kI = tab.add("kI", 0).getEntry();
+    // private NetworkTableEntry kD = tab.add("kD", 0).getEntry();
+    // private NetworkTableEntry kF = tab.add("kF", 0).getEntry();
     // private NetworkTableEntry timeEntry = tab.add("Time: ", 0).getEntry();//debugging
     // private NetworkTableEntry indexEntry = tab.add("Index: ", 0).getEntry();//debugging
 
@@ -63,7 +63,7 @@ public class ShooterSpeed extends CommandBase {
         // }
 
 
-        m_shooter.setPIDFvalues(kP.getDouble(0), kI.getDouble(0), kD.getDouble(0), kF.getDouble(0));
+        m_shooter.setPIDFvalues(kShooter.kPID.kP, kShooter.kPID.kI, kShooter.kPID.kD, kShooter.kPID.kF);
         m_shooter.spinMotAtSpeed(shooterSpeed);
         distanceEntry.setDouble(distance);
         targetSpeedEntry.setDouble(shooterSpeed);

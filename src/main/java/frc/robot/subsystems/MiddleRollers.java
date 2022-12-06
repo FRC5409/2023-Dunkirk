@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,19 +20,27 @@ public class MiddleRollers extends SubsystemBase {
 	public MiddleRollers() {
 
 		middleRollerMotor = new CANSparkMax(Constants.kMiddleRollers.kRollerMotorID, MotorType.kBrushless);
-
+		
+		middleRollerMotor.restoreFactoryDefaults();
+		middleRollerMotor.setIdleMode(IdleMode.kBrake);
 		middleRollerMotor.setInverted(true);	// Invert the rollers
+		middleRollerMotor.burnFlash();
 
 	}
 
-	/** Makes the rollers roll forward */
-	public void rollersForward() {
+	/** Makes the rollers roll forward (Sucking the ball in) */
+	public void rollForward() {
     	middleRollerMotor.set(Constants.kMiddleRollers.kRollersSpeed);
 	}
 
 	/** Makes the rollers stop rolling */
-	public void stopRollers() {
+	public void stopRolling() {
     	middleRollerMotor.set(Constants.kMiddleRollers.kRollersStopped);
+	}
+
+	/** Makes the rollers roll backward (Spitting the ball out) */
+	public void rollBackward() {
+		middleRollerMotor.set(-Constants.kMiddleRollers.kRollersSpeed);
 	}
 
 	@Override

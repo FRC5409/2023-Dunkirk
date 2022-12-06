@@ -34,15 +34,15 @@ public class IntakeBall extends CommandBase {
 	@Override
 	public void execute() {
 		m_intake.rollForward();
-		m_middleRollers.rollersForward();
+		m_middleRollers.rollForward();
 	}
 
 	// Called once the command ends or is interrupted
 	@Override
 	public void end(boolean interrupted) {
 		m_intake.stopRolling();
+		m_middleRollers.stopRolling();
 		m_intake.intakeUp();
-		m_middleRollers.stopRollers();
 	}
 
 	// Returns true when the command should end.

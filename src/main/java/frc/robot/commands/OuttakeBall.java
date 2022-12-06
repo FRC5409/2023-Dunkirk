@@ -5,37 +5,37 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.MiddleRollers;
 
-public class IndexBall extends CommandBase {
-  /** Creates a new IndexBall. */
+public class OuttakeBall extends CommandBase {
+	/** Creates a new OuttakeBall. */
 
-	private final Indexer m_indexer;
+	private final MiddleRollers m_middleRollers;
 
-	public IndexBall(Indexer indexer) {
+	public OuttakeBall(MiddleRollers middleRollers) {
 
-	m_indexer = indexer;
+		m_middleRollers = middleRollers;
 
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_indexer);
-  }
+		// Use addRequirements() here to declare subsystem dependencies.
+    	addRequirements(m_middleRollers);
+  	}
 
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
-		//m_indexer.stopRollers();
+		m_middleRollers.stopRolling();
 	}
 
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		//m_indexer.rollersForward();
+		m_middleRollers.rollBackward();
 	}
 
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
-		//m_indexer.stopRollers();
+		m_middleRollers.stopRolling();
 	}
 
 	// Returns true when the command should end.

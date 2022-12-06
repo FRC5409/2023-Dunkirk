@@ -58,14 +58,6 @@ public final class Constants {
         public final static double kRollersStopped = 0.0;
     }
 
-    public static class kIndexer {
-        public static class kMotors {
-            public final static int kFeederMotorID = 9;
-            public final static double kFeederSpeed = 0.4;
-            public final static double kFeederStopped = 0.0;
-        }
-    }
-
     public static class kIntake {
         public static class kRollers {
             public final static int kIntakeMotorID = 11;

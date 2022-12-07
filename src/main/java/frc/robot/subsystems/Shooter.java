@@ -6,7 +6,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 // import com.playingwithfusion.TimeOfFlight;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,7 +17,7 @@ public class Shooter extends SubsystemBase {
 
     private final WPI_TalonFX leftMot;
     private final WPI_TalonFX rightMot;
-    private final CANSparkMax feederMot;//TODO: Find act motor
+    private final CANSparkMax feederMot;
 
     // private final TimeOfFlight ToFFeeder;
 
@@ -41,7 +40,7 @@ public class Shooter extends SubsystemBase {
     @Override
     public void periodic() {
         if (Math.abs(m_joystick.getRightY()) >= 0.01) {//joystick drift
-            distance -= m_joystick.getRightY() * 0.1;
+            distance -= m_joystick.getRightY() * 0.1;//changed the distance
         }
     }
 
@@ -49,6 +48,11 @@ public class Shooter extends SubsystemBase {
     public void simulationPeriodic() {}
 
     public void configMots() {
+
+        leftMot.configFactoryDefault();
+        rightMot.configFactoryDefault();
+        feederMot.restoreFactoryDefaults();
+
         leftMot.setNeutralMode(NeutralMode.Coast);
         rightMot.setNeutralMode(NeutralMode.Coast);
         feederMot.setIdleMode(IdleMode.kBrake);
@@ -56,9 +60,8 @@ public class Shooter extends SubsystemBase {
         rightMot.follow(leftMot);//following to shoot at the same speed
         rightMot.setInverted(true);
 
-        // leftMot.sensor
-
-        //not sure if I should implement current limiting
+        feederMot.burnFlash();
+        //cant burn flash for other controllers
     }
 
     public void setPIDFvalues(double p, double i, double d, double f) {
@@ -66,25 +69,22 @@ public class Shooter extends SubsystemBase {
         leftMot.config_kI(0, i, 30);
         leftMot.config_kD(0, d, 30);
         leftMot.config_kF(0, f, 30);
-
-        //pc = 0.25;
-        //kc = 0.8
     }
 
     public double getVelocity() {
-        return getAverageSpeed();//couldn't find sensor coffiecent
+        return getAverageSpeed();
     }
 
     public double getAverageSpeed() {
-        return (Math.abs(leftMot.getSelectedSensorVelocity()) + Math.abs(rightMot.getSelectedSensorVelocity())) / 2 / 2048.0 * 600;
+        return (Math.abs(leftMot.getSelectedSensorVelocity()) + Math.abs(rightMot.getSelectedSensorVelocity())) / 2 / 2048.0 * 600;//convers to RPM
     }
 
     public void spinMotAtSpeed(double RPM) {
-        leftMot.set(TalonFXControlMode.Velocity, RPM * 2048.0 / 600.0);
+        leftMot.set(TalonFXControlMode.Velocity, RPM * 2048.0 / 600.0);//spins at RPM
     }
 
     public void feed() {
-        feederMot.set(kShooter.feedSpeed);
+        feederMot.set(kShooter.feedSpeed);//start the feeding motor
     }
 
     public void stopMotors() {
@@ -93,17 +93,6 @@ public class Shooter extends SubsystemBase {
     }
 
     public int closestPoint() {//finds the closest point at index x
-        // double closest = 999999999;
-        // int index = -1;
-        // for (int i = 0; i < kShooter.kShooterData.shooterDataX.length; i++) {
-        //     if (Math.abs(kShooter.kShooterData.shooterDataX[i] - distance) < closest) {
-        //         closest = Math.abs(kShooter.kShooterData.shooterDataX[i] - distance);
-        //         index = i;
-        //     } else {// data must be in order for this part to work, if not in order remove this
-        //         break;
-        //     }
-        // }
-        // return index;
         return (int) Math.round(distance / 15) - 1;//going up by 15 inches per step
     }
 

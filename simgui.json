@@ -16,6 +16,7 @@
       "/LiveWindow/Gyro": "Subsystem",
       "/LiveWindow/Intake": "Subsystem",
       "/LiveWindow/Intake/Roller Motor": "Motor Controller",
+      "/LiveWindow/Limelight": "Subsystem",
       "/LiveWindow/Pneumatics": "Subsystem",
       "/LiveWindow/Shooter": "Subsystem",
       "/LiveWindow/Ungrouped/DifferentialDrive[1]": "DifferentialDrive",

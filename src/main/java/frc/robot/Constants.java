@@ -86,9 +86,9 @@ public final class Constants {
 
         public final static double feedSpeed = 0.4;
 
-        public final static double shooterPlay = 25;
+        public final static double shooterRPMPlay = 25;
 
-        public final static double feedTime = 200;
+        public final static double feedTime = 100;
 
         public static class kPID {
             public final static double kP = 0.42;
@@ -101,7 +101,13 @@ public final class Constants {
 
         public static class kShooterData {
             public final static double[] shooterDataX = {15, 30, 45, 60, 75, 80, 105, 120, 135, 150};//distance to target
-            public static double[] shooterDataY = {1800, 1900, 2000, 2100, 2600, 3000, 3800, 4300, 4600, 5000};//speed to spin at
+            public final static double[] shooterDataY = {1800, 1900, 2000, 2100, 2600, 3000, 3800, 4300, 4600, 5000};//speed to spin at
         }
+    }
+
+    public static class kLimelight {
+        public final static double mountAngle = 45;//TODO: get real value
+        public final static double targetHeight = 140;
+        public final static double heightOffFloor = 70;
     }
 }

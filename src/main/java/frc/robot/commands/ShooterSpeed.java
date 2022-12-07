@@ -26,7 +26,7 @@ public class ShooterSpeed extends CommandBase {
     private double distance;
     private int time;
 
-    public ShooterSpeed(Shooter shooter) {
+    public ShooterSpeed(Shooter shooter) {//TODO: somepoint at limelight to this to grab the distace
         // Use addRequirements() here to declare subsystem dependencies.
         m_shooter = shooter;
         addRequirements(m_shooter);
@@ -56,11 +56,11 @@ public class ShooterSpeed extends CommandBase {
             shooterSpeed = kShooter.kShooterData.shooterDataY[kShooter.kShooterData.shooterDataY.length - 1];
         }
         //if its reached its speed
-        // if (m_shooter.getVelocity() >= shooterSpeed - kShooter.shooterPlay && m_shooter.getVelocity() <= shooterSpeed + kShooter.shooterPlay) {
+        if (Math.abs(m_shooter.getAverageSpeed() - shooterSpeed) <= kShooter.shooterRPMPlay) {
             //feed
-            time++;//TODO: Fix this if condition
+            time++;
             m_shooter.feed();
-        // }
+        }
 
 
         m_shooter.setPIDFvalues(kShooter.kPID.kP, kShooter.kPID.kI, kShooter.kPID.kD, kShooter.kPID.kF);

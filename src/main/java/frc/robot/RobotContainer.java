@@ -15,6 +15,7 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pneumatics;
 import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -36,6 +37,7 @@ public class RobotContainer {
     private final ExampleSubsystem sys_example;
     private final Intake sys_intake;
     private final Shooter sys_shooter;
+    private final Limelight sys_limelight;
 
     // Controller
     private final XboxController sys_controller;
@@ -59,6 +61,7 @@ public class RobotContainer {
         sys_example = new ExampleSubsystem();
         sys_intake = new Intake();
         sys_shooter = new Shooter();
+        sys_limelight = new Limelight();
         
         // Controller
         sys_controller = new XboxController(0);

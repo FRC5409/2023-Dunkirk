@@ -40,7 +40,7 @@ public class Shooter extends SubsystemBase {
     @Override
     public void periodic() {
         if (Math.abs(m_joystick.getRightY()) >= 0.01) {//joystick drift
-            distance -= m_joystick.getRightY() * 0.1;//changed the distance
+            distance -= m_joystick.getRightY() * 0.1;//changed the distance for teseting
         }
     }
 
@@ -60,15 +60,17 @@ public class Shooter extends SubsystemBase {
         rightMot.follow(leftMot);//following to shoot at the same speed
         rightMot.setInverted(true);
 
+        setPIDFvalues(kShooter.kPID.kP, kShooter.kPID.kI, kShooter.kPID.kD, kShooter.kPID.kF);
+
         feederMot.burnFlash();
         //cant burn flash for other controllers
     }
 
     public void setPIDFvalues(double p, double i, double d, double f) {
-        leftMot.config_kP(0, p, 30);
-        leftMot.config_kI(0, i, 30);
-        leftMot.config_kD(0, d, 30);
-        leftMot.config_kF(0, f, 30);
+        leftMot.config_kP(0, p, kShooter.timeOutMs);
+        leftMot.config_kI(0, i, kShooter.timeOutMs);
+        leftMot.config_kD(0, d, kShooter.timeOutMs);
+        leftMot.config_kF(0, f, kShooter.timeOutMs);
     }
 
     public double getVelocity() {

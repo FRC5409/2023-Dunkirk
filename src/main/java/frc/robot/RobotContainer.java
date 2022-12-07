@@ -104,6 +104,7 @@ public class RobotContainer {
         but_main_B.whenPressed(() -> sys_pneumatics.disable());
 
         but_main_LBumper.whenPressed(cmd_shooterSpeed);
+        // but_main_LBumper.whenReleased(() -> cmd_shooterSpeed.end(true));//TODO: test to see if this works
     }
 
     /**

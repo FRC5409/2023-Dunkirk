@@ -63,7 +63,6 @@ public class ShooterSpeed extends CommandBase {
         }
 
 
-        m_shooter.setPIDFvalues(kShooter.kPID.kP, kShooter.kPID.kI, kShooter.kPID.kD, kShooter.kPID.kF);
         m_shooter.spinMotAtSpeed(shooterSpeed);
         distanceEntry.setDouble(distance);
         targetSpeedEntry.setDouble(shooterSpeed);

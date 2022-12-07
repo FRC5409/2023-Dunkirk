@@ -86,9 +86,11 @@ public final class Constants {
 
         public final static double feedSpeed = 0.4;
 
-        public final static double shooterRPMPlay = 25;
+        public final static double shooterRPMPlay = 50;
 
         public final static double feedTime = 100;
+
+        public final static int timeOutMs = 30;
 
         public static class kPID {
             public final static double kP = 0.42;

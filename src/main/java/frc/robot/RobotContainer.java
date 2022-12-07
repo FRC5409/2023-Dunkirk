@@ -81,7 +81,7 @@ public class RobotContainer {
         cmd_toggleGear = new ToggleGear(sys_driveTrain);
         cmd_example = new ExampleCommand(sys_example);
         cmd_intakeBall = new IntakeBall(sys_intake);
-        cmd_shooterSpeed = new ShooterSpeed(sys_shooter);
+        cmd_shooterSpeed = new ShooterSpeed(sys_shooter, sys_controller);
         
 
         sys_driveTrain.setDefaultCommand(cmd_defaultDrive);
@@ -104,7 +104,6 @@ public class RobotContainer {
         but_main_B.whenPressed(() -> sys_pneumatics.disable());
 
         but_main_LBumper.whenPressed(cmd_shooterSpeed);
-        // but_main_LBumper.whenReleased(() -> cmd_shooterSpeed.end(true));//TODO: test to see if this works
     }
 
     /**

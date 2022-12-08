@@ -59,13 +59,10 @@ public class ShooterSpeed extends CommandBase {
             shooterSpeed = kShooter.kShooterData.shooterDataY[kShooter.kShooterData.shooterDataY.length - 1];
         }
         //if its reached its speed
-        if (Math.abs(m_shooter.getAverageSpeed() - shooterSpeed) <= kShooter.shooterRPMPlay) {
+        if (Math.abs(shooterSpeed - m_shooter.getAverageSpeed()) <= kShooter.shooterRPMPlay) {
             //feed
             m_feeder.feed();
-        } else {
-            m_feeder.stopFeeding();
         }
-
 
         m_shooter.spinMotAtSpeed(shooterSpeed);
         distanceEntry.setDouble(distance);

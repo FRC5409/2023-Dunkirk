@@ -10,17 +10,16 @@ public class Feeder extends SubsystemBase {
 
     private final CANSparkMax feederMot;
 
+    private boolean isFeeding = false;
+
     public Feeder() {
         feederMot = new CANSparkMax(kFeeder.feederID, MotorType.kBrushless);
-
         configMot();
+        stopFeeding();
     }
 
     @Override
-    public void periodic() {
-        // This method will be called once per scheduler run
-        
-    }
+    public void periodic() {}
 
     @Override
     public void simulationPeriodic() {}
@@ -35,10 +34,16 @@ public class Feeder extends SubsystemBase {
 
 
     public void feed() {
-        feederMot.set(kFeeder.feedSpeed);
+        if (!isFeeding) {
+            isFeeding = true;
+            feederMot.set(kFeeder.feedSpeed);
+        }
     }
 
     public void stopFeeding() {
-        feederMot.set(0);
+        if (isFeeding) {
+            isFeeding = false;
+            feederMot.set(0);
+        }
     }
 }

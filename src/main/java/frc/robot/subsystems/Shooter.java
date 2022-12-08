@@ -3,9 +3,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 // import com.playingwithfusion.TimeOfFlight;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,7 +14,6 @@ public class Shooter extends SubsystemBase {
 
     private final WPI_TalonFX leftMot;
     private final WPI_TalonFX rightMot;
-    private final CANSparkMax feederMot;
 
     // private final TimeOfFlight ToFFeeder;
 
@@ -27,8 +23,7 @@ public class Shooter extends SubsystemBase {
 
     public Shooter() {
         leftMot = new WPI_TalonFX(kShooter.leftMotID);
-        rightMot = new WPI_TalonFX(kShooter.rightMotID);
-        feederMot = new CANSparkMax(kShooter.feederID, MotorType.kBrushless);
+        rightMot = new WPI_TalonFX(kShooter.rightMotID); 
 
         // ToFFeeder = new TimeOfFlight(kShooter.ToFID);
 
@@ -44,7 +39,7 @@ public class Shooter extends SubsystemBase {
     @Override
     public void periodic() {
         if (Math.abs(m_joystick.getRightY()) >= 0.01) {//joystick drift
-            distance -= m_joystick.getRightY() * 0.1;//changed the distance for teseting
+            distance -= m_joystick.getRightY() * 0.3;//changed the distance for teseting
         }
     }
 
@@ -55,19 +50,16 @@ public class Shooter extends SubsystemBase {
 
         leftMot.configFactoryDefault();
         rightMot.configFactoryDefault();
-        feederMot.restoreFactoryDefaults();
 
         leftMot.setNeutralMode(NeutralMode.Coast);
         rightMot.setNeutralMode(NeutralMode.Coast);
-        feederMot.setIdleMode(IdleMode.kBrake);
     
         rightMot.follow(leftMot);//following to shoot at the same speed
         rightMot.setInverted(true);
 
         setPIDFvalues(kShooter.kPID.kP, kShooter.kPID.kI, kShooter.kPID.kD, kShooter.kPID.kF);
 
-        feederMot.burnFlash();
-        //cant burn flash for other controllers
+        //cant burn flash
     }
 
     public void setPIDFvalues(double p, double i, double d, double f) {
@@ -91,20 +83,17 @@ public class Shooter extends SubsystemBase {
 
     public void feed() {
         if (!isFeeding) {
-            feederMot.set(kShooter.feedSpeed);//start the feeding motor
             isFeeding = true;
         }
     }
 
     public void stopFeeding() {
         if (isFeeding) {
-            feederMot.set(0);
             isFeeding = false;
         }
     }
 
     public void stopMotors() {
-        feederMot.set(0);
         leftMot.set(0);
         isFeeding = false;
     }

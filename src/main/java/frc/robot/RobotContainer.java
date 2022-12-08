@@ -13,6 +13,7 @@ import frc.robot.commands.ShooterSpeed;
 import frc.robot.commands.ToggleGear;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
@@ -37,6 +38,7 @@ public class RobotContainer {
     private final ExampleSubsystem sys_example;
     private final Intake sys_intake;
     private final Shooter sys_shooter;
+    private final Feeder sys_feeder;
     private final Limelight sys_limelight;
 
     // Controller
@@ -61,6 +63,7 @@ public class RobotContainer {
         sys_example = new ExampleSubsystem();
         sys_intake = new Intake();
         sys_shooter = new Shooter();
+        sys_feeder = new Feeder();
         sys_limelight = new Limelight();
         
         // Controller
@@ -81,7 +84,7 @@ public class RobotContainer {
         cmd_toggleGear = new ToggleGear(sys_driveTrain);
         cmd_example = new ExampleCommand(sys_example);
         cmd_intakeBall = new IntakeBall(sys_intake);
-        cmd_shooterSpeed = new ShooterSpeed(sys_shooter, sys_controller);
+        cmd_shooterSpeed = new ShooterSpeed(sys_shooter, sys_controller, sys_feeder);
         
 
         sys_driveTrain.setDefaultCommand(cmd_defaultDrive);

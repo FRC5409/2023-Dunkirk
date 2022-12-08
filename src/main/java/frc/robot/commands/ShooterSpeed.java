@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.kShooter;
+import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Shooter;
 
 public class ShooterSpeed extends CommandBase {
@@ -24,23 +25,22 @@ public class ShooterSpeed extends CommandBase {
 
     private final Shooter m_shooter;
     private final XboxController m_joystick;
+    private final Feeder m_feeder;
     // private final Limelight m_limelight;
     private double distance;
-    private int time;
 
-    public ShooterSpeed(Shooter shooter, XboxController joystick) {//TODO: somepoint at limelight to this to grab the distace
+    public ShooterSpeed(Shooter shooter, XboxController joystick, Feeder feeder) {//TODO: somepoint at limelight to this to grab the distace
         // Use addRequirements() here to declare subsystem dependencies.
         m_shooter = shooter;
         m_joystick = joystick;
-        addRequirements(m_shooter);
+        m_feeder = feeder;
+        addRequirements(m_shooter, m_feeder);
         
     }
 
     // Called when the command is initially scheduled.
     @Override
-    public void initialize() {
-        time = 0;
-    }
+    public void initialize() {}
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
@@ -61,10 +61,9 @@ public class ShooterSpeed extends CommandBase {
         //if its reached its speed
         if (Math.abs(m_shooter.getAverageSpeed() - shooterSpeed) <= kShooter.shooterRPMPlay) {
             //feed
-            time++;
-            m_shooter.feed();
+            m_feeder.feed();
         } else {
-            m_shooter.stopFeeding();
+            m_feeder.stopFeeding();
         }
 
 
@@ -78,19 +77,16 @@ public class ShooterSpeed extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_shooter.stopMotors();
-        time = 0;
+        m_feeder.stopFeeding();
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() { 
-        if (time >= kShooter.feedTime || !m_joystick.getLeftBumper()) {//if button is off return true
-            time = 0;
+        if (!m_joystick.getLeftBumper()) {//if button is off return true
             return true;
         } else {
             return false;
         }
-        
     }
-
 }

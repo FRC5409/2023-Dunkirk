@@ -85,18 +85,6 @@ public class Shooter extends SubsystemBase {
         leftMot.set(TalonFXControlMode.Velocity, RPM * 2048.0 / 600.0);//spins at RPM
     }
 
-    public void feed() {
-        if (!isFeeding) {
-            isFeeding = true;
-        }
-    }
-
-    public void stopFeeding() {
-        if (isFeeding) {
-            isFeeding = false;
-        }
-    }
-
     public void stopMotors() {
         leftMot.set(0);
         isFeeding = false;

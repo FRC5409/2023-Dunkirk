@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.kDriveTrain;
+import frc.robot.Constants.kPneumatics;
 
 public class DriveTrain extends SubsystemBase {
 
@@ -52,10 +53,10 @@ public class DriveTrain extends SubsystemBase {
     public DriveTrain() {
 
         // Motors
-        m_motorLeft1 = new WPI_TalonFX(Constants.kDriveTrain.kMotors.kLeft1CAN);
-        m_motorLeft2 = new WPI_TalonFX(Constants.kDriveTrain.kMotors.kLeft2CAN);
-        m_motorRight1 = new WPI_TalonFX(Constants.kDriveTrain.kMotors.kRight1CAN);
-        m_motorRight2 = new WPI_TalonFX(Constants.kDriveTrain.kMotors.kRight2CAN);
+        m_motorLeft1 = new WPI_TalonFX(kDriveTrain.kMotors.kLeft1CAN);
+        m_motorLeft2 = new WPI_TalonFX(kDriveTrain.kMotors.kLeft2CAN);
+        m_motorRight1 = new WPI_TalonFX(kDriveTrain.kMotors.kRight1CAN);
+        m_motorRight2 = new WPI_TalonFX(kDriveTrain.kMotors.kRight2CAN);
 
         m_motorLeft2.follow(m_motorLeft1);
         m_motorRight2.follow(m_motorRight1);
@@ -75,15 +76,15 @@ public class DriveTrain extends SubsystemBase {
         setNeutralMode(m_motorNeutralMode);
 
         // CANCoders
-        m_cancoderLeft = new WPI_CANCoder(Constants.kDriveTrain.kCANCoder.kLeftCANCoder);
-        m_cancoderRight = new WPI_CANCoder(Constants.kDriveTrain.kCANCoder.kRightCANCoder);
+        m_cancoderLeft = new WPI_CANCoder(kDriveTrain.kCANCoder.kLeftCANCoder);
+        m_cancoderRight = new WPI_CANCoder(kDriveTrain.kCANCoder.kRightCANCoder);
 
         resetCANCoders();
 
         // Config CANCoders
         cancoderConfig = new CANCoderConfiguration();
-        cancoderConfig.sensorCoefficient = Constants.kDriveTrain.kCANCoder.kSensorCoefficient;
-        cancoderConfig.unitString = Constants.kDriveTrain.kCANCoder.kUnitString;
+        cancoderConfig.sensorCoefficient = kDriveTrain.kCANCoder.kSensorCoefficient;
+        cancoderConfig.unitString = kDriveTrain.kCANCoder.kUnitString;
         cancoderConfig.sensorTimeBase = SensorTimeBase.PerSecond;
         m_cancoderLeft.configAllSettings(cancoderConfig);
         m_cancoderRight.configAllSettings(cancoderConfig);
@@ -91,10 +92,10 @@ public class DriveTrain extends SubsystemBase {
         // Solenoids
         try {
             m_doubleSolenoid = new DoubleSolenoid(
-                Constants.kPneumatics.kHubModuleID,
-                Constants.kPneumatics.kPneumaticsModuleType,
-                Constants.kDriveTrain.Solenoids.kGearShiftHigh,
-                Constants.kDriveTrain.Solenoids.kGearShiftLow);
+                kPneumatics.kHubModuleID,
+                kPneumatics.kPneumaticsModuleType,
+                kDriveTrain.Solenoids.kGearShiftHigh,
+                kDriveTrain.Solenoids.kGearShiftLow);
             m_gearShiftValue = m_doubleSolenoid.get();
         } catch (NullPointerException exception) {
             DriverStation.reportError("Error creating Solenoid", exception.getStackTrace());

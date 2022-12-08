@@ -51,6 +51,12 @@
       "open": true
     },
     "SmartDashboard": {
+      "Left Solenoid": {
+        "open": true
+      },
+      "open": true
+    },
+    "SmartDashboard": {
       "Roller Motor": {
         "open": true
       },

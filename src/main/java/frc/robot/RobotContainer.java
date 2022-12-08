@@ -10,13 +10,17 @@ import frc.robot.commands.BallBackOff;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.IntakeBall;
+import frc.robot.commands.ShooterSpeed;
 import frc.robot.commands.ToggleGear;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.MiddleRollers;
 import frc.robot.subsystems.Pneumatics;
+import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -35,6 +39,9 @@ public class RobotContainer {
     private final Pneumatics sys_pneumatics;
     private final ExampleSubsystem sys_example;
     private final Intake sys_intake;
+    private final Shooter sys_shooter;
+    private final Feeder sys_feeder;
+    private final Limelight sys_limelight;
     private final MiddleRollers sys_middleRollers;
 
     // Controller
@@ -47,6 +54,7 @@ public class RobotContainer {
     private final ToggleGear cmd_toggleGear;
     private final ExampleCommand cmd_example;
     private final IntakeBall cmd_intakeBall;
+    private final ShooterSpeed cmd_shooterSpeed;
     private final BallBackOff cmd_ballBackOff;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -58,6 +66,9 @@ public class RobotContainer {
         sys_pneumatics = new Pneumatics();
         sys_example = new ExampleSubsystem();
         sys_intake = new Intake();
+        sys_shooter = new Shooter();
+        sys_feeder = new Feeder();
+        sys_limelight = new Limelight();
         sys_middleRollers = new MiddleRollers();
         
         // Controller
@@ -77,6 +88,8 @@ public class RobotContainer {
         cmd_defaultDrive = new DefaultDrive(sys_driveTrain, sys_controller);
         cmd_toggleGear = new ToggleGear(sys_driveTrain);
         cmd_example = new ExampleCommand(sys_example);
+        cmd_shooterSpeed = new ShooterSpeed(sys_shooter, sys_controller, sys_feeder);
+        
         cmd_intakeBall = new IntakeBall(sys_intake, sys_middleRollers);
         cmd_ballBackOff = new BallBackOff(sys_middleRollers);
 
@@ -99,8 +112,11 @@ public class RobotContainer {
         but_main_Y.whileHeld(cmd_ballBackOff);
         but_main_RBumper.whenPressed(cmd_toggleGear);
 
+
         but_main_A.whenPressed(() -> sys_pneumatics.enable());
         but_main_B.whenPressed(() -> sys_pneumatics.disable());
+
+        but_main_LBumper.whenPressed(cmd_shooterSpeed);
     }
 
     /**

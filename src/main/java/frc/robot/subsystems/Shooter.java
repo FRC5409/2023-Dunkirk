@@ -23,6 +23,8 @@ public class Shooter extends SubsystemBase {
 
     private double distance;
 
+    private boolean isFeeding = false;
+
     public Shooter() {
         leftMot = new WPI_TalonFX(kShooter.leftMotID);
         rightMot = new WPI_TalonFX(kShooter.rightMotID);
@@ -35,6 +37,8 @@ public class Shooter extends SubsystemBase {
         configMots();
 
         distance = 10;
+
+        stopMotors();
     }
 
     @Override
@@ -86,12 +90,23 @@ public class Shooter extends SubsystemBase {
     }
 
     public void feed() {
-        feederMot.set(kShooter.feedSpeed);//start the feeding motor
+        if (!isFeeding) {
+            feederMot.set(kShooter.feedSpeed);//start the feeding motor
+            isFeeding = true;
+        }
+    }
+
+    public void stopFeeding() {
+        if (isFeeding) {
+            feederMot.set(0);
+            isFeeding = false;
+        }
     }
 
     public void stopMotors() {
         feederMot.set(0);
         leftMot.set(0);
+        isFeeding = false;
     }
 
     public int closestPoint() {//finds the closest point at index x

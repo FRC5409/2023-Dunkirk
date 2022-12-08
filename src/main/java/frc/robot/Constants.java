@@ -85,10 +85,9 @@ public final class Constants {
         public final static int ToFID = 11;
 
         public final static double feedSpeed = 0.4;
+        public final static double feedTime = 100;
 
         public final static double shooterRPMPlay = 50;
-
-        public final static double feedTime = 100;
 
         public final static int timeOutMs = 30;
 

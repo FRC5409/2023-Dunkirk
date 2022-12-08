@@ -63,6 +63,8 @@ public class ShooterSpeed extends CommandBase {
             //feed
             time++;
             m_shooter.feed();
+        } else {
+            m_shooter.stopFeeding();
         }
 
 

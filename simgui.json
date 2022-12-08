@@ -14,9 +14,11 @@
       "/LiveWindow/DriveTrain": "Subsystem",
       "/LiveWindow/ExampleSubsystem": "Subsystem",
       "/LiveWindow/Gyro": "Subsystem",
+      "/LiveWindow/Indexer": "Subsystem",
       "/LiveWindow/Intake": "Subsystem",
       "/LiveWindow/Intake/Roller Motor": "Motor Controller",
       "/LiveWindow/Limelight": "Subsystem",
+      "/LiveWindow/MiddleRollers": "Subsystem",
       "/LiveWindow/Pneumatics": "Subsystem",
       "/LiveWindow/Shooter": "Subsystem",
       "/LiveWindow/Ungrouped/DifferentialDrive[1]": "DifferentialDrive",
@@ -52,7 +54,10 @@
       "Left Solenoid": {
         "open": true
       },
-      "Right Solenoid": {
+      "open": true
+    },
+    "SmartDashboard": {
+      "Roller Motor": {
         "open": true
       },
       "open": true

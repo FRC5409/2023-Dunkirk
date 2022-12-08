@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.BallBackOff;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.IntakeBall;
@@ -17,6 +18,7 @@ import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.MiddleRollers;
 import frc.robot.subsystems.Pneumatics;
 import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -40,6 +42,8 @@ public class RobotContainer {
     private final Shooter sys_shooter;
     private final Feeder sys_feeder;
     private final Limelight sys_limelight;
+    private final MiddleRollers sys_middleRollers;
+
 
     // Controller
     private final XboxController sys_controller;
@@ -52,6 +56,7 @@ public class RobotContainer {
     private final ExampleCommand cmd_example;
     private final IntakeBall cmd_intakeBall;
     private final ShooterSpeed cmd_shooterSpeed;
+    private final BallBackOff cmd_ballBackOff;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -65,7 +70,8 @@ public class RobotContainer {
         sys_shooter = new Shooter();
         sys_feeder = new Feeder();
         sys_limelight = new Limelight();
-        
+        sys_middleRollers = new MiddleRollers();
+
         // Controller
         sys_controller = new XboxController(0);
         but_main_A = new JoystickButton(sys_controller, XboxController.Button.kA.value);
@@ -83,8 +89,10 @@ public class RobotContainer {
         cmd_defaultDrive = new DefaultDrive(sys_driveTrain, sys_controller);
         cmd_toggleGear = new ToggleGear(sys_driveTrain);
         cmd_example = new ExampleCommand(sys_example);
-        cmd_intakeBall = new IntakeBall(sys_intake);
         cmd_shooterSpeed = new ShooterSpeed(sys_shooter, sys_controller, sys_feeder);
+        
+        cmd_intakeBall = new IntakeBall(sys_intake, sys_middleRollers);
+        cmd_ballBackOff = new BallBackOff(sys_middleRollers);
         
 
         sys_driveTrain.setDefaultCommand(cmd_defaultDrive);
@@ -101,6 +109,9 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         but_main_X.whileHeld(cmd_intakeBall);
+        but_main_X.whenReleased(cmd_ballBackOff.withTimeout(0.2));
+
+        but_main_Y.whileHeld(cmd_ballBackOff);
         but_main_RBumper.whenPressed(cmd_toggleGear);
 
 

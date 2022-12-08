@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -25,11 +26,9 @@ public class Intake extends SubsystemBase {
 	/** Creates a new Intake. */
 	public Intake() {
 		rollerMotor = new WPI_TalonFX(Constants.kIntake.kRollers.kIntakeMotorID);
-
-		rollerMotor.setInverted(true);
-
-		// Invert the motor
-		// rollerMotor.setInverted(true);
+		
+		rollerMotor.setNeutralMode(NeutralMode.Brake);	// Set brake mode
+		rollerMotor.setInverted(true);	// Invert the motor
 
 		intakeLeft = new DoubleSolenoid(
 			Constants.kPneumatics.kHubModuleID,
@@ -48,19 +47,19 @@ public class Intake extends SubsystemBase {
 
 	}
 
-	/** Rolling the wheels forward by making the motor rotate CW */
+	/** Rolling the wheels forward (Sucking the ball in) */
 	public void rollForward() {
 		rollerMotor.set(Constants.kIntake.kRollers.kIntakeRollersSpeed);
-	}
-
-	/** Rolling the wheels backward by making the motor rotate CCW */
-	public void rollBackward() {
-		rollerMotor.set(-Constants.kIntake.kRollers.kIntakeRollersSpeed);
 	}
 
 	/** Stop rolling the rollers */
 	public void stopRolling() {
 		rollerMotor.set(Constants.kIntake.kRollers.kIntakeRollersStopped);
+	}
+
+	/** Rolling the wheels backward (Spitting the ball out) */
+	public void rollBackward() {
+		rollerMotor.set(-Constants.kIntake.kRollers.kIntakeRollersSpeed);
 	}
 
 	/** Makes the intake go down */

@@ -5,6 +5,8 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.kIntake;
+import frc.robot.subsystems.Index;
 import frc.robot.subsystems.Intake;
 
 public class IntakeMovement extends CommandBase {
@@ -32,8 +34,23 @@ public class IntakeMovement extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intake.motorForward();
+    double rollarSpeed = 0;
+
+    rollarSpeed = kIntake.rollarSpeedDataY[kIntake.rollarSpeedDataY.length - 1];
+
+  //if its reached its speed
+//  try {
+//    rollarSpeed = m_intake.getInterpolatedSpeed(0,kIntake.rollarSpeedDataY[Index],0, kIntake.rollarSpeedDataY, x)
+//} catch (Exception e) {
+//}
+  if (Math.abs(m_intake.getAverageSpeed() - rollarSpeed) <= kIntake.intakeRPMPlay) {
+      //feed
+      m_intake.motorForward();
+  } else {
+      m_intake.motorStop();
   }
+    m_intake.spinRollarAtSpeed(rollarSpeed);
+  
 
   // Called once the command ends or is interrupted.
   @Override

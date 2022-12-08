@@ -78,5 +78,7 @@ public final class Constants {
         public final static double kindexNeo2Forward = 0.4;
         public final static double kindexNeo2Backward = 0.4;
 
+        public final static IndexModuleType kPneumaticsModleType = 
+
     }
 }

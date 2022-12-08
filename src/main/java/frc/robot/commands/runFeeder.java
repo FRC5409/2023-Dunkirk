@@ -25,6 +25,7 @@ public class runFeeder extends CommandBase {
         m_feeder = feeder;
         m_joystick = joystick;
         addRequirements(m_feeder);
+        targetVelocity.setDouble(600);
         
     }
 

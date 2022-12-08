@@ -61,7 +61,7 @@ public class ShooterSpeed extends CommandBase {
         //if its reached its speed
         if (Math.abs(shooterSpeed - m_shooter.getAverageSpeed()) <= kShooter.shooterRPMPlay) {
             //feed
-            m_feeder.feed();
+            m_feeder.feedForward();
         }
 
         m_shooter.spinMotAtSpeed(shooterSpeed);

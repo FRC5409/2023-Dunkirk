@@ -33,10 +33,17 @@ public class Feeder extends SubsystemBase {
     }
 
 
-    public void feed() {
+    public void feedForward() {
         if (!isFeeding) {
             isFeeding = true;
             feederMot.set(kFeeder.feedSpeed);
+        }
+    }
+
+    public void feedBackward() {
+        if (!isFeeding) {
+            isFeeding = true;
+            feederMot.set(- (kFeeder.feedSpeed));
         }
     }
 

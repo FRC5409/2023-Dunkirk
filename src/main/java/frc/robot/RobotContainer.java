@@ -92,7 +92,7 @@ public class RobotContainer {
         cmd_shooterSpeed = new ShooterSpeed(sys_shooter, sys_controller, sys_feeder);
         
         cmd_intakeBall = new IntakeBall(sys_intake, sys_middleRollers);
-        cmd_ballBackOff = new BallBackOff(sys_middleRollers);
+        cmd_ballBackOff = new BallBackOff(sys_middleRollers, sys_feeder);
         
 
         sys_driveTrain.setDefaultCommand(cmd_defaultDrive);

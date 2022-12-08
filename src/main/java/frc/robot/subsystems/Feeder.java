@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -10,12 +11,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Feeder extends SubsystemBase {
 
     private final CANSparkMax feederMot;
+    private final RelativeEncoder encoder;
     private final SparkMaxPIDController pidController;
 
     private boolean isFeeding = false;
 
     public Feeder() {
         feederMot = new CANSparkMax(kFeeder.feederID, MotorType.kBrushless);
+        encoder = feederMot.getEncoder();
         pidController = feederMot.getPIDController();
         configMot();
         stopFeeding();
@@ -49,8 +52,7 @@ public class Feeder extends SubsystemBase {
     public void feed() {
         if (!isFeeding) {
             isFeeding = true;
-            pidController.setReference(kFeeder.feedSpeed, CANSparkMax.ControlType.kVelocity);
-            // feederMot.set(kFeeder.feedSpeed);
+            pidController.setReference(600, CANSparkMax.ControlType.kVelocity);
         }
     }//
 
@@ -62,6 +64,6 @@ public class Feeder extends SubsystemBase {
     }
 
     public double getVelocity() {
-        
+        return encoder.getVelocity();
     }
 }

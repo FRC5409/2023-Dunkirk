@@ -7,18 +7,18 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.MiddleRollers;
 
-public class OuttakeBall extends CommandBase {
-	/** Creates a new OuttakeBall. */
+public class BallBackOff extends CommandBase {
+	/** Creates a new BallBackOff. */
 
 	private final MiddleRollers m_middleRollers;
 
-	public OuttakeBall(MiddleRollers middleRollers) {
+	public BallBackOff(MiddleRollers middleRollers) {
 
 		m_middleRollers = middleRollers;
 
 		// Use addRequirements() here to declare subsystem dependencies.
-    	addRequirements(m_middleRollers);
-  	}
+		addRequirements(m_middleRollers);
+	}
 
 	// Called when the command is initially scheduled.
 	@Override

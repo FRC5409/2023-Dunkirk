@@ -22,6 +22,7 @@ public final class Constants {
             public final static int kRight1CAN = 3;
             public final static int kRight2CAN = 4;
 
+            public final static int currentLimit = 90;
             public final static double rampRate = 0.5;
         }
 

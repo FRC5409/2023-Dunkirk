@@ -82,6 +82,7 @@ public class RobotContainer {
         sys_example = new ExampleSubsystem();
         sys_shooter = new Shooter();
         sys_feeder = new Feeder();
+        sys_intake = new Intake();
         sys_limelight = new Limelight();
         sys_elevator = new Elevator();
         

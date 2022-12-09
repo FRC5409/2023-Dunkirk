@@ -21,12 +21,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.kElevator;
 
 
-
-
 public class Elevator extends SubsystemBase implements Loggable{
 
-    public static CANSparkMax m_left;
-    public static CANSparkMax m_right;
+    public CANSparkMax m_left;
+    public CANSparkMax m_right;
 
     private RelativeEncoder s_encoder;
 
@@ -62,11 +60,17 @@ public class Elevator extends SubsystemBase implements Loggable{
         c_pidController = m_left.getPIDController();
         c_pidController.setOutputRange(-1, 1);
 
-        kP = c_pidController.getP();
-        kI = c_pidController.getI();
-        kD = c_pidController.getD();
-        kF = c_pidController.getFF();
-
+        try {
+            kP = c_pidController.getP();
+            kI = c_pidController.getI();
+            kD = c_pidController.getD();
+            kF = c_pidController.getFF();
+        } catch(Exception e) {
+            kP = 0;
+            kI = 0;
+            kD = 0;
+            kF = 0;
+        }
         setPIDFValues();
         m_left.burnFlash();
 
@@ -149,5 +153,4 @@ public class Elevator extends SubsystemBase implements Loggable{
     public void moveElevator(double setpoint) {
         c_pidController.setReference(setpoint, ControlType.kPosition);
     }
-
 }

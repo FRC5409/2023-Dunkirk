@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.SetCoastMode;
+import frc.robot.commands.Elevator.BurnFlash;
 
 
 /**
@@ -41,6 +42,10 @@ public class Robot extends TimedRobot {
     .debounce(5)
     .whenActive(new SetCoastMode(m_robotContainer.sys_driveTrain));
 
+    new Trigger(this::isEnabled)
+    .negate()
+    .debounce(1)
+    .whenActive(new BurnFlash(m_robotContainer.sys_elevator));
   }
 
   /**

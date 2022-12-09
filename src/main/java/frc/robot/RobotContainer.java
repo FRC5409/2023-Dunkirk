@@ -4,25 +4,29 @@
 
 package frc.robot;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.IntakeBall;
 import frc.robot.commands.ShooterSpeed;
 import frc.robot.commands.ToggleGear;
-import frc.robot.commands.MoveElevator;
+import frc.robot.commands.Elevator.MoveElevator;
+import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pneumatics;
 import frc.robot.subsystems.Shooter;
+
 import io.github.oblarg.oblog.Logger;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -42,7 +46,7 @@ public class RobotContainer {
     private final Shooter sys_shooter;
     private final Feeder sys_feeder;
     private final Limelight sys_limelight;
-    private final Elevator sys_elevator;
+    public final Elevator sys_elevator;
 
     // Controller
     private final XboxController sys_controller;
@@ -61,17 +65,15 @@ public class RobotContainer {
         //Drivetrain
         private final ToggleGear cmd_toggleGear;
         private final DefaultDrive cmd_defaultDrive;
-        // private final GearShift cmd_gearShift
+        
+    //Conditionals
+    private BooleanSupplier dpadUp;
+    private BooleanSupplier dpadDown;
+    private BooleanSupplier elevatorActiveCondiotional;
+    private boolean elevatorActive;
 
-        //Elevator
-        private final MoveElevator cmd_moveElevator;
+    //Triggers
 
-    /* The container for the robot. Contains subsystems, OI devices, and commands. 
-     * @throws ParseException
-     * @throws IOException
-     * @throws FileNotFoundException
-     * @throws SecurityException
-     * @throws NoSuchFieldException*/
 
     public RobotContainer() {
 
@@ -105,11 +107,11 @@ public class RobotContainer {
         cmd_example = new ExampleCommand(sys_example);
         cmd_intakeBall = new IntakeBall(sys_intake);
         cmd_shooterSpeed = new ShooterSpeed(sys_shooter, sys_controller, sys_feeder);
-        
 
-        cmd_moveElevator = new MoveElevator(sys_elevator, sys_controller);
-       
-        sys_elevator.setDefaultCommand(cmd_moveElevator);
+        //Conditionals
+        dpadUp = () -> sys_controller.getPOV() == 0;
+        dpadDown = () -> sys_controller.getPOV() == 180;
+        elevatorActiveCondiotional = () -> elevatorActive == true;
 
         // Configure the button bindings
         configureButtonBindings();
@@ -131,10 +133,18 @@ public class RobotContainer {
 
         but_main_A.whenPressed(() -> sys_pneumatics.enable());
         but_main_B.whenPressed(() -> sys_pneumatics.disable());
-
-        but_main_LBumper.whenPressed(cmd_shooterSpeed);
-        but_main_Start.whenPressed(() -> cmd_moveElevator.toggleMove());
         
+        but_main_LBumper.whenPressed(cmd_shooterSpeed);
+
+        but_main_Start.whenPressed(() -> elevatorActive =! elevatorActive);
+
+        new Trigger(elevatorActiveCondiotional)
+        .and(new Trigger(dpadUp)
+            .or(new Trigger(dpadDown)
+                .whenActive(new MoveElevator(sys_elevator, sys_controller, false))
+            )
+            .whenActive(new MoveElevator(sys_elevator, sys_controller, true))
+        );
     }
 
     /**

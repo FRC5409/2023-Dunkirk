@@ -4,20 +4,15 @@
 
 package frc.robot;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
-import org.json.simple.parser.ParseException;
-
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ClimberMove;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.IntakeBall;
 import frc.robot.commands.ShooterSpeed;
 import frc.robot.commands.ToggleGear;
+import frc.robot.commands.MoveElevator;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Gyro;
@@ -25,7 +20,6 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pneumatics;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.elevator.Elevator;
 import io.github.oblarg.oblog.Logger;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -70,9 +64,7 @@ public class RobotContainer {
         // private final GearShift cmd_gearShift
 
         //Elevator
-        private final ClimberMove cmd_climberMove;
-
-
+        private final MoveElevator cmd_moveElevator;
 
     /* The container for the robot. Contains subsystems, OI devices, and commands. 
      * @throws ParseException
@@ -114,10 +106,9 @@ public class RobotContainer {
         cmd_shooterSpeed = new ShooterSpeed(sys_shooter, sys_controller, sys_feeder);
         
 
-        cmd_climberMove = new ClimberMove(sys_elevator, sys_controller);
-
-        sys_elevator.setDefaultCommand(cmd_climberMove);
-
+        cmd_moveElevator = new MoveElevator(sys_elevator, sys_controller);
+       
+        sys_elevator.setDefaultCommand(cmd_moveElevator);
 
         // Configure the button bindings
         configureButtonBindings();
@@ -141,6 +132,8 @@ public class RobotContainer {
         but_main_B.whenPressed(() -> sys_pneumatics.disable());
 
         but_main_LBumper.whenPressed(cmd_shooterSpeed);
+        but_main_Start.whenPressed(() -> cmd_moveElevator.toggleMove());
+        
     }
 
     /**

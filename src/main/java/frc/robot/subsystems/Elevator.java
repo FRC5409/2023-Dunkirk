@@ -23,6 +23,8 @@ import frc.robot.Constants.kElevator;
 
 public class Elevator extends SubsystemBase implements Loggable{
 
+    public boolean elevatorActive;
+
     public CANSparkMax m_left;
     public CANSparkMax m_right;
 
@@ -80,6 +82,7 @@ public class Elevator extends SubsystemBase implements Loggable{
         
         ShuffleboardLayout encoder = Shuffleboard.getTab("Elevator").getLayout("Encoder Values", BuiltInLayouts.kList);
         
+        ShuffleboardLayout active = Shuffleboard.getTab("Elevator").getLayout("Elevator Active", BuiltInLayouts.kList);
 
         shuffleboardFields.put("Enable Config", pidLayout.add("Enable Configuration", false).withWidget(BuiltInWidgets.kToggleButton).withPosition(1, 1).getEntry());
     
@@ -90,6 +93,7 @@ public class Elevator extends SubsystemBase implements Loggable{
 
         shuffleboardFields.put("EncoderDistance", encoder.add("Encoder Distance Travelled", getPosition()).withWidget(BuiltInWidgets.kEncoder).getEntry());
 
+        shuffleboardFields.put("ElevatorActive", active.add("Elevator Active?", elevatorActive).withWidget(BuiltInWidgets.kBooleanBox).getEntry());
     }
 
     @Override
@@ -123,7 +127,8 @@ public class Elevator extends SubsystemBase implements Loggable{
             }
         }
 
-        shuffleboardFields.get("Encoder").setNumber(getPosition());
+        shuffleboardFields.get("EncoderDistance").setNumber(getPosition());
+        shuffleboardFields.get("ElevatorActive").setBoolean(elevatorActive);
     }
 
     @Override

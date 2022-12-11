@@ -67,10 +67,10 @@ public class RobotContainer {
         private final DefaultDrive cmd_defaultDrive;
         
     //Conditionals
+    public boolean elevatorActive;
+    private BooleanSupplier isElevatorActive;
     private BooleanSupplier dpadUp;
     private BooleanSupplier dpadDown;
-    private BooleanSupplier elevatorActiveCondiotional;
-    private boolean elevatorActive;
 
     //Triggers
 
@@ -111,7 +111,7 @@ public class RobotContainer {
         //Conditionals
         dpadUp = () -> sys_controller.getPOV() == 0;
         dpadDown = () -> sys_controller.getPOV() == 180;
-        elevatorActiveCondiotional = () -> elevatorActive == true;
+        isElevatorActive = () -> elevatorActive == true;
 
         // Configure the button bindings
         configureButtonBindings();
@@ -136,9 +136,12 @@ public class RobotContainer {
         
         but_main_LBumper.whenPressed(cmd_shooterSpeed);
 
-        but_main_Start.whenPressed(() -> elevatorActive =! elevatorActive);
+        but_main_Start
+        .whenPressed(() -> elevatorActive = !elevatorActive)
+        .whenPressed(() -> sys_elevator.elevatorActive = !sys_elevator.elevatorActive);
 
-        new Trigger(elevatorActiveCondiotional)
+
+        new Trigger(isElevatorActive)
         .and(new Trigger(dpadUp)
             .or(new Trigger(dpadDown)
                 .whenActive(new MoveElevator(sys_elevator, sys_controller, false))

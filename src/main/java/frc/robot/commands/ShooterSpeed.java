@@ -29,7 +29,7 @@ public class ShooterSpeed extends CommandBase {
     // private final Limelight m_limelight;
     private double distance;
 
-    public ShooterSpeed(Shooter shooter, XboxController joystick, Feeder feeder) {//TODO: somepoint at limelight to this to grab the distace
+    public ShooterSpeed(Shooter shooter, XboxController joystick, Feeder feeder) {//TODO: somepoint add limelight to this to grab the distance
         // Use addRequirements() here to declare subsystem dependencies.
         m_shooter = shooter;
         m_joystick = joystick;

@@ -5,7 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import frc.robot.subsystems.Elevator;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean

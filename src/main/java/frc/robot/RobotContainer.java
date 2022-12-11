@@ -67,13 +67,14 @@ public class RobotContainer {
         private final DefaultDrive cmd_defaultDrive;
         
     //Conditionals
-    public boolean elevatorActive;
+    private boolean elevatorActive;
     private BooleanSupplier isElevatorActive;
     private BooleanSupplier dpadUp;
     private BooleanSupplier dpadDown;
 
     //Triggers
-
+    private Trigger elevatorUp;
+    private Trigger elevatorDown;
 
     public RobotContainer() {
 
@@ -140,14 +141,13 @@ public class RobotContainer {
         .whenPressed(() -> elevatorActive = !elevatorActive)
         .whenPressed(() -> sys_elevator.elevatorActive = !sys_elevator.elevatorActive);
 
+        elevatorUp = new Trigger(isElevatorActive)
+            .and(new Trigger(dpadUp))
+            .whenActive(new MoveElevator(sys_elevator, sys_controller, true));
 
-        new Trigger(isElevatorActive)
-        .and(new Trigger(dpadUp)
-            .or(new Trigger(dpadDown)
-                .whenActive(new MoveElevator(sys_elevator, sys_controller, false))
-            )
-            .whenActive(new MoveElevator(sys_elevator, sys_controller, true))
-        );
+        elevatorDown = new Trigger(isElevatorActive)
+            .and(new Trigger(dpadDown))
+            .whenActive(new MoveElevator(sys_elevator, sys_controller, false));
     }
 
     /**

@@ -73,8 +73,8 @@ public class RobotContainer {
     private BooleanSupplier dpadDown;
 
     //Triggers
-    private Trigger elevatorUp;
-    private Trigger elevatorDown;
+    private final Trigger elevatorUp;
+    private final Trigger elevatorDown;
 
     public RobotContainer() {
 
@@ -114,6 +114,15 @@ public class RobotContainer {
         dpadDown = () -> sys_controller.getPOV() == 180;
         isElevatorActive = () -> elevatorActive == true;
 
+        //Triggers
+        elevatorUp = new Trigger(isElevatorActive)
+            .and(new Trigger(dpadUp))
+            .whenActive(new MoveElevator(sys_elevator, sys_controller, true));
+
+        elevatorDown = new Trigger(isElevatorActive)
+            .and(new Trigger(dpadDown))
+            .whenActive(new MoveElevator(sys_elevator, sys_controller, false));
+
         // Configure the button bindings
         configureButtonBindings();
 
@@ -140,14 +149,6 @@ public class RobotContainer {
         but_main_Start
         .whenPressed(() -> elevatorActive = !elevatorActive)
         .whenPressed(() -> sys_elevator.elevatorActive = !sys_elevator.elevatorActive);
-
-        elevatorUp = new Trigger(isElevatorActive)
-            .and(new Trigger(dpadUp))
-            .whenActive(new MoveElevator(sys_elevator, sys_controller, true));
-
-        elevatorDown = new Trigger(isElevatorActive)
-            .and(new Trigger(dpadDown))
-            .whenActive(new MoveElevator(sys_elevator, sys_controller, false));
     }
 
     /**

@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.BallBackOff;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.OuttakeBall;
 import frc.robot.commands.IntakeBall;
 import frc.robot.commands.ShooterSpeed;
 import frc.robot.commands.ToggleGear;
@@ -57,6 +58,7 @@ public class RobotContainer {
     private final IntakeBall cmd_intakeBall;
     private final ShooterSpeed cmd_shooterSpeed;
     private final BallBackOff cmd_ballBackOff;
+    private final OuttakeBall cmd_outtakeBall;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -90,9 +92,9 @@ public class RobotContainer {
         cmd_toggleGear = new ToggleGear(sys_driveTrain);
         cmd_example = new ExampleCommand(sys_example);
         cmd_shooterSpeed = new ShooterSpeed(sys_shooter, sys_controller, sys_feeder);
-        
         cmd_intakeBall = new IntakeBall(sys_intake, sys_middleRollers);
         cmd_ballBackOff = new BallBackOff(sys_middleRollers, sys_feeder);
+        cmd_outtakeBall = new OuttakeBall(sys_middleRollers, sys_feeder);
         
 
         sys_driveTrain.setDefaultCommand(cmd_defaultDrive);
@@ -109,9 +111,10 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         but_main_X.whileHeld(cmd_intakeBall);
-        but_main_X.whenReleased(cmd_ballBackOff.withTimeout(0.2));
+        but_main_X.whenReleased(cmd_ballBackOff.withTimeout(0.4));
 
-        but_main_Y.whileHeld(cmd_ballBackOff);
+        but_main_Y.whileHeld(cmd_outtakeBall);
+
         but_main_RBumper.whenPressed(cmd_toggleGear);
 
 

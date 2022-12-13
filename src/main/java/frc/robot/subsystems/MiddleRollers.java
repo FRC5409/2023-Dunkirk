@@ -16,6 +16,7 @@ public class MiddleRollers extends SubsystemBase {
   /** Creates a new MiddleRollers. */
 
   private final CANSparkMax middleRollerMotor;
+  private boolean isRolling = false;
 
 	public MiddleRollers() {
 
@@ -26,22 +27,32 @@ public class MiddleRollers extends SubsystemBase {
 		middleRollerMotor.setInverted(true);	// Invert the rollers
 		middleRollerMotor.burnFlash();
 
+		stopRolling();
 	}
 
 	/** Makes the rollers roll forward (Sucking the ball in) */
 	public void rollForward() {
-    	middleRollerMotor.set(Constants.kMiddleRollers.kRollersSpeed);
-	}
+        if (!isRolling) {
+            isRolling = true;
+            middleRollerMotor.set(Constants.kMiddleRollers.kRollersSpeed);
+        }
+    }
 
 	/** Makes the rollers stop rolling */
 	public void stopRolling() {
-    	middleRollerMotor.set(Constants.kMiddleRollers.kRollersStopped);
-	}
+        if (isRolling) {
+            isRolling = false;
+            middleRollerMotor.set(Constants.kMiddleRollers.kRollersStopped);
+        }
+    }
 
 	/** Makes the rollers roll backward (Spitting the ball out) */
 	public void rollBackward() {
-		middleRollerMotor.set(-Constants.kMiddleRollers.kRollersSpeed);
-	}
+        if (!isRolling) {
+            isRolling = true;
+            middleRollerMotor.set(- (Constants.kMiddleRollers.kRollersSpeed));
+        }
+    }
 
 	@Override
 	public void periodic() {

@@ -74,7 +74,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getAverageSpeed() {
-        return (Math.abs(leftMot.getSelectedSensorVelocity()) + Math.abs(rightMot.getSelectedSensorVelocity())) / 2 / 2048.0 * 600;//convers to RPM
+        return (Math.abs(leftMot.getSelectedSensorVelocity()) + Math.abs(rightMot.getSelectedSensorVelocity())) / 2 / 2048.0 * 600;//converts to RPM
     }
 
     public void spinMotAtSpeed(double RPM) {

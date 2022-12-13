@@ -6,19 +6,19 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-// could be PWMSparkMax instead of Spark
+
+
 public class Index extends SubsystemBase {
   private final CANSparkMax middleRollar;
-  private final CANSparkMax indexNeo2;
+  //private final CANSparkMax indexNeo2;
+
 
   /** Creates a new Index. */
-  public Index() {
-    middleRollar = new CANSparkMax(Constants.kIndex.kindexmiddleRollar, MotorType.kBrushless)
-    //indexNeo2 = new CANSparkMax();
+  public Index(){
+    middleRollar = new CANSparkMax(Constants.kIndex.kindexmiddleRollar, MotorType.kBrushless);
+  //  indexNeo2 = new CANSparkMax();
     middleRollar.restoreFactoryDefaults();
 		middleRollar.setIdleMode(IdleMode.kBrake);
 		middleRollar.setInverted(true);	// Invert the rollers
@@ -36,18 +36,6 @@ public class Index extends SubsystemBase {
 
   public void indexNeo1Stop (){
     middleRollar.set(0); // stops motor
-  }
-
-  public void indexNeo2forward(){
-    indexNeo2.set(Constants.kIndex.kindexmiddleRollarForward2* -1); // makes motor move forward
-  }
-
-	public void indexNeo2Backward(){
-    indexNeo2.set(Constants.kIndex.kindexmiddleRollarBackward2* -1); // makes motor move backwards
-  }
-
-  public void indexNeo2Stop (){
-    indexNeo2.set(0); // stops motor
   }
 
 

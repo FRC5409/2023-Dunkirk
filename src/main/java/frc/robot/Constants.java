@@ -69,16 +69,28 @@ public final class Constants {
         public final static int kleftSolenoidBackward = 5;
         public final static int krightSolenoidForward = 10;
         public final static int krightSolenoidBackward = 11;
+
+        public final static int timeOutMs = 30;
+        public final static double krollarSpeed = 0.4;
+
+        public static class kPID{
+            public final static double kP = 0.42;
+            public final static double kI = 0;
+            public final static double kD = 0;
+            public final static double kF = 0.0505;
+    
+        }
     }
     public static class kIndex{
-        public final static int kindexNeo1 = 8;
-        public final static int kindexNeo2 = 9;
-        public final static double kindexNeo1Forward = 0.4;
-        public final static double kindexNeo1Backward = 0.4;
-        public final static double kindexNeo2Forward = 0.4;
-        public final static double kindexNeo2Backward = 0.4;
-
-        public final static IndexModuleType kPneumaticsModleType = 
+        public final static int kindexmiddleRollar = 8;
+        public final static int kindexmiddleRollar2 = 9;
+        public final static double kindexmiddleRollarForward = 0.4;
+        public final static double kindexmiddleRollarBackward = 0.4;
+        public final static double kindexmiddleRollarForward2 = 0.4;
+        public final static double kindexmiddleRollarBackward2= 0.4;
+       // rev neo brushless 
+       // sensor type is hall effect
 
     }
+    
 }

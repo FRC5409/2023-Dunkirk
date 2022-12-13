@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.kFeeder;
 import frc.robot.Constants.kShooter;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Shooter;
@@ -61,7 +62,7 @@ public class ShooterSpeed extends CommandBase {
         //if its reached its speed
         if (Math.abs(shooterSpeed - m_shooter.getAverageSpeed()) <= kShooter.shooterRPMPlay) {
             //feed
-            m_feeder.feed();
+            m_feeder.feed(kFeeder.feedSpeed);//TODO: finish this value
         }
 
         m_shooter.spinMotAtSpeed(shooterSpeed);

@@ -74,10 +74,10 @@ public final class Constants {
         public final static double krollarSpeed = 0.4;
 
         public static class kPID{
-            public final static double kP = 0.42;
+            public final static double kP = 0;
             public final static double kI = 0;
             public final static double kD = 0;
-            public final static double kF = 0.0505;
+            public final static double kF = 0;
     
         }
     }

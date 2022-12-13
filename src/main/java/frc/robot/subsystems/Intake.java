@@ -42,7 +42,7 @@ public class Intake extends SubsystemBase {
     rollarMotor.setInverted(true);
     rollarMotor.configFactoryDefault();
     rollarMotor.setNeutralMode(NeutralMode.Coast);
-    setPIDFvalues(kIntake.kPID.kP, kIntake.kPID.kI, kIntake.kPID.kD, kIntake.kPID.kF);
+   // setPIDFvalues(kIntake.kPID.kP, kIntake.kPID.kI, kIntake.kPID.kD, kIntake.kPID.kF);
 
   }
 
@@ -54,11 +54,8 @@ public class Intake extends SubsystemBase {
   }
 
   public double getVelocity() {
-    return getAverageSpeed();
+    return (Math.abs(rollarMotor.getSelectedSensorVelocity()))/ 2048.0 * 600;//converts to RPM
   } 
-  public double getAverageSpeed() {
-    return (Math.abs(rollarMotor.getSelectedSensorVelocity()))/ 2048.0 * 600;//convers to RPM
-  }
 
   public void spinRollarAtSpeed(double RPM) {
     rollarMotor.set(TalonFXControlMode.Velocity, RPM * 2048.0 / 600.0);//spins at RPM

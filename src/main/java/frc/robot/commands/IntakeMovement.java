@@ -20,6 +20,8 @@ public class IntakeMovement extends CommandBase {
   private NetworkTableEntry kI = tab.add("kI", 0).getEntry();
   private NetworkTableEntry kD = tab.add("kD", 0).getEntry();
   private NetworkTableEntry kF = tab.add("kF", 0).getEntry();
+  private NetworkTableEntry targetSpeed = tab.add("targetSpeed",600).getEntry();
+  private NetworkTableEntry speed = tab.add("speed",0).getEntry();
 
 
   /** Creates a new solenoidsmovement. */
@@ -42,10 +44,8 @@ public class IntakeMovement extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double rollarSpeed = 0;
-
-    rollarSpeed = kIntake.krollarSpeed;
-    m_intake.spinRollarAtSpeed(rollarSpeed);
+    m_intake.spinRollarAtSpeed(targetSpeed.getDouble(0));
+    speed.setDouble(m_intake.getVelocity());
   }
   // Called once the command ends or is interrupted.
   @Override

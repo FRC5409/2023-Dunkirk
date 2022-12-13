@@ -26,15 +26,13 @@ public class runFeeder extends CommandBase {
         m_feeder = feeder;
         m_joystick = joystick;
         addRequirements(m_feeder);
-        targetVelocity.setDouble(600);
-        
+        targetVelocity.setDouble(kFeeder.feedSpeed);
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
         m_feeder.feed(kFeeder.feedSpeed);
-        
     }
 
     // Called every time the scheduler runs while the command is scheduled.

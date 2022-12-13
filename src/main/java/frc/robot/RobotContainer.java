@@ -107,8 +107,8 @@ public class RobotContainer {
         but_main_RBumper.whenPressed(cmd_toggleGear);
 
 
-        // but_main_A.whenPressed(() -> sys_pneumatics.enable());
-        but_main_A.whenPressed(cmd_runFeeder);
+        but_main_A.whenPressed(() -> sys_pneumatics.enable());
+        // but_main_A.whenPressed(cmd_runFeeder);
         but_main_B.whenPressed(() -> sys_pneumatics.disable());
 
         but_main_LBumper.whenPressed(cmd_shooterSpeed);

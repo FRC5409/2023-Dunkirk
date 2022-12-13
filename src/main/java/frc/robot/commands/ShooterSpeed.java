@@ -53,10 +53,10 @@ public class ShooterSpeed extends CommandBase {
     public void execute() {
         distance = m_shooter.getTargetDistance(); //inches
         int index = m_shooter.closestPoint();
-        // indexEntry.setDouble(index);
         
         double shooterSpeed = 0;
         //getting interpolated data
+        
         try {
             shooterSpeed = m_shooter.getInterpolatedSpeed(kShooter.kShooterData.shooterDataX[index], kShooter.kShooterData.shooterDataY[index], kShooter.kShooterData.shooterDataX[index + 1], kShooter.kShooterData.shooterDataY[index + 1], distance);
         }   catch (Exception e) {
@@ -86,10 +86,6 @@ public class ShooterSpeed extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() { 
-        if (!m_joystick.getLeftBumper()) {//if button is off return true
-            return true;
-        } else {
-            return false;
-        }
+        return !m_joystick.getLeftBumper();
     }
 }

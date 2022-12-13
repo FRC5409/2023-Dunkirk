@@ -18,8 +18,6 @@ public class IntakeMovement extends CommandBase {
     m_intake = intake;
 
     addRequirements(m_intake);
-
-
     // Use addRequirements() here to declare subsystem dependencies.
   }
 

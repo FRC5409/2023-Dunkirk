@@ -34,7 +34,6 @@ public class Feeder extends SubsystemBase {
         pidController.setI(kI);
         pidController.setD(kD);
         pidController.setFF(kF);
-        pidController.setOutputRange(-1, 1);
     }
 
     @Override
@@ -45,16 +44,22 @@ public class Feeder extends SubsystemBase {
 
         feederMot.setIdleMode(IdleMode.kBrake);
 
+        feederMot.setSmartCurrentLimit(kFeeder.currentLimit);
+
+        pidController.setOutputRange(-1, 1);
+
+        configPIDF(kFeeder.kPID.kP, kFeeder.kPID.kI, kFeeder.kPID.kD, kFeeder.kPID.kF);
+
         feederMot.burnFlash();
     }
 
 
-    public void feed() {
+    public void feed(double RPM) {
         if (!isFeeding) {
             isFeeding = true;
-            pidController.setReference(600, CANSparkMax.ControlType.kVelocity);
+            pidController.setReference(RPM*1.0, CANSparkMax.ControlType.kVelocity);
         }
-    }//
+    }
 
     public void stopFeeding() {
         if (isFeeding) {

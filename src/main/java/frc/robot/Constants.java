@@ -108,7 +108,16 @@ public final class Constants {
     public static class kFeeder {
         public final static int feederID = 9;
 
-        public final static double feedSpeed = 0.4;
+        public final static double feedSpeed = 600;
+
+        public final static int currentLimit = 40;
+        
+        public static class kPID {
+            public final static double kP = 0.00015;
+            public final static double kI = 0;
+            public final static double kD = 0;
+            public final static double kF = 0.0002;
+        }
     }
 
     public static class kLimelight {

@@ -65,16 +65,23 @@ public class RobotContainer {
         //Drivetrain
         private final ToggleGear cmd_toggleGear;
         private final DefaultDrive cmd_defaultDrive;
+
+        //Elevator
         
     //Conditionals
     private boolean elevatorActive;
     private BooleanSupplier isElevatorActive;
     private BooleanSupplier dpadUp;
     private BooleanSupplier dpadDown;
+    private BooleanSupplier dpadLeft;
+    private BooleanSupplier dpadRight;
+    public BooleanSupplier isElevatorMoving;
 
     //Triggers
-    private final Trigger elevatorUp;
+    private final Trigger elevatorMidRung;
+    private final Trigger elevatorLowRung;
     private final Trigger elevatorDown;
+    private final Trigger elevatorToZero;
 
     public RobotContainer() {
 
@@ -112,16 +119,30 @@ public class RobotContainer {
         //Conditionals
         dpadUp = () -> sys_controller.getPOV() == 0;
         dpadDown = () -> sys_controller.getPOV() == 180;
+        dpadLeft = () -> sys_controller.getPOV() == 270;
+        dpadRight = () -> sys_controller.getPOV() == 90;
         isElevatorActive = () -> elevatorActive == true;
+        isElevatorMoving = () -> sys_elevator.getElevatorState() == false;
 
         //Triggers
-        elevatorUp = new Trigger(isElevatorActive)
+        elevatorMidRung = new Trigger(isElevatorActive)
             .and(new Trigger(dpadUp))
-            .whenActive(new MoveElevator(sys_elevator, sys_controller, true));
+            .and(new Trigger(isElevatorMoving))
+            .whenActive(new MoveElevator(sys_elevator, Constants.kElevator.kToMidRung));
+        elevatorLowRung = new Trigger(isElevatorActive)
+            .and(new Trigger(dpadLeft))
+            .and(new Trigger(isElevatorMoving))
+            .whenActive(new MoveElevator(sys_elevator, Constants.kElevator.kToLowRung));
 
         elevatorDown = new Trigger(isElevatorActive)
             .and(new Trigger(dpadDown))
-            .whenActive(new MoveElevator(sys_elevator, sys_controller, false));
+            .and(new Trigger(isElevatorMoving))
+            .whenActive(new MoveElevator(sys_elevator));
+
+        elevatorToZero = new Trigger(isElevatorActive)
+            .and(new Trigger(isElevatorMoving))
+            .and(new Trigger(dpadRight))
+            .whenActive(new MoveElevator(sys_elevator, true));
 
         // Configure the button bindings
         configureButtonBindings();
@@ -139,7 +160,6 @@ public class RobotContainer {
     private void configureButtonBindings() {
         but_main_X.whileHeld(cmd_intakeBall);
         but_main_RBumper.whenPressed(cmd_toggleGear);
-
 
         but_main_A.whenPressed(() -> sys_pneumatics.enable());
         but_main_B.whenPressed(() -> sys_pneumatics.disable());

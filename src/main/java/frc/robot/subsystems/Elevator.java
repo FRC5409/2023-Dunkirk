@@ -13,12 +13,15 @@ import com.revrobotics.SparkMaxPIDController;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.kElevator;
+import frc.robot.Constants.kPneumatics;
 
 
 public class Elevator extends SubsystemBase implements Loggable{
@@ -27,21 +30,25 @@ public class Elevator extends SubsystemBase implements Loggable{
 
     public CANSparkMax m_left;
     public CANSparkMax m_right;
+    public  SparkMaxPIDController c_pidController;
 
     private RelativeEncoder s_encoder;
 
     private final DigitalInput s_magSwitch;
 
-    public  SparkMaxPIDController c_pidController;
+    private final DoubleSolenoid ratchetLock;
 
     private static boolean configEnabled = false;
-
     public static HashMap<String, NetworkTableEntry> shuffleboardFields;
 
     private static double kP;
     private static double kI;
     private static double kD;
     private static double kF;
+
+    private boolean isMoving;
+
+    private double prevHeldPos = 0;
 
 
     
@@ -56,6 +63,8 @@ public class Elevator extends SubsystemBase implements Loggable{
         
         s_encoder = m_left.getEncoder();
         zeroEncoder();
+
+        ratchetLock = new DoubleSolenoid(kPneumatics.kHubModuleID, kPneumatics.kPneumaticsModuleType, 14, 15);
 
         s_magSwitch = new DigitalInput(kElevator.kMagSwitchDIO);      
 
@@ -157,5 +166,37 @@ public class Elevator extends SubsystemBase implements Loggable{
     
     public void moveElevator(double setpoint) {
         c_pidController.setReference(setpoint, ControlType.kPosition);
+    }
+
+    public void setElevatorState(boolean isMoving) {
+        this.isMoving = isMoving;
+    }
+
+    public boolean getElevatorState() {
+        return isMoving;
+    }
+
+    public void setPrevPos(double prevPos) {
+        prevHeldPos = prevPos;
+    }
+
+    public double getPrevPos() {
+        return prevHeldPos;
+    }
+
+    public void disableMotors() {
+        m_left.disable();
+    }
+
+    public void lockRatchet() {
+        ratchetLock.set(DoubleSolenoid.Value.kForward);
+    }
+
+    public void unlockRatchet() {
+        ratchetLock.set(DoubleSolenoid.Value.kReverse);
+    }
+
+    public Value getRatchetState() {
+        return ratchetLock.get();
     }
 }

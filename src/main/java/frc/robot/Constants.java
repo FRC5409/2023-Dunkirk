@@ -122,10 +122,13 @@ public final class Constants {
 
         public final static int kMagSwitchDIO = 8;
 
-        public final static double kMax = 0;
-        public final static double kMin = 0;
-        
         public final static double kExtendToMax = 0;
         public final static double kRetractToMin = 0;
+
+        public final static double kToMidRung = 0;
+        public final static double kToLowRung = 0;
+
+        public final static double kRetractLow = 0;
+        public final static double kRetractMid = 0;
     }
 }

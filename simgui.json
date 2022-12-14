@@ -13,6 +13,7 @@
       "/FMSInfo": "FMSInfo",
       "/LiveWindow/DriveTrain": "Subsystem",
       "/LiveWindow/ExampleSubsystem": "Subsystem",
+      "/LiveWindow/Feeder": "Subsystem",
       "/LiveWindow/Gyro": "Subsystem",
       "/LiveWindow/Intake": "Subsystem",
       "/LiveWindow/Intake/Roller Motor": "Motor Controller",

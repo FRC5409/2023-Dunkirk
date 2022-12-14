@@ -27,7 +27,7 @@ public class Shooter extends SubsystemBase {
 
     private double distance;
 
-    private boolean isFeeding = false;
+    private double lastRPM = -100000;
 
     public Shooter() {
         leftMot = new WPI_TalonFX(kShooter.leftMotID);
@@ -46,6 +46,7 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
+        //testing code
         if (Math.abs(m_joystick.getRightY()) >= 0.01) {//joystick drift
             distance -= m_joystick.getRightY() * 0.3;//changed the distance for teseting
         }
@@ -55,7 +56,6 @@ public class Shooter extends SubsystemBase {
     public void simulationPeriodic() {}
 
     public void configMots() {
-
         leftMot.configFactoryDefault();
         rightMot.configFactoryDefault();
 
@@ -82,12 +82,15 @@ public class Shooter extends SubsystemBase {
     }
 
     public void spinMotAtSpeed(double RPM) {
-        leftMot.set(TalonFXControlMode.Velocity, RPM * 2048.0 / 600.0);//spins at RPM
+        if (lastRPM != RPM) {
+            leftMot.set(TalonFXControlMode.Velocity, RPM * 2048.0 / 600.0);//spins at RPM
+            lastRPM = RPM;
+        }
     }
 
     public void stopMotors() {
+        lastRPM = -100000;
         leftMot.set(0);
-        isFeeding = false;
     }
 
     public int closestPoint() {//finds the closest point at index x
@@ -122,7 +125,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getTargetDistance() {
-        return distance;
+        return distance;//TODO: later do limelight stuff
     }
 
     // public boolean cargo() {

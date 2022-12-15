@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-// import com.playingwithfusion.TimeOfFlight;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.kShooter;
@@ -15,17 +14,13 @@ public class Shooter extends SubsystemBase {
     private final WPI_TalonFX leftMot;
     private final WPI_TalonFX rightMot;
 
-    // private final TimeOfFlight ToFFeeder;
-
     private double distance;
 
-    private double lastRPM = -100000;
+    private double lastRPM = 0;
 
     public Shooter() {
         leftMot = new WPI_TalonFX(kShooter.leftMotID);
         rightMot = new WPI_TalonFX(kShooter.rightMotID); 
-
-        // ToFFeeder = new TimeOfFlight(kShooter.ToFID);
 
         m_joystick = new XboxController(0);
 
@@ -33,7 +28,7 @@ public class Shooter extends SubsystemBase {
 
         distance = 10;
 
-        stopMotors();
+        stopShooter();
     }
 
     @Override
@@ -63,6 +58,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public void setPIDFvalues(double p, double i, double d, double f) {
+        //config the motor controller
         leftMot.config_kP(0, p, kShooter.timeOutMs);
         leftMot.config_kI(0, i, kShooter.timeOutMs);
         leftMot.config_kD(0, d, kShooter.timeOutMs);
@@ -70,19 +66,23 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getAverageSpeed() {
+        //returns shooter RPM
         return (Math.abs(leftMot.getSelectedSensorVelocity()) + Math.abs(rightMot.getSelectedSensorVelocity())) / 2 / 2048.0 * 600;//converts to RPM
     }
 
     public void spinMotAtSpeed(double RPM) {
+        //if its the the last RPM set (avoiding spamming the CAN bus)
         if (lastRPM != RPM) {
             leftMot.set(TalonFXControlMode.Velocity, RPM * 2048.0 / 600.0);//spins at RPM
             lastRPM = RPM;
         }
     }
 
-    public void stopMotors() {
-        lastRPM = -100000;
-        leftMot.set(0);
+    public void stopShooter() {
+        if (lastRPM != 0) {
+            lastRPM = 0;
+            leftMot.set(0);
+        }
     }
 
     public int closestPoint() {//finds the closest point at index x
@@ -102,9 +102,5 @@ public class Shooter extends SubsystemBase {
     public double getTargetDistance() {
         return distance;//TODO: later do limelight stuff
     }
-
-    // public boolean cargo() {
-    //     return ToFFeeder.getRange() <= kShooter.cargoIsThere;//sees if cargo is in the indexer
-    // }
 
 }

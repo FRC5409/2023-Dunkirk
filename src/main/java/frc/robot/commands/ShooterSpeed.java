@@ -51,26 +51,40 @@ public class ShooterSpeed extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        distance = m_shooter.getTargetDistance(); //inches
-        int index = m_shooter.closestPoint();
-        
         double shooterSpeed = 0;
+
+        distance = m_shooter.getTargetDistance(); //inches
+
+        //grabs the closest point to the distance this is for interpolating data
+        int index = m_shooter.closestPoint();
+
         //getting interpolated data
-        
         try {
-            shooterSpeed = m_shooter.getInterpolatedSpeed(kShooter.kShooterData.shooterDataX[index], kShooter.kShooterData.shooterDataY[index], kShooter.kShooterData.shooterDataX[index + 1], kShooter.kShooterData.shooterDataY[index + 1], distance);
-        }   catch (Exception e) {
+            //getting a new point based on a estimation of the old points
+            shooterSpeed = m_shooter.getInterpolatedSpeed(
+                kShooter.kShooterData.shooterDataX[index], 
+                kShooter.kShooterData.shooterDataY[index], 
+                kShooter.kShooterData.shooterDataX[index + 1], 
+                kShooter.kShooterData.shooterDataY[index + 1], 
+                distance
+            );
+
+        } catch (Exception e) {
+            
             //if its outside the data use the highest point of data
             DriverStation.reportError("Distance outside shooter data: " + index, true);
             shooterSpeed = kShooter.kShooterData.shooterDataY[kShooter.kShooterData.shooterDataY.length - 1];
         }
-        //if its reached its speed
+        
+        //if its reached its target speed
         if (Math.abs(shooterSpeed - m_shooter.getAverageSpeed()) <= kShooter.shooterRPMPlay) {
-            //feed
-            m_feeder.feed(kFeeder.feedSpeed);//TODO: finish this value
+            //start feeding
+            m_feeder.feed(kFeeder.feedSpeed);
         }
 
         m_shooter.spinMotAtSpeed(shooterSpeed);
+
+        //shuffleboard
         distanceEntry.setDouble(distance);
         targetSpeedEntry.setDouble(shooterSpeed);
         shooterSpeedEntry.setDouble(m_shooter.getAverageSpeed());
@@ -79,7 +93,7 @@ public class ShooterSpeed extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        m_shooter.stopMotors();
+        m_shooter.stopShooter();
         m_feeder.stopFeeding();
     }
 

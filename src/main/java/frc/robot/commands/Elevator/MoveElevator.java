@@ -14,15 +14,16 @@ public class MoveElevator extends CommandBase {
     private boolean extending;
     private boolean findingZero;
     private boolean overridden;
+    private boolean grabbingBar;
 
+    // Constructor for moving the elevator up to a setpoint
     public MoveElevator(Elevator subsystem, double destination) {
         sys_elevator = subsystem;
         setPoint = destination;
         extending = true;
         overridden = false;
         findingZero = false;
-        if (sys_elevator.getPrevPos() == Constants.kElevator.kToMidRung 
-            || sys_elevator.getPrevPos() == Constants.kElevator.kToLowRung) {
+        if (sys_elevator.getPrevPos() == setPoint) {
             isFinished();
         }
         
@@ -30,12 +31,14 @@ public class MoveElevator extends CommandBase {
         addRequirements(sys_elevator);
     }
 
+    // Constructor for moving the elevator down to the bar
     public MoveElevator(Elevator subsystem) {
         sys_elevator = subsystem;
         extending = false;
         overridden = false;
         findingZero = false;
-        if (sys_elevator.getPrevPos() == 0) {
+        setPoint = getRetractPos();
+        if (sys_elevator.getPrevPos() == setPoint) {
             isFinished();
         }
 
@@ -43,6 +46,7 @@ public class MoveElevator extends CommandBase {
         addRequirements(sys_elevator);
     }
 
+    // Constructor for moving down to find the zero
     public MoveElevator(Elevator subsystem, boolean findingZero) {
         this.findingZero = findingZero;
         sys_elevator = subsystem;
@@ -63,7 +67,6 @@ public class MoveElevator extends CommandBase {
             sys_elevator.setElevatorState(true);
             sys_elevator.moveElevator(setPoint);       
         } else if (!extending && !findingZero) {
-            setPoint = getRetractPos();
             if (sys_elevator.getRatchetState() == DoubleSolenoid.Value.kReverse) {
                 sys_elevator.lockRatchet();
             }
@@ -75,6 +78,12 @@ public class MoveElevator extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+
+        if(!extending && !findingZero) {
+            if (setPoint == Constants.kElevator.kRetractToBar && sys_elevator.getPosition() == setPoint) {
+                grabbingBar = true;
+            } 
+        }
 
         if (findingZero) {
             if (sys_elevator.detectLimSwitch()) {
@@ -89,10 +98,15 @@ public class MoveElevator extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         if (!interrupted) {
-            if(!overridden) {
-                sys_elevator.lockRatchet();
+            if (!overridden) {
+                if (sys_elevator.getRatchetState() == DoubleSolenoid.Value.kReverse) {
+                    sys_elevator.lockRatchet();
+                }
                 sys_elevator.setElevatorState(false);
                 sys_elevator.setPrevPos(setPoint);
+                if (grabbingBar) {
+                    sys_elevator.disableMotors();
+                }
             }
         }
     }
@@ -100,9 +114,8 @@ public class MoveElevator extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        if (!findingZero && sys_elevator.getPrevPos() != Constants.kElevator.kToMidRung && extending
-             || sys_elevator.getPrevPos() != 0 && !extending) {
-            return 1-setPoint <= sys_elevator.getPosition() && sys_elevator.getPosition() <= 1-setPoint;
+        if (!findingZero) {
+            return 0.5-setPoint <= sys_elevator.getPosition() && sys_elevator.getPosition() <= 0.5-setPoint;
         } else if (findingZero) {
             return sys_elevator.getPosition() == 0;
         } else {
@@ -112,11 +125,10 @@ public class MoveElevator extends CommandBase {
     }
 
     private double getRetractPos() {
-        if (sys_elevator.getPrevPos() == Constants.kElevator.kToMidRung) {
-            return Constants.kElevator.kRetractMid;
+        if (sys_elevator.getPrevPos() == Constants.kElevator.kToMidRung || sys_elevator.getPrevPos() == Constants.kElevator.kToLowRung) {
+            return Constants.kElevator.kRetractToBar;
         } else {
-            return Constants.kElevator.kRetractLow;
+            return Constants.kElevator.kRetractToMin;
         }
     }
-
 }

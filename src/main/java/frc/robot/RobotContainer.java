@@ -69,7 +69,6 @@ public class RobotContainer {
         //Elevator
         
     //Conditionals
-    private boolean elevatorActive;
     private BooleanSupplier isElevatorActive;
     private BooleanSupplier dpadUp;
     private BooleanSupplier dpadDown;
@@ -121,7 +120,7 @@ public class RobotContainer {
         dpadDown = () -> sys_controller.getPOV() == 180;
         dpadLeft = () -> sys_controller.getPOV() == 270;
         dpadRight = () -> sys_controller.getPOV() == 90;
-        isElevatorActive = () -> elevatorActive == true;
+        isElevatorActive = () -> sys_elevator.elevatorActive == true;
         isElevatorMoving = () -> sys_elevator.getElevatorState() == false;
 
         //Triggers
@@ -133,12 +132,10 @@ public class RobotContainer {
             .and(new Trigger(dpadLeft))
             .and(new Trigger(isElevatorMoving))
             .whenActive(new MoveElevator(sys_elevator, Constants.kElevator.kToLowRung));
-
         elevatorDown = new Trigger(isElevatorActive)
             .and(new Trigger(dpadDown))
             .and(new Trigger(isElevatorMoving))
             .whenActive(new MoveElevator(sys_elevator));
-
         elevatorToZero = new Trigger(isElevatorActive)
             .and(new Trigger(isElevatorMoving))
             .and(new Trigger(dpadRight))
@@ -167,7 +164,6 @@ public class RobotContainer {
         but_main_LBumper.whenPressed(cmd_shooterSpeed);
 
         but_main_Start
-        .whenPressed(() -> elevatorActive = !elevatorActive)
         .whenPressed(() -> sys_elevator.elevatorActive = !sys_elevator.elevatorActive);
     }
 

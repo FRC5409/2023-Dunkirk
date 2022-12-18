@@ -127,19 +127,19 @@ public class RobotContainer {
         elevatorMidRung = new Trigger(isElevatorActive)
             .and(new Trigger(dpadUp))
             .and(new Trigger(isElevatorMoving))
-            .whenActive(new MoveElevator(sys_elevator, Constants.kElevator.kToMidRung));
+            .whenActive(new MoveElevator(sys_elevator, Constants.kElevator.kToMidRung), false);
         elevatorLowRung = new Trigger(isElevatorActive)
             .and(new Trigger(dpadLeft))
             .and(new Trigger(isElevatorMoving))
-            .whenActive(new MoveElevator(sys_elevator, Constants.kElevator.kToLowRung));
+            .whenActive(new MoveElevator(sys_elevator, Constants.kElevator.kToLowRung), false);
         elevatorDown = new Trigger(isElevatorActive)
             .and(new Trigger(dpadDown))
             .and(new Trigger(isElevatorMoving))
-            .whenActive(new MoveElevator(sys_elevator));
+            .whenActive(new MoveElevator(sys_elevator), false);
         elevatorToZero = new Trigger(isElevatorActive)
             .and(new Trigger(isElevatorMoving))
             .and(new Trigger(dpadRight))
-            .whenActive(new MoveElevator(sys_elevator, true));
+            .whenActive(new MoveElevator(sys_elevator, true), false);
 
         // Configure the button bindings
         configureButtonBindings();

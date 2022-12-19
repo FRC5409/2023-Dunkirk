@@ -82,7 +82,7 @@ public final class Constants {
     public static class kShooter {
         public final static int leftMotID = 5;
         public final static int rightMotID = 8;
-        public final static int ToFID = 11;
+        // public final static int ToFID = 11;
 
         public final static double shooterRPMPlay = 50;
 

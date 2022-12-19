@@ -21,7 +21,6 @@ public class Limelight extends SubsystemBase {
     public Limelight() {
         NetworkTableInstance.getDefault().startClientTeam(5409);
         distanceToTarget = -1;
-        
     }
 
     @Override
@@ -29,7 +28,7 @@ public class Limelight extends SubsystemBase {
         // This method will be called once per scheduler run
 
         if (isVisable()) {
-            angleGoal = (kLimelight.mountAngle + getYOffset()) * (3.14159 / 180);//getting the angle to the goal in radians (tan requires radians to work)
+            angleGoal = (kLimelight.mountAngle + getYOffset()) * (Math.PI / 180);//getting the angle to the goal in radians (tan requires radians to work)
             distanceToTarget = (kLimelight.targetHeight - kLimelight.heightOffFloor) / Math.tan(angleGoal);//getting distance to target
         }
 
@@ -56,11 +55,7 @@ public class Limelight extends SubsystemBase {
     }
 
     public boolean isVisable() {
-        if (NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(-1) == 1) {
-            return true;
-        } else {
-            return false;
-        }
+        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0) == 1;
     }
     
 }

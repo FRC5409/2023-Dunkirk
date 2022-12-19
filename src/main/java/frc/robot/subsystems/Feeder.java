@@ -55,6 +55,7 @@ public class Feeder extends SubsystemBase {
 
 
     public void feed(double RPM) {
+        //doesn't spam the CAN bus only triggers once
         if (!isFeeding) {
             isFeeding = true;
             pidController.setReference(RPM*1.0, CANSparkMax.ControlType.kVelocity);
@@ -62,6 +63,7 @@ public class Feeder extends SubsystemBase {
     }
 
     public void stopFeeding() {
+        //doesn't spam the CAN bus only triggers once
         if (isFeeding) {
             isFeeding = false;
             feederMot.set(0);
@@ -69,6 +71,7 @@ public class Feeder extends SubsystemBase {
     }
 
     public double getVelocity() {
+        //returns encoders velocity
         return encoder.getVelocity();
     }
 }

@@ -68,7 +68,11 @@ public class ShooterSpeed extends CommandBase {
             
             //if its outside the data use the highest point of data
             DriverStation.reportError("Distance outside shooter data: " + index, true);
-            shooterSpeed = kShooter.kShooterData.shooterDataY[kShooter.kShooterData.shooterDataY.length - 1];
+            if (index >= kShooter.kShooterData.shooterDataY.length) {
+                shooterSpeed = kShooter.kShooterData.shooterDataY[kShooter.kShooterData.shooterDataY.length - 1];
+            } else {
+                shooterSpeed = kShooter.kShooterData.shooterDataY[0];
+            }
         }
         
         //if its reached its target speed
@@ -77,6 +81,7 @@ public class ShooterSpeed extends CommandBase {
             m_feeder.feed(kFeeder.feedSpeed);
         }
 
+        //start shooting
         m_shooter.spinMotAtSpeed(shooterSpeed);
 
         //shuffleboard

@@ -53,6 +53,7 @@ public class RobotContainer {
     private final ExampleCommand cmd_example;
     private final IntakeBall cmd_intakeBall;
     private final ShooterSpeed cmd_shooterSpeed;
+    private final runFeeder cmd_runFeeder;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -86,6 +87,7 @@ public class RobotContainer {
         cmd_example = new ExampleCommand(sys_example);
         cmd_intakeBall = new IntakeBall(sys_intake);
         cmd_shooterSpeed = new ShooterSpeed(sys_shooter, sys_controller, sys_feeder);
+        cmd_runFeeder = new runFeeder(sys_feeder, sys_controller);
         
 
         sys_driveTrain.setDefaultCommand(cmd_defaultDrive);

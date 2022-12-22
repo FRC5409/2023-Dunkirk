@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.kElevator;
 import frc.robot.Constants.kPneumatics;
 
@@ -40,11 +41,6 @@ public class Elevator extends SubsystemBase implements Loggable{
 
     private static boolean configEnabled = false;
     public static HashMap<String, NetworkTableEntry> shuffleboardFields;
-
-    private static double kP;
-    private static double kI;
-    private static double kD;
-    private static double kF;
 
     private boolean isMoving;
 
@@ -70,35 +66,14 @@ public class Elevator extends SubsystemBase implements Loggable{
 
         c_pidController = m_left.getPIDController();
         c_pidController.setOutputRange(-1, 1);
-
-        try {
-            kP = c_pidController.getP();
-            kI = c_pidController.getI();
-            kD = c_pidController.getD();
-            kF = c_pidController.getFF();
-        } catch(Exception e) {
-            kP = 0;
-            kI = 0;
-            kD = 0;
-            kF = 0;
-        }
         setPIDFValues();
         m_left.burnFlash();
 
         shuffleboardFields = new HashMap<String, NetworkTableEntry>();
-
-        ShuffleboardLayout pidLayout = Shuffleboard.getTab("Elevator").getLayout("PID Config", BuiltInLayouts.kList).withSize(5, 5);
         
         ShuffleboardLayout encoder = Shuffleboard.getTab("Elevator").getLayout("Encoder Values", BuiltInLayouts.kList);
         
         ShuffleboardLayout active = Shuffleboard.getTab("Elevator").getLayout("Elevator Active", BuiltInLayouts.kList);
-
-        shuffleboardFields.put("Enable Config", pidLayout.add("Enable Configuration", false).withWidget(BuiltInWidgets.kToggleButton).withPosition(1, 1).getEntry());
-    
-        shuffleboardFields.put("kPConfig", pidLayout.add("Proportional Gain Config", c_pidController.getP()).withWidget(BuiltInWidgets.kTextView).withPosition(1, 2).getEntry());
-            shuffleboardFields.put("kIConfig", pidLayout.add("Integral Gain Config", c_pidController.getI()).withWidget(BuiltInWidgets.kTextView).withPosition(1, 3).getEntry());
-            shuffleboardFields.put("kDConfig", pidLayout.add("Derivative Gain Config", c_pidController.getD()).withWidget(BuiltInWidgets.kTextView).withPosition(1, 4).getEntry());
-            shuffleboardFields.put("kFConfig", pidLayout.add("Feedforward Gain Config", c_pidController.getFF()).withWidget(BuiltInWidgets.kTextView).withPosition(1, 5).getEntry());
 
         shuffleboardFields.put("EncoderDistance", encoder.add("Encoder Distance Travelled", getPosition()).withWidget(BuiltInWidgets.kEncoder).getEntry());
 
@@ -108,34 +83,6 @@ public class Elevator extends SubsystemBase implements Loggable{
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        if (shuffleboardFields.get("Enable Config").getBoolean(false) == true && configEnabled == false) {
-            configEnabled = true;
-        }
-
-        if (shuffleboardFields.get("Enable Config").getBoolean(true) == false && configEnabled == true) {
-            configEnabled = false;
-        }
-
-        if (configEnabled == true) {
-
-            if (shuffleboardFields.get("kPConfig").getDouble(kP) != kP) {
-                kP = shuffleboardFields.get("kPConfig").getDouble(kP);
-                c_pidController.setP(kP);
-            }
-            if (shuffleboardFields.get("kIConfig").getDouble(kI) != kI) {
-                kI = shuffleboardFields.get("kIConfig").getDouble(kI);
-                c_pidController.setI(kI);
-            }
-            if (shuffleboardFields.get("kDConfig").getDouble(kD) != kD) {
-                kD = shuffleboardFields.get("kDConfig").getDouble(kD);
-                c_pidController.setD(kD);
-            }
-            if (shuffleboardFields.get("kFConfig").getDouble(kF) != kF) {
-                kF = shuffleboardFields.get("kFConfig").getDouble(kF);
-                c_pidController.setFF(kF);
-            }
-        }
-
         shuffleboardFields.get("EncoderDistance").setNumber(getPosition());
         shuffleboardFields.get("ElevatorActive").setBoolean(elevatorActive);
     }
@@ -158,10 +105,10 @@ public class Elevator extends SubsystemBase implements Loggable{
     }
 
     public void setPIDFValues() {
-        c_pidController.setP(kP);
-        c_pidController.setD(kI);
-        c_pidController.setI(kD);
-        c_pidController.setFF(kF);
+        c_pidController.setP(Constants.kElevator.kP);
+        c_pidController.setD(Constants.kElevator.kI);
+        c_pidController.setI(Constants.kElevator.kD);
+        c_pidController.setFF(Constants.kElevator.kF);
     }
     
     public void moveElevator(double setpoint) {

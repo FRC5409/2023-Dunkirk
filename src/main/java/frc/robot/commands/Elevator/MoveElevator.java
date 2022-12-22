@@ -78,7 +78,7 @@ public class MoveElevator extends CommandBase {
     public void execute() {
 
         if(!extending && !findingZero) {
-            if (setPoint == Constants.kElevator.kRetractToBar && sys_elevator.getPosition() == setPoint) {
+            if (setPoint == Constants.kElevator.kRetractToBar && setPoint - 0.5 <= sys_elevator.getPosition() && sys_elevator.getPosition() == setPoint) {
                 grabbingBar = true;
             } 
         }
@@ -95,16 +95,14 @@ public class MoveElevator extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        if (!interrupted) {
-            if (!overridden) {
-                if (sys_elevator.getRatchetState() == DoubleSolenoid.Value.kReverse) {
-                    sys_elevator.lockRatchet();
-                }
-                sys_elevator.setElevatorState(false);
-                sys_elevator.setPrevPos(setPoint);
-                if (grabbingBar) {
-                    sys_elevator.disableMotors();
-                }
+        if (!overridden) {
+            if (sys_elevator.getRatchetState() == DoubleSolenoid.Value.kReverse) {
+                sys_elevator.lockRatchet();
+            }
+            sys_elevator.setElevatorState(false);
+            sys_elevator.setPrevPos(setPoint);
+            if (grabbingBar) {
+                sys_elevator.disableMotors();
             }
         }
     }

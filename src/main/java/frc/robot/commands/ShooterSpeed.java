@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.kFeeder;
 import frc.robot.Constants.kShooter;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Shooter;
@@ -45,26 +46,45 @@ public class ShooterSpeed extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        distance = m_shooter.getTargetDistance(); //inches
-        int index = m_shooter.closestPoint();
-        // indexEntry.setDouble(index);
-        
         double shooterSpeed = 0;
+
+        distance = m_shooter.getTargetDistance(); //inches
+
+        //grabs the closest point to the distance this is for interpolating data
+        int index = m_shooter.closestPoint();
+
         //getting interpolated data
         try {
-            shooterSpeed = m_shooter.getInterpolatedSpeed(kShooter.kShooterData.shooterDataX[index], kShooter.kShooterData.shooterDataY[index], kShooter.kShooterData.shooterDataX[index + 1], kShooter.kShooterData.shooterDataY[index + 1], distance);
-        }   catch (Exception e) {
+            //getting a new point based on a estimation of the old points
+            shooterSpeed = m_shooter.getInterpolatedSpeed(
+                kShooter.kShooterData.shooterDataX[index], 
+                kShooter.kShooterData.shooterDataY[index], 
+                kShooter.kShooterData.shooterDataX[index + 1], 
+                kShooter.kShooterData.shooterDataY[index + 1], 
+                distance
+            );
+
+        } catch (Exception e) {
+            
             //if its outside the data use the highest point of data
             DriverStation.reportError("Distance outside shooter data: " + index, true);
-            shooterSpeed = kShooter.kShooterData.shooterDataY[kShooter.kShooterData.shooterDataY.length - 1];
+            if (index >= kShooter.kShooterData.shooterDataY.length) {
+                shooterSpeed = kShooter.kShooterData.shooterDataY[kShooter.kShooterData.shooterDataY.length - 1];
+            } else {
+                shooterSpeed = kShooter.kShooterData.shooterDataY[0];
+            }
         }
-        //if its reached its speed
+        
+        //if its reached its target speed
         if (Math.abs(shooterSpeed - m_shooter.getAverageSpeed()) <= kShooter.shooterRPMPlay) {
-            //feed
-            m_feeder.feed();
+            //start feeding
+            m_feeder.feed(kFeeder.feedSpeed);
         }
 
+        //start shooting
         m_shooter.spinMotAtSpeed(shooterSpeed);
+
+        //shuffleboard
         distanceEntry.setDouble(distance);
         targetSpeedEntry.setDouble(shooterSpeed);
         shooterSpeedEntry.setDouble(m_shooter.getAverageSpeed());
@@ -73,17 +93,13 @@ public class ShooterSpeed extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        m_shooter.stopMotors();
+        m_shooter.stopShooter();
         m_feeder.stopFeeding();
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() { 
-        if (!m_joystick.getLeftBumper()) {//if button is off return true
-            return true;
-        } else {
-            return false;
-        }
+        return !m_joystick.getLeftBumper();
     }
 }

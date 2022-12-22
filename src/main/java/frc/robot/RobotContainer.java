@@ -11,6 +11,7 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.IntakeBall;
 import frc.robot.commands.ShooterSpeed;
 import frc.robot.commands.ToggleGear;
+import frc.robot.commands.runFeeder;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Feeder;
@@ -52,6 +53,7 @@ public class RobotContainer {
     private final ExampleCommand cmd_example;
     private final IntakeBall cmd_intakeBall;
     private final ShooterSpeed cmd_shooterSpeed;
+    private final runFeeder cmd_runFeeder;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -85,6 +87,7 @@ public class RobotContainer {
         cmd_example = new ExampleCommand(sys_example);
         cmd_intakeBall = new IntakeBall(sys_intake);
         cmd_shooterSpeed = new ShooterSpeed(sys_shooter, sys_controller, sys_feeder);
+        cmd_runFeeder = new runFeeder(sys_feeder, sys_controller);
         
 
         sys_driveTrain.setDefaultCommand(cmd_defaultDrive);
@@ -105,6 +108,7 @@ public class RobotContainer {
 
 
         but_main_A.whenPressed(() -> sys_pneumatics.enable());
+        // but_main_A.whenPressed(cmd_runFeeder);
         but_main_B.whenPressed(() -> sys_pneumatics.disable());
 
         but_main_LBumper.whenPressed(cmd_shooterSpeed);

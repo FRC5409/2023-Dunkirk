@@ -108,7 +108,7 @@ public final class Constants {
     public static class kFeeder {
         public final static int feederID = 9;
 
-        public final static double feedSpeed = 600;
+        public final static double feedSpeed = 800;
 
         public final static int currentLimit = 40;
         

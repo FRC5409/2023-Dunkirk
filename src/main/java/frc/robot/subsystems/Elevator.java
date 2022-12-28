@@ -47,17 +47,18 @@ public class Elevator extends SubsystemBase {
     
     public Elevator() {
         m_left = new CANSparkMax(kElevator.kLeftCAN, MotorType.kBrushless);
-            m_left.setInverted(false);
-            m_left.setIdleMode(IdleMode.kBrake);
-
+        m_left.setInverted(false);
+        m_left.setIdleMode(IdleMode.kBrake);
+        
         m_right = new CANSparkMax(kElevator.kRightCAN, MotorType.kBrushless);
-            m_right.follow(m_left, true);
-            m_right.setIdleMode(IdleMode.kBrake);
+        m_right.follow(m_left, true);
+        m_right.setIdleMode(IdleMode.kBrake);
         
         s_encoder = m_left.getEncoder();
         zeroEncoder();
-
+        
         ratchetLock = new DoubleSolenoid(kPneumatics.kHubModuleID, kPneumatics.kPneumaticsModuleType, 14, 15);
+        unlockRatchet();
 
         s_magSwitch = new DigitalInput(kElevator.kMagSwitchDIO);      
 
@@ -79,6 +80,7 @@ public class Elevator extends SubsystemBase {
         shuffleboardFields.put("LimitSwitch", extras.add("Mag Switch Active?", detectLimSwitch()).withWidget(BuiltInWidgets.kBooleanBox).getEntry());
 
         shuffleboardFields.put("ElevatorActive", active.add("Elevator Active?", elevatorActive).withWidget(BuiltInWidgets.kBooleanBox).getEntry());
+
     }
 
     @Override

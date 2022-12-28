@@ -127,9 +127,9 @@ public final class Constants {
         public final static double kToLowRung = 55.0;
         public final static double kRetractToBar = 7.0;
 
-        public final static double kP = 0.8;
+        public final static double kP = 0.7;
         public final static double kI = 0.0;
-        public final static double kD = 1.7;
+        public final static double kD = 0.0;
         public final static double kF = 0.0;
     }
 }

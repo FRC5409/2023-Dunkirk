@@ -26,8 +26,6 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pneumatics;
 import frc.robot.subsystems.Shooter;
 
-import io.github.oblarg.oblog.Logger;
-
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -143,9 +141,6 @@ public class RobotContainer {
 
         // Configure the button bindings
         configureButtonBindings();
-
-        Logger.configureLoggingAndConfig(this, true);
-        Logger.updateEntries();
     }
 
     /*

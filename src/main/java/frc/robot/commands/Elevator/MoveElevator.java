@@ -1,7 +1,7 @@
 package frc.robot.commands.Elevator;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.robot.Constants;
 import frc.robot.subsystems.Elevator;
 
@@ -11,7 +11,6 @@ public class MoveElevator extends CommandBase {
     private double setPoint;
     private boolean extending;
     private boolean findingZero;
-    private boolean overridden;
     private boolean grabbingBar;
 
     // Constructor for moving the elevator up to a setpoint
@@ -19,7 +18,6 @@ public class MoveElevator extends CommandBase {
         sys_elevator = subsystem;
         setPoint = destination;
         extending = true;
-        overridden = false;
         findingZero = false;
         if (sys_elevator.getPrevPos() == setPoint) {
             isFinished();
@@ -33,9 +31,8 @@ public class MoveElevator extends CommandBase {
     public MoveElevator(Elevator subsystem) {
         sys_elevator = subsystem;
         extending = false;
-        overridden = false;
         findingZero = false;
-        setPoint = getRetractPos();
+        setPoint = Constants.kElevator.kRetractToBar;
         if (sys_elevator.getPrevPos() == setPoint) {
             isFinished();
         }
@@ -48,7 +45,6 @@ public class MoveElevator extends CommandBase {
     public MoveElevator(Elevator subsystem, boolean findingZero) {
         this.findingZero = findingZero;
         sys_elevator = subsystem;
-        overridden = false;
 
         addRequirements(sys_elevator);
     }
@@ -59,13 +55,13 @@ public class MoveElevator extends CommandBase {
         if(findingZero) {
             sys_elevator.m_left.set(-0.1);
         } else if (extending && !findingZero) {
-            if(sys_elevator.getRatchetState() == DoubleSolenoid.Value.kForward) {
+            if(sys_elevator.getRatchetState() == Value.kForward) {
                 sys_elevator.unlockRatchet();
             }
             sys_elevator.setElevatorState(true);
             sys_elevator.moveElevator(setPoint);       
         } else if (!extending && !findingZero) {
-            if (sys_elevator.getRatchetState() == DoubleSolenoid.Value.kReverse) {
+            if (sys_elevator.getRatchetState() == Value.kReverse) {
                 sys_elevator.lockRatchet();
             }
             sys_elevator.setElevatorState(true);
@@ -95,36 +91,23 @@ public class MoveElevator extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        if (!overridden) {
-            if (sys_elevator.getRatchetState() == DoubleSolenoid.Value.kReverse) {
-                sys_elevator.lockRatchet();
-            }
-            sys_elevator.setElevatorState(false);
-            sys_elevator.setPrevPos(setPoint);
-            if (grabbingBar) {
-                sys_elevator.disableMotors();
-            }
+        if (sys_elevator.getRatchetState() == Value.kReverse) {
+            sys_elevator.lockRatchet();
         }
+        sys_elevator.setElevatorState(false);
+        sys_elevator.setPrevPos(setPoint);
+        sys_elevator.disableMotors();
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
         if (!findingZero) {
-            return 0.5-setPoint <= sys_elevator.getPosition() && sys_elevator.getPosition() <= 0.5-setPoint;
+            return setPoint-0.5 <= sys_elevator.getPosition() && sys_elevator.getPosition() <= setPoint+0.5;
         } else if (findingZero) {
             return sys_elevator.getPosition() == 0;
         } else {
-            overridden = true;
             return true;
-        }
-    }
-
-    private double getRetractPos() {
-        if (sys_elevator.getPrevPos() == Constants.kElevator.kToMidRung || sys_elevator.getPrevPos() == Constants.kElevator.kToLowRung) {
-            return Constants.kElevator.kRetractToBar;
-        } else {
-            return Constants.kElevator.kRetractToMin;
         }
     }
 }

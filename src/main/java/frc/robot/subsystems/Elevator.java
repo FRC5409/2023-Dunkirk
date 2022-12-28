@@ -2,8 +2,6 @@ package frc.robot.subsystems;
 
 import java.util.HashMap;
 
-import io.github.oblarg.oblog.Loggable;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -25,7 +23,7 @@ import frc.robot.Constants.kElevator;
 import frc.robot.Constants.kPneumatics;
 
 
-public class Elevator extends SubsystemBase implements Loggable{
+public class Elevator extends SubsystemBase {
 
     public boolean elevatorActive;
 
@@ -39,7 +37,6 @@ public class Elevator extends SubsystemBase implements Loggable{
 
     private final DoubleSolenoid ratchetLock;
 
-    private static boolean configEnabled = false;
     public static HashMap<String, NetworkTableEntry> shuffleboardFields;
 
     private boolean isMoving;
@@ -75,7 +72,11 @@ public class Elevator extends SubsystemBase implements Loggable{
         
         ShuffleboardLayout active = Shuffleboard.getTab("Elevator").getLayout("Elevator Active", BuiltInLayouts.kList);
 
-        shuffleboardFields.put("EncoderDistance", encoder.add("Encoder Distance Travelled", getPosition()).withWidget(BuiltInWidgets.kEncoder).getEntry());
+        ShuffleboardLayout extras = Shuffleboard.getTab("Elevator").getLayout("Limit Switch", BuiltInLayouts.kList);
+
+        shuffleboardFields.put("EncoderDistance", encoder.add("Encoder Distance Travelled", getPosition()).withWidget(BuiltInWidgets.kTextView).getEntry());
+
+        shuffleboardFields.put("LimitSwitch", extras.add("Mag Switch Active?", detectLimSwitch()).withWidget(BuiltInWidgets.kBooleanBox).getEntry());
 
         shuffleboardFields.put("ElevatorActive", active.add("Elevator Active?", elevatorActive).withWidget(BuiltInWidgets.kBooleanBox).getEntry());
     }
@@ -85,6 +86,7 @@ public class Elevator extends SubsystemBase implements Loggable{
         // This method will be called once per scheduler run
         shuffleboardFields.get("EncoderDistance").setNumber(getPosition());
         shuffleboardFields.get("ElevatorActive").setBoolean(elevatorActive);
+        shuffleboardFields.get("LimitSwitch").setBoolean(detectLimSwitch());
     }
 
     @Override

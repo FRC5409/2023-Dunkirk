@@ -16,6 +16,7 @@ import frc.robot.commands.IntakeBall;
 import frc.robot.commands.ShooterSpeed;
 import frc.robot.commands.ToggleGear;
 import frc.robot.commands.Elevator.MoveElevator;
+import frc.robot.commands.Elevator.ZeroElevator;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
@@ -63,8 +64,6 @@ public class RobotContainer {
         //Drivetrain
         private final ToggleGear cmd_toggleGear;
         private final DefaultDrive cmd_defaultDrive;
-
-        //Elevator
         
     //Conditionals
     private BooleanSupplier isElevatorActive;
@@ -137,7 +136,7 @@ public class RobotContainer {
         elevatorToZero = new Trigger(isElevatorActive)
             .and(new Trigger(isElevatorMoving))
             .and(new Trigger(dpadRight))
-            .whenActive(new MoveElevator(sys_elevator, true), false);
+            .whenActive(new ZeroElevator(sys_elevator), false);
 
         // Configure the button bindings
         configureButtonBindings();

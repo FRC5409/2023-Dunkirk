@@ -18,6 +18,7 @@ public class ZeroElevator extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+        sys_elevator.lockRatchet();
         sys_elevator.m_left.set(-0.1);
         sys_elevator.setElevatorState(true);
     }

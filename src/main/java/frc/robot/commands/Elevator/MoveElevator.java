@@ -11,6 +11,7 @@ public class MoveElevator extends CommandBase {
     private double setPoint;
     private boolean extending;
     private boolean findingZero;
+    private boolean override;
 
     // Constructor for moving the elevator up to a setpoint
     public MoveElevator(Elevator subsystem, double destination) {
@@ -19,6 +20,7 @@ public class MoveElevator extends CommandBase {
         extending = true;
         findingZero = false;
         if (sys_elevator.getPrevPos() == setPoint) {
+            override = true;
             isFinished();
         }
         
@@ -33,6 +35,7 @@ public class MoveElevator extends CommandBase {
         findingZero = false;
         setPoint = Constants.kElevator.kRetractToBar;
         if (sys_elevator.getPrevPos() == setPoint) {
+            override = true;
             isFinished();
         }
 
@@ -99,8 +102,9 @@ public class MoveElevator extends CommandBase {
             return Math.abs(setPoint - sys_elevator.getPosition()) < 0.5;
         } else if (findingZero) {
             return sys_elevator.getPosition() == 0;
-        } else {
+        } else if (override) {
             return true;
         }
+        return true;
     }
 }

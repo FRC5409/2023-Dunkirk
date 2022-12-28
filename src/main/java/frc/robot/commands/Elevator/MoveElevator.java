@@ -100,12 +100,14 @@ public class MoveElevator extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
+        if (override) {
+            return true;
+        }
+        
         if (!findingZero) {
             return Math.abs(setPoint - sys_elevator.getPosition()) < 0.5;
         } else if (findingZero) {
             return sys_elevator.getPosition() == 0;
-        } else if (override) {
-            return true;
         }
         return true;
     }

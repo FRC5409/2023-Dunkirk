@@ -87,12 +87,14 @@ public class MoveElevator extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        if (sys_elevator.getRatchetState() == Value.kReverse) {
-            sys_elevator.lockRatchet();
+        if (!override) {    
+            if (sys_elevator.getRatchetState() == Value.kReverse) {
+                sys_elevator.lockRatchet();
+            }
+            sys_elevator.setElevatorState(false);
+            sys_elevator.setPrevPos(setPoint);
+            sys_elevator.disableMotors();
         }
-        sys_elevator.setElevatorState(false);
-        sys_elevator.setPrevPos(setPoint);
-        sys_elevator.disableMotors();
     }
 
     // Returns true when the command should end.

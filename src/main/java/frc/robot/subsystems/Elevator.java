@@ -48,11 +48,11 @@ public class Elevator extends SubsystemBase {
     public Elevator() {
         m_left = new CANSparkMax(kElevator.kLeftCAN, MotorType.kBrushless);
         m_left.setInverted(false);
-        m_left.setIdleMode(IdleMode.kBrake);
+        m_left.setIdleMode(IdleMode.kCoast);
         
         m_right = new CANSparkMax(kElevator.kRightCAN, MotorType.kBrushless);
         m_right.follow(m_left, true);
-        m_right.setIdleMode(IdleMode.kBrake);
+        m_right.setIdleMode(IdleMode.kCoast);
         
         s_encoder = m_left.getEncoder();
         zeroEncoder();
@@ -73,7 +73,7 @@ public class Elevator extends SubsystemBase {
         
         ShuffleboardLayout active = Shuffleboard.getTab("Elevator").getLayout("Elevator Active", BuiltInLayouts.kList);
 
-        ShuffleboardLayout extras = Shuffleboard.getTab("Elevator").getLayout("Limit Switch", BuiltInLayouts.kList);
+        ShuffleboardLayout extras = Shuffleboard.getTab("Elevator").getLayout("Extras", BuiltInLayouts.kList);
 
         shuffleboardFields.put("EncoderDistance", encoder.add("Encoder Distance Travelled", getPosition()).withWidget(BuiltInWidgets.kTextView).getEntry());
 
@@ -115,8 +115,8 @@ public class Elevator extends SubsystemBase {
         c_pidController.setFF(Constants.kElevator.kF);
     }
     
-    public void moveElevator(double setpoint) {
-        c_pidController.setReference(setpoint, ControlType.kPosition);
+    public void moveElevator(double setPoint) {
+        c_pidController.setReference(setPoint, ControlType.kPosition);
     }
 
     public void setElevatorState(boolean isMoving) {
@@ -127,16 +127,9 @@ public class Elevator extends SubsystemBase {
         return isMoving;
     }
 
-    public void setPrevPos(double prevPos) {
-        prevHeldPos = prevPos;
-    }
-
-    public double getPrevPos() {
-        return prevHeldPos;
-    }
-
     public void disableMotors() {
         m_left.disable();
+        m_right.disable();
     }
 
     public void lockRatchet() {

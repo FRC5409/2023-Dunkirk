@@ -32,18 +32,17 @@ public class ZeroElevator extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        if (sys_elevator.getRatchetState() == Value.kReverse) {
-            sys_elevator.lockRatchet();
-        }
         sys_elevator.setElevatorState(false);
+        sys_elevator.disableMotors();
         sys_elevator.zeroEncoder();
-        sys_elevator.setPrevPos(0);
-        sys_elevator.m_left.set(0);
+
+        System.out.println("reached here");
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
+        System.out.println(!sys_elevator.detectLimSwitch());
         return sys_elevator.detectLimSwitch();
     }
 

@@ -27,9 +27,9 @@ public class Elevator extends SubsystemBase {
 
     public boolean elevatorActive;
 
-    public CANSparkMax m_left;
-    public CANSparkMax m_right;
-    public  SparkMaxPIDController c_pidController;
+    private CANSparkMax m_left;
+    private CANSparkMax m_right;
+    private  SparkMaxPIDController c_pidController;
 
     private RelativeEncoder s_encoder;
 
@@ -117,6 +117,10 @@ public class Elevator extends SubsystemBase {
     
     public void moveElevator(double setPoint) {
         c_pidController.setReference(setPoint, ControlType.kPosition);
+    }
+
+    public void startZeroing() {
+        m_left.set(-0.1);
     }
 
     public void setElevatorState(boolean isMoving) {

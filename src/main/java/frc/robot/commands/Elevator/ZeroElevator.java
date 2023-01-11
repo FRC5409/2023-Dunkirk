@@ -19,7 +19,7 @@ public class ZeroElevator extends CommandBase {
     @Override
     public void initialize() {
         sys_elevator.lockRatchet();
-        sys_elevator.m_left.set(-0.1);
+        sys_elevator.startZeroing();
         sys_elevator.setElevatorState(true);
     }
 
@@ -35,14 +35,11 @@ public class ZeroElevator extends CommandBase {
         sys_elevator.setElevatorState(false);
         sys_elevator.disableMotors();
         sys_elevator.zeroEncoder();
-
-        System.out.println("reached here");
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        System.out.println(!sys_elevator.detectLimSwitch());
         return sys_elevator.detectLimSwitch();
     }
 

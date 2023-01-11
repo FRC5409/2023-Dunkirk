@@ -65,6 +65,12 @@ public class RobotContainer {
         private final ToggleGear cmd_toggleGear;
         private final DefaultDrive cmd_defaultDrive;
         
+        //Elevator
+        private final MoveElevator cmd_elevatorMid;
+        private final MoveElevator cmd_elevatorLow;
+        private final MoveElevator cmd_downToBar;
+        private final ZeroElevator cmd_zeroElevator;
+        
     //Conditionals
     private BooleanSupplier isElevatorActive;
     private BooleanSupplier dpadUp;
@@ -111,6 +117,10 @@ public class RobotContainer {
         cmd_example = new ExampleCommand(sys_example);
         cmd_intakeBall = new IntakeBall(sys_intake);
         cmd_shooterSpeed = new ShooterSpeed(sys_shooter, sys_controller, sys_feeder);
+        cmd_elevatorMid = new MoveElevator(sys_elevator, Constants.kElevator.kToMidRung);
+        cmd_elevatorLow = new MoveElevator(sys_elevator, Constants.kElevator.kToLowRung);
+        cmd_downToBar = new MoveElevator(sys_elevator);
+        cmd_zeroElevator = new ZeroElevator(sys_elevator);
 
         //Conditionals
         dpadUp = () -> sys_controller.getPOV() == 0;
@@ -123,16 +133,13 @@ public class RobotContainer {
         //Triggers
         elevatorMidRung = new Trigger(isElevatorActive)
             .and(new Trigger(dpadUp))
-            .and(new Trigger(isElevatorMoving))
-            .whenActive(new MoveElevator(sys_elevator, Constants.kElevator.kToMidRung), false);
+            .whenActive(cmd_elevatorMid, false);
         elevatorLowRung = new Trigger(isElevatorActive)
             .and(new Trigger(dpadLeft))
-            .and(new Trigger(isElevatorMoving))
-            .whenActive(new MoveElevator(sys_elevator, Constants.kElevator.kToLowRung), false);
+            .whenActive(cmd_elevatorLow, false);
         elevatorDown = new Trigger(isElevatorActive)
             .and(new Trigger(dpadDown))
-            .and(new Trigger(isElevatorMoving))
-            .whenActive(new MoveElevator(sys_elevator), false);
+            .whenActive(cmd_downToBar, false);
         elevatorToZero = new Trigger(isElevatorActive)
             .and(new Trigger(isElevatorMoving))
             .and(new Trigger(dpadRight))

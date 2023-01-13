@@ -41,8 +41,6 @@ public class Elevator extends SubsystemBase {
 
     private boolean isMoving;
 
-    private double prevHeldPos = 0;
-
 
     
     public Elevator() {

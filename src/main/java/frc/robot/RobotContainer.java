@@ -164,6 +164,8 @@ public class RobotContainer {
         
         but_main_LBumper.whenPressed(cmd_shooterSpeed);
 
+        // TODO: add turret head rotation 
+        // Use sequential groups 
         but_main_Start
         .whenPressed(() -> sys_elevator.elevatorActive = !sys_elevator.elevatorActive);
     }

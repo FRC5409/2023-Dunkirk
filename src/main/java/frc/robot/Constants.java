@@ -120,7 +120,7 @@ public final class Constants {
 
     public static class kRotate{
         public final static int kTurrentNeoID = 12;
-        public final static MotorType kTurrentNeoModuleType = MotorType.kBrushless;
+     
         public final static double krotateForwardSpeed = 0.4;
         public final static double krotateBackwardSpeed = -0.4;
 

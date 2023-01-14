@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -14,9 +14,9 @@ public class Pneumatics extends SubsystemBase {
 
     private Compressor m_compressor;
     private final ShuffleboardTab sb_pneumaticsTab;
-    private final NetworkTableEntry nt_compressorEnabled;
-    private final NetworkTableEntry nt_pressure;
-    private final NetworkTableEntry nt_current;
+    private final GenericEntry nt_compressorEnabled;
+    private final GenericEntry nt_pressure;
+    private final GenericEntry nt_current;
 
     /**
      * Pneumatics control subsystem

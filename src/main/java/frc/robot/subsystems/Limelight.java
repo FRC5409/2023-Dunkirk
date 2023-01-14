@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -10,17 +11,19 @@ import frc.robot.Constants.kLimelight;
 
 public class Limelight extends SubsystemBase {
 
-    private ShuffleboardTab tab = Shuffleboard.getTab("Limelight");
-    private NetworkTableEntry distanceEntry = tab.add("Distance to target: ", 0).getEntry();
+    private ShuffleboardTab tab = Shuffleboard.getTab("limelight");
+    private GenericEntry distanceEntry = tab.add("Distance to target: ", 0).getEntry();
 
     NetworkTable limeTable;
 
     double angleGoal;
     double distanceToTarget;
 
+
+    
     public Limelight() {
-        NetworkTableInstance.getDefault().startClientTeam(5409);
-        distanceToTarget = -1;
+        NetworkTableInstance.getDefault().setServerTeam(5409);;
+        distanceToTarget = -1;  
         
     }
 

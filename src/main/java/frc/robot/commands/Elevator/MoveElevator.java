@@ -40,16 +40,14 @@ public class MoveElevator extends CommandBase {
             if(sys_elevator.getRatchetState() == Value.kForward) {
                 sys_elevator.unlockRatchet();
                 Timer.delay(0.1);
-            }
-            sys_elevator.setElevatorState(true);
-            sys_elevator.moveElevator(setPoint);       
+            }  
         } else if (!extending) {
             if (sys_elevator.getRatchetState() == Value.kReverse) {
                 sys_elevator.lockRatchet();
             }
-            sys_elevator.setElevatorState(true);
-            sys_elevator.moveElevator(setPoint);
         }
+        sys_elevator.setElevatorState(true);
+        sys_elevator.moveElevator(setPoint);
     }
     
     // Called every time the scheduler runs while the command is scheduled.

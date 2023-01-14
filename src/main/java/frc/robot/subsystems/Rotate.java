@@ -5,11 +5,11 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-
-import edu.wpi.first.wpilibj.Joystick;
+import com.revrobotics.CANSparkMax.IdleMode;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+
 
 public class Rotate extends SubsystemBase {
   private final CANSparkMax m_Rotateneo;
@@ -17,37 +17,21 @@ public class Rotate extends SubsystemBase {
 
   /** Creates a new ExampleSubsystem. */
   public Rotate() {
-    m_Rotateneo = new CANSparkMax(Constants.kRotate.kTurrentNeoID,Constants.kRotate.kTurrentNeoModuleType);
-    m_Rotateneo.setIdleMode(null);
-    m_Rotateneo.setInverted(true);
-    m_
-
-
-
-
+    m_Rotateneo = new CANSparkMax(Constnats.kRotate,Motortype.Brushless);
+   
+		m_Rotateneo.setIdleMode();
+		m_Rotateneo.setInverted(true);	// Invert the rollers
+    m_Rotateneo.burnFlash();
   }
 
-  public void disable(){}
-
-  /**
-   * Example command factory method.
-   *
-   * @return a command
-   */
-  public CommandBase exampleMethodCommand() {
-    // Inline construction of command goes here.
-    // Subsystem::RunOnce implicitly requires `this` subsystem.
-    return runOnce(
-        () -> {
-          /* one-time action goes here */
-        });
+  public void disable(){
+    m_Rotateneo.set(0);
   }
-
-  /**
-   * An example method querying a boolean state of the subsystem (for example, a digital sensor).
-   *
-   * @return value of some boolean subsystem state, such as a digital sensor.
-   */
+  public void rotateForward(){
+    m_Rotateneo.set();
+  }
+  
+  public void rotateBackward(){}
 
   public void rotateLeft (){
 
@@ -69,4 +53,5 @@ public class Rotate extends SubsystemBase {
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
   }
+}
 }

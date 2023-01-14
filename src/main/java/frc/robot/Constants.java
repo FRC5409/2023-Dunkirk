@@ -4,7 +4,10 @@
 
 package frc.robot;
 
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -114,4 +117,13 @@ public final class Constants {
         public final static double targetHeight = 140;
         public final static double heightOffFloor = 70;
     }
+
+    public static class kRotate{
+        public final static int kTurrentNeoID = 12;
+        public final static MotorType kTurrentNeoModuleType = MotorType.kBrushless;
+        public final static double krotateForwardSpeed = 0.4;
+        public final static double krotateBackwardSpeed = -0.4;
+
+    }
+
 }

@@ -41,9 +41,6 @@ public class Elevator extends SubsystemBase {
 
     private boolean isMoving;
 
-    private double prevHeldPos = 0;
-
-
     
     public Elevator() {
         m_left = new CANSparkMax(kElevator.kLeftCAN, MotorType.kBrushless);

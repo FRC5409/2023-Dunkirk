@@ -1,6 +1,6 @@
 package frc.robot.commands;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -13,15 +13,15 @@ import frc.robot.subsystems.Shooter;
 public class ShooterSpeed extends CommandBase {
 
     private ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
-    private NetworkTableEntry distanceEntry = tab.add("Distance to the target", 0).getEntry();
-    private NetworkTableEntry targetSpeedEntry = tab.add("Target Speed", 0).getEntry();
-    private NetworkTableEntry shooterSpeedEntry = tab.add("Shooter Speed", 0).getEntry();
-    // private NetworkTableEntry kP = tab.add("kP", 0).getEntry();
-    // private NetworkTableEntry kI = tab.add("kI", 0).getEntry();
-    // private NetworkTableEntry kD = tab.add("kD", 0).getEntry();
-    // private NetworkTableEntry kF = tab.add("kF", 0).getEntry();
-    // private NetworkTableEntry timeEntry = tab.add("Time: ", 0).getEntry();//debugging
-    // private NetworkTableEntry indexEntry = tab.add("Index: ", 0).getEntry();//debugging
+    private GenericEntry distanceEntry = tab.add("Distance to the target", 0).getEntry();
+    private GenericEntry targetSpeedEntry = tab.add("Target Speed", 0).getEntry();
+    private GenericEntry shooterSpeedEntry = tab.add("Shooter Speed", 0).getEntry();
+    // private GenericEntry kP = tab.add("kP", 0).getEntry();
+    // private GenericEntry kI = tab.add("kI", 0).getEntry();
+    // private GenericEntry kD = tab.add("kD", 0).getEntry();
+    // private GenericEntry kF = tab.add("kF", 0).getEntry();
+    // private GenericEntry timeEntry = tab.add("Time: ", 0).getEntry();//debugging
+    // private GenericEntry indexEntry = tab.add("Index: ", 0).getEntry();//debugging
 
     private final Shooter m_shooter;
     private final XboxController m_joystick;

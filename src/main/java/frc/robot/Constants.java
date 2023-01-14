@@ -114,4 +114,12 @@ public final class Constants {
         public final static double targetHeight = 140;
         public final static double heightOffFloor = 70;
     }
+
+    public static class kRotate{
+        public final static int kTurrentNeoID = 12;
+     
+        public final static double krotateForwardSpeed = 0.4;
+        public final static double krotateBackwardSpeed = -0.4;
+
+    }
 }

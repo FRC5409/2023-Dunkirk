@@ -103,7 +103,7 @@ public class DriveTrain extends SubsystemBase {
 
         // Gyro and odometry
         m_gyro = new Gyro(); // new gyro? or take in parameter
-        m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());
+        m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), getLeftDistance(), getRightDistance());
     }
 
     /**
@@ -194,7 +194,7 @@ public class DriveTrain extends SubsystemBase {
 
     public void resetOdometry(Pose2d pose) {
         resetCANCoders();
-        m_odometry.resetPosition(pose, m_gyro.getRotation2d());
+        m_odometry.resetPosition(m_gyro.getRotation2d(), getLeftDistance(), getRightDistance(),  pose);
     }
     // -------------------------
 

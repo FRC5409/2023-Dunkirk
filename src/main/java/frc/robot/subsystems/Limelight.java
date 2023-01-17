@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -19,10 +18,10 @@ public class Limelight extends SubsystemBase {
     double angleGoal;
     double distanceToTarget;
 
-
-    
+   
     public Limelight() {
-        NetworkTableInstance.getDefault().setServerTeam(5409);;
+        NetworkTableInstance.getDefault().startServer();
+        NetworkTableInstance.getDefault().setServerTeam(5409);
         distanceToTarget = -1;  
         
     }
@@ -59,11 +58,12 @@ public class Limelight extends SubsystemBase {
     }
 
     public boolean isVisable() {
-        if (NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(-1) == 1) {
-            return true;
-        } else {
+        try {
+            return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0) == 1;
+        } catch (Exception e) { 
             return false;
         }
+    
     }
     
 }

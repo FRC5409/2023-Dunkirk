@@ -32,12 +32,12 @@ public final class Constants {
 
             public final static double kCountsPerRevolution = 4096;
             public final static double kSensorCoefficient = (Math.PI * kDriveTrain.kWheel.kWheelDiameter) / kCountsPerRevolution;
-            public final static String kUnitString = "mm";
+            public final static String kUnitString = "m";
         }
 
         public static class kWheel {
-            public final static double kWheelDiameter = 94.04; // mm
-            public final static double kWheelCircumference = Math.PI * kWheelDiameter; // mm
+            public final static double kWheelDiameter = 0.09404; // m
+            public final static double kWheelCircumference = Math.PI * kWheelDiameter; // m
         }
 
         public static class Solenoids {

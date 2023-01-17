@@ -65,7 +65,7 @@ public class Pneumatics extends SubsystemBase {
 
     public boolean getEnabled() {
         try {
-            return m_compressor.enabled();
+            return m_compressor.isEnabled();
         } catch (NullPointerException exception) {
             DriverStation.reportError("Compressor is null", exception.getStackTrace());
             return false;

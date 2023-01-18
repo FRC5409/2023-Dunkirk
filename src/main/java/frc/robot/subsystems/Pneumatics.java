@@ -28,14 +28,8 @@ public class Pneumatics extends SubsystemBase {
      * https://docs.wpilib.org/en/stable/docs/yearly-overview/known-issues.html#code-crash-when-initializing-a-ph-pcm-related-device
      */
     public Pneumatics() {
-
-        try {
-            m_compressor = new Compressor(Constants.kPneumatics.kHubModuleID, Constants.kPneumatics.kPneumaticsModuleType);
-
-            enable();
-        } catch (NullPointerException exception) {
-            DriverStation.reportError("Error creating Compressor", exception.getStackTrace());
-        }
+        m_compressor = new Compressor(Constants.kPneumatics.kHubModuleID, Constants.kPneumatics.kPneumaticsModuleType);
+        enable();
 
         // Shuffleboard
         sb_pneumaticsTab = Shuffleboard.getTab("Compressor");
@@ -48,55 +42,27 @@ public class Pneumatics extends SubsystemBase {
     }
 
     public void enable() {
-        try {
-            m_compressor.enableAnalog(Constants.kPneumatics.kMinPressure, Constants.kPneumatics.kMaxPressure);
-        } catch (NullPointerException exception) {
-            DriverStation.reportError("Compressor is null", exception.getStackTrace());
-        }
+        m_compressor.enableAnalog(Constants.kPneumatics.kMinPressure, Constants.kPneumatics.kMaxPressure);
     }
 
     public void disable() {
-        try {
-            m_compressor.disable();
-        } catch (NullPointerException exception) {
-            DriverStation.reportError("Compressor are null", exception.getStackTrace());
-        }
+        m_compressor.disable();
     }
 
     public boolean getEnabled() {
-        try {
-            return m_compressor.isEnabled();
-        } catch (NullPointerException exception) {
-            DriverStation.reportError("Compressor is null", exception.getStackTrace());
-            return false;
-        }
+        return m_compressor.isEnabled();
     }
 
     public boolean getPressureSwitchValue() {
-        try {
-            return m_compressor.getPressureSwitchValue();
-        } catch (NullPointerException exception) {
-            DriverStation.reportError("Compressor are null", exception.getStackTrace());
-            return false;
-        }
+        return m_compressor.getPressureSwitchValue();
     }
 
     public double getCurrent() {
-        try {
-            return m_compressor.getCurrent();
-        } catch (NullPointerException exception) {
-            DriverStation.reportError("Compressor are null", exception.getStackTrace());
-            return 0;
-        }
+        return m_compressor.getCurrent();
     }
 
     public double getPressure() {
-        try {
-            return m_compressor.getPressure();
-        } catch (NullPointerException exception) {
-            DriverStation.reportError("Compressor are null", exception.getStackTrace());
-            return 0;
-        }
+        return m_compressor.getPressure();
     }
 
     @Override

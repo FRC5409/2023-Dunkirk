@@ -25,7 +25,7 @@ import frc.robot.Constants.kPneumatics;
 
 public class Elevator extends SubsystemBase {
 
-    public boolean elevatorActive;
+    private boolean elevatorActive;
 
     private CANSparkMax m_left;
     private CANSparkMax m_right;
@@ -119,20 +119,12 @@ public class Elevator extends SubsystemBase {
     public void startZeroing() {
         m_left.set(-0.1);
     }
-
-    public void setElevatorState(boolean isMoving) {
-        this.isMoving = isMoving;
-    }
-
-    public boolean getElevatorState() {
-        return isMoving;
-    }
-
+    
     public void disableMotors() {
         m_left.disable();
         m_right.disable();
     }
-
+    
     public void lockRatchet() {
         ratchetLock.set(DoubleSolenoid.Value.kForward);
     }
@@ -143,5 +135,21 @@ public class Elevator extends SubsystemBase {
 
     public Value getRatchetState() {
         return ratchetLock.get();
+    }
+    
+    public void setElevatorState(boolean isMoving) {
+        this.isMoving = isMoving;
+    }
+
+    public boolean getElevatorState() {
+        return isMoving;
+    }
+
+    public void toggleActiveState() {
+        elevatorActive = !elevatorActive;
+    }
+
+    public boolean getActiveState() {
+        return elevatorActive;
     }
 }

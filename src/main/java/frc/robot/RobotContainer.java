@@ -63,10 +63,6 @@ public class RobotContainer {
     private final MoveElevator cmd_downToBar;
     private final ZeroElevator cmd_zeroElevator;
     
-    //Conditionals
-    private BooleanSupplier isElevatorActive;
-    public BooleanSupplier isElevatorMoving;
-    
     //Triggers
     private final Trigger elevatorMidRung;
     private final Trigger elevatorLowRung;
@@ -101,26 +97,23 @@ public class RobotContainer {
         cmd_downToBar = new MoveElevator(sys_elevator);
         cmd_zeroElevator = new ZeroElevator(sys_elevator);
 
-        //Conditionals
-        isElevatorActive = () -> sys_elevator.elevatorActive == true;
-        isElevatorMoving = () -> sys_elevator.getElevatorState() == false;
-
         //Triggers
         elevatorMidRung = c_joystick
             .povUp()
-            .and(isElevatorActive)
-            .onTrue(cmd_elevatorMid);
+            .and(sys_elevator::getActiveState)
+            .onTrue(new MoveElevator(sys_elevator, Constants.kElevator.kToMidRung));
         elevatorLowRung = c_joystick
             .povLeft()
-            .and(isElevatorActive)
-            .onTrue(cmd_elevatorLow);
+            .and(sys_elevator::getActiveState)
+            .onTrue(new MoveElevator(sys_elevator, Constants.kElevator.kToLowRung));
         elevatorDown = c_joystick
             .povDown()
-            .and(isElevatorActive)
-            .onTrue(cmd_downToBar);
+            .and(sys_elevator::getActiveState)
+            .onTrue(new MoveElevator(sys_elevator));
         elevatorToZero = c_joystick
             .povRight()
-            .and(new Trigger(isElevatorMoving))
+            .and(sys_elevator::getActiveState)
+            .and(() -> !sys_elevator.getElevatorState())
             .onTrue(new ZeroElevator(sys_elevator));
         
 
@@ -140,11 +133,12 @@ public class RobotContainer {
         c_joystick.x().whileTrue(cmd_intakeBall);
         c_joystick.rightBumper().onTrue(cmd_toggleGear);
 
-
-        c_joystick.a().onTrue(Commands.runOnce(() -> sys_pneumatics.enable()));
-        c_joystick.a().onTrue(Commands.runOnce(() -> sys_pneumatics.disable()));
+        c_joystick.a().onTrue(Commands.runOnce(sys_pneumatics::enable));
+        c_joystick.a().onTrue(Commands.runOnce(sys_pneumatics::disable));
 
         c_joystick.leftBumper().whileTrue(cmd_shooterSpeed);
+
+        c_joystick.start().onTrue(Commands.runOnce(sys_elevator::toggleActiveState));
     }
 
     /**

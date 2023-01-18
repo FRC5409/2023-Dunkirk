@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import java.util.function.BooleanSupplier;
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DefaultDrive;
@@ -58,16 +56,6 @@ public class RobotContainer {
     private final ExampleCommand cmd_example;
     private final IntakeBall cmd_intakeBall;
     private final ShooterSpeed cmd_shooterSpeed;
-    private final MoveElevator cmd_elevatorMid;
-    private final MoveElevator cmd_elevatorLow;
-    private final MoveElevator cmd_downToBar;
-    private final ZeroElevator cmd_zeroElevator;
-    
-    //Triggers
-    private final Trigger elevatorMidRung;
-    private final Trigger elevatorLowRung;
-    private final Trigger elevatorDown;
-    private final Trigger elevatorToZero;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -92,30 +80,6 @@ public class RobotContainer {
         cmd_example = new ExampleCommand(sys_example);
         cmd_intakeBall = new IntakeBall(sys_intake);
         cmd_shooterSpeed = new ShooterSpeed(sys_shooter, c_joystick, sys_feeder);
-        cmd_elevatorMid = new MoveElevator(sys_elevator, Constants.kElevator.kToMidRung);
-        cmd_elevatorLow = new MoveElevator(sys_elevator, Constants.kElevator.kToLowRung);
-        cmd_downToBar = new MoveElevator(sys_elevator);
-        cmd_zeroElevator = new ZeroElevator(sys_elevator);
-
-        //Triggers
-        elevatorMidRung = c_joystick
-            .povUp()
-            .and(sys_elevator::getActiveState)
-            .onTrue(new MoveElevator(sys_elevator, Constants.kElevator.kToMidRung));
-        elevatorLowRung = c_joystick
-            .povLeft()
-            .and(sys_elevator::getActiveState)
-            .onTrue(new MoveElevator(sys_elevator, Constants.kElevator.kToLowRung));
-        elevatorDown = c_joystick
-            .povDown()
-            .and(sys_elevator::getActiveState)
-            .onTrue(new MoveElevator(sys_elevator));
-        elevatorToZero = c_joystick
-            .povRight()
-            .and(sys_elevator::getActiveState)
-            .and(() -> !sys_elevator.getElevatorState())
-            .onTrue(new ZeroElevator(sys_elevator));
-        
 
         sys_driveTrain.setDefaultCommand(cmd_defaultDrive);
 
@@ -139,6 +103,25 @@ public class RobotContainer {
         c_joystick.leftBumper().whileTrue(cmd_shooterSpeed);
 
         c_joystick.start().onTrue(Commands.runOnce(sys_elevator::toggleActiveState));
+
+        c_joystick
+            .povUp()
+            .and(sys_elevator::getActiveState)
+            .onTrue(new MoveElevator(sys_elevator, Constants.kElevator.kToMidRung));
+        c_joystick
+            .povLeft()
+            .and(sys_elevator::getActiveState)
+            .onTrue(new MoveElevator(sys_elevator, Constants.kElevator.kToLowRung));
+        c_joystick
+            .povDown()
+            .and(sys_elevator::getActiveState)
+            .onTrue(new MoveElevator(sys_elevator));
+        c_joystick
+            .povRight()
+            .and(sys_elevator::getActiveState)
+            .and(() -> !sys_elevator.getElevatorState())
+            .onTrue(new ZeroElevator(sys_elevator));
+        
     }
 
     /**

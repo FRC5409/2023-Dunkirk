@@ -37,7 +37,8 @@ public class Robot extends TimedRobot {
     new Trigger(this::isEnabled)
     .negate()
     .debounce(5)
-    .whenActive(new SetCoastMode(m_robotContainer.sys_driveTrain));
+    .onTrue(new SetCoastMode(m_robotContainer.sys_driveTrain));
+    
   }
 
   /**

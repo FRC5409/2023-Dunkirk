@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -25,7 +26,7 @@ public class Rotate extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   public Rotate() {
     m_Rotateneo = new CANSparkMax(Constants.kRotate.kTurrentNeoID,MotorType.kBrushless);
-    m_Rotateneo.restoreFactoryDefaults();
+    //m_Rotateneo.restoreFactoryDefaults();
 		m_Rotateneo.setIdleMode(IdleMode.kBrake);
 		m_Rotateneo.setInverted(true);	// Invert the rollers
     m_Rotateneo.burnFlash();
@@ -36,7 +37,6 @@ public class Rotate extends SubsystemBase {
 
     //ge_velocity = sb_rotateTab.add("velocity",rotateForward().getEntry());
 
-    // private NetworkTableEntry kF = tab.add("kF", 0).getEntry();
     
     disable();
   }
@@ -60,11 +60,22 @@ public class Rotate extends SubsystemBase {
     return m_encoder.getPosition();
   }
 
+  public double getPositionConversionFactor(){
+    return m_encoder.getPositionConversionFactor();
+  }
+
+  public REVLibError setPositionConversionFactor(int i){
+    return m_encoder.setPositionConversionFactor(Constants.kRotate.mulitFactor);
+  }
+
+
 
   @Override
   public void periodic() {
     sb_rotateTab.addNumber("Velocity", this::getSpeed);
     sb_rotateTab.addDouble("Rotation", this::getRotation);
+    sb_rotateTab.addNumber("PositionConversion", this:: getPositionConversionFactor);
+
     // This method will be called once per scheduler run
 
   }

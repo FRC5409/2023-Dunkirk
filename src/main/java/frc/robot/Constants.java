@@ -121,6 +121,7 @@ public final class Constants {
      
         public final static double krotateForwardSpeed = 0.4;
         public final static double krotateBackwardSpeed = -0.4;
+        public final static double mulitFactor = 1;
 
     }
 

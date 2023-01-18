@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import javax.rmi.ssl.SslRMIServerSocketFactory;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DefaultDrive;
@@ -105,15 +107,23 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        but_main_X.whileHeld(cmd_intakeBall);
-        but_main_RBumper.whenPressed(cmd_toggleGear);
-        but_main_Y.whenHeld(cmd_rotation);
+      //  but_main_A.whenPressed(() -> sys_pneumatics.enable());
+      //  but_main_B.whenPressed(() -> sys_pneumatics.disable());        
 
 
-        but_main_A.whenPressed(() -> sys_pneumatics.enable());
-        but_main_B.whenPressed(() -> sys_pneumatics.disable());
+       // changing
+        but_main_X.whileTrue(cmd_intakeBall);
+        but_main_RBumper.onTrue(cmd_toggleGear);
+        but_main_Y.whileTrue(cmd_rotation);
 
-        but_main_LBumper.whenPressed(cmd_shooterSpeed);
+        but_main_A.onTrue(cmd_defaultDrive);
+
+
+        but_main_LBumper.onTrue(cmd_shooterSpeed);
+
+      
+
+
         
     }
 

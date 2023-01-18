@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DefaultDrive;
@@ -11,7 +13,10 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.IntakeBall;
 import frc.robot.commands.ShooterSpeed;
 import frc.robot.commands.ToggleGear;
+import frc.robot.commands.Elevator.MoveElevator;
+import frc.robot.commands.Elevator.ZeroElevator;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Gyro;
@@ -22,6 +27,7 @@ import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -41,11 +47,10 @@ public class RobotContainer {
     private final Shooter sys_shooter;
     private final Feeder sys_feeder;
     private final Limelight sys_limelight;
+    private final Elevator sys_elevator;
 
     // Controller
     private final CommandXboxController c_joystick;
-    // private final JoystickButton but_main_A, but_main_B, but_main_X, but_main_Y, but_main_LBumper, but_main_RBumper,
-    //     but_main_LAnalog, but_main_RAnalog, but_main_Back, but_main_Start;
 
     // Commands
     private final DefaultDrive cmd_defaultDrive;
@@ -53,6 +58,20 @@ public class RobotContainer {
     private final ExampleCommand cmd_example;
     private final IntakeBall cmd_intakeBall;
     private final ShooterSpeed cmd_shooterSpeed;
+    private final MoveElevator cmd_elevatorMid;
+    private final MoveElevator cmd_elevatorLow;
+    private final MoveElevator cmd_downToBar;
+    private final ZeroElevator cmd_zeroElevator;
+    
+    //Conditionals
+    private BooleanSupplier isElevatorActive;
+    public BooleanSupplier isElevatorMoving;
+    
+    //Triggers
+    private final Trigger elevatorMidRung;
+    private final Trigger elevatorLowRung;
+    private final Trigger elevatorDown;
+    private final Trigger elevatorToZero;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -66,6 +85,7 @@ public class RobotContainer {
         sys_shooter = new Shooter();
         sys_feeder = new Feeder();
         sys_limelight = new Limelight();
+        sys_elevator = new Elevator();
         
         // Controller
         c_joystick = new CommandXboxController(0);
@@ -76,6 +96,32 @@ public class RobotContainer {
         cmd_example = new ExampleCommand(sys_example);
         cmd_intakeBall = new IntakeBall(sys_intake);
         cmd_shooterSpeed = new ShooterSpeed(sys_shooter, c_joystick, sys_feeder);
+        cmd_elevatorMid = new MoveElevator(sys_elevator, Constants.kElevator.kToMidRung);
+        cmd_elevatorLow = new MoveElevator(sys_elevator, Constants.kElevator.kToLowRung);
+        cmd_downToBar = new MoveElevator(sys_elevator);
+        cmd_zeroElevator = new ZeroElevator(sys_elevator);
+
+        //Conditionals
+        isElevatorActive = () -> sys_elevator.elevatorActive == true;
+        isElevatorMoving = () -> sys_elevator.getElevatorState() == false;
+
+        //Triggers
+        elevatorMidRung = c_joystick
+            .povUp()
+            .and(isElevatorActive)
+            .onTrue(cmd_elevatorMid);
+        elevatorLowRung = c_joystick
+            .povLeft()
+            .and(isElevatorActive)
+            .onTrue(cmd_elevatorLow);
+        elevatorDown = c_joystick
+            .povDown()
+            .and(isElevatorActive)
+            .onTrue(cmd_downToBar);
+        elevatorToZero = c_joystick
+            .povRight()
+            .and(new Trigger(isElevatorMoving))
+            .onTrue(new ZeroElevator(sys_elevator));
         
 
         sys_driveTrain.setDefaultCommand(cmd_defaultDrive);

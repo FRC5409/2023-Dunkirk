@@ -1,11 +1,11 @@
 package frc.robot.commands;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.kShooter;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Shooter;
@@ -13,9 +13,9 @@ import frc.robot.subsystems.Shooter;
 public class ShooterSpeed extends CommandBase {
 
     private ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
-    private NetworkTableEntry distanceEntry = tab.add("Distance to the target", 0).getEntry();
-    private NetworkTableEntry targetSpeedEntry = tab.add("Target Speed", 0).getEntry();
-    private NetworkTableEntry shooterSpeedEntry = tab.add("Shooter Speed", 0).getEntry();
+    private GenericEntry distanceEntry = tab.add("Distance to the target", 0).getEntry();
+    private GenericEntry targetSpeedEntry = tab.add("Target Speed", 0).getEntry();
+    private GenericEntry shooterSpeedEntry = tab.add("Shooter Speed", 0).getEntry();
     // private NetworkTableEntry kP = tab.add("kP", 0).getEntry();
     // private NetworkTableEntry kI = tab.add("kI", 0).getEntry();
     // private NetworkTableEntry kD = tab.add("kD", 0).getEntry();
@@ -24,12 +24,12 @@ public class ShooterSpeed extends CommandBase {
     // private NetworkTableEntry indexEntry = tab.add("Index: ", 0).getEntry();//debugging
 
     private final Shooter m_shooter;
-    private final XboxController m_joystick;
+    private final CommandXboxController m_joystick;
     private final Feeder m_feeder;
     // private final Limelight m_limelight;
     private double distance;
 
-    public ShooterSpeed(Shooter shooter, XboxController joystick, Feeder feeder) {//TODO: somepoint at limelight to this to grab the distace
+    public ShooterSpeed(Shooter shooter, CommandXboxController joystick, Feeder feeder) {//TODO: somepoint at limelight to this to grab the distace
         // Use addRequirements() here to declare subsystem dependencies.
         m_shooter = shooter;
         m_joystick = joystick;
@@ -80,10 +80,6 @@ public class ShooterSpeed extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() { 
-        if (!m_joystick.getLeftBumper()) {//if button is off return true
-            return true;
-        } else {
-            return false;
-        }
+        return false;
     }
 }

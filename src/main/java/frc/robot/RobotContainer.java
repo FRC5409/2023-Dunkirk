@@ -11,7 +11,10 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.IntakeBall;
 import frc.robot.commands.ShooterSpeed;
 import frc.robot.commands.ToggleGear;
+import frc.robot.commands.Elevator.MoveElevator;
+import frc.robot.commands.Elevator.ZeroElevator;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Gyro;
@@ -20,7 +23,9 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pneumatics;
 import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -40,11 +45,10 @@ public class RobotContainer {
     private final Shooter sys_shooter;
     private final Feeder sys_feeder;
     private final Limelight sys_limelight;
+    private final Elevator sys_elevator;
 
     // Controller
-    private final XboxController sys_controller;
-    private final JoystickButton but_main_A, but_main_B, but_main_X, but_main_Y, but_main_LBumper, but_main_RBumper,
-        but_main_LAnalog, but_main_RAnalog, but_main_Back, but_main_Start;
+    private final CommandXboxController c_joystick;
 
     // Commands
     private final DefaultDrive cmd_defaultDrive;
@@ -65,27 +69,17 @@ public class RobotContainer {
         sys_shooter = new Shooter();
         sys_feeder = new Feeder();
         sys_limelight = new Limelight();
+        sys_elevator = new Elevator();
         
         // Controller
-        sys_controller = new XboxController(0);
-        but_main_A = new JoystickButton(sys_controller, XboxController.Button.kA.value);
-        but_main_B = new JoystickButton(sys_controller, XboxController.Button.kB.value);
-        but_main_X = new JoystickButton(sys_controller, XboxController.Button.kX.value);
-        but_main_Y = new JoystickButton(sys_controller, XboxController.Button.kY.value);
-        but_main_LBumper = new JoystickButton(sys_controller, XboxController.Button.kLeftBumper.value);
-        but_main_RBumper = new JoystickButton(sys_controller, XboxController.Button.kRightBumper.value);
-        but_main_LAnalog = new JoystickButton(sys_controller, XboxController.Button.kLeftStick.value);
-        but_main_RAnalog = new JoystickButton(sys_controller, XboxController.Button.kRightStick.value);
-        but_main_Back = new JoystickButton(sys_controller, XboxController.Button.kBack.value);
-        but_main_Start = new JoystickButton(sys_controller, XboxController.Button.kStart.value);
+        c_joystick = new CommandXboxController(0);
 
         // Commands
-        cmd_defaultDrive = new DefaultDrive(sys_driveTrain, sys_controller);
+        cmd_defaultDrive = new DefaultDrive(sys_driveTrain, c_joystick);
         cmd_toggleGear = new ToggleGear(sys_driveTrain);
         cmd_example = new ExampleCommand(sys_example);
         cmd_intakeBall = new IntakeBall(sys_intake);
-        cmd_shooterSpeed = new ShooterSpeed(sys_shooter, sys_controller, sys_feeder);
-        
+        cmd_shooterSpeed = new ShooterSpeed(sys_shooter, c_joystick, sys_feeder);
 
         sys_driveTrain.setDefaultCommand(cmd_defaultDrive);
 
@@ -100,14 +94,34 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        but_main_X.whileHeld(cmd_intakeBall);
-        but_main_RBumper.whenPressed(cmd_toggleGear);
+        c_joystick.x().whileTrue(cmd_intakeBall);
+        c_joystick.rightBumper().onTrue(cmd_toggleGear);
 
+        c_joystick.a().onTrue(Commands.runOnce(sys_pneumatics::enable));
+        c_joystick.a().onTrue(Commands.runOnce(sys_pneumatics::disable));
 
-        but_main_A.whenPressed(() -> sys_pneumatics.enable());
-        but_main_B.whenPressed(() -> sys_pneumatics.disable());
+        c_joystick.leftBumper().whileTrue(cmd_shooterSpeed);
 
-        but_main_LBumper.whenPressed(cmd_shooterSpeed);
+        c_joystick.start().onTrue(Commands.runOnce(sys_elevator::toggleActiveState));
+
+        c_joystick
+            .povUp()
+            .and(sys_elevator::getActiveState)
+            .onTrue(new MoveElevator(sys_elevator, Constants.kElevator.kToMidRung));
+        c_joystick
+            .povLeft()
+            .and(sys_elevator::getActiveState)
+            .onTrue(new MoveElevator(sys_elevator, Constants.kElevator.kToLowRung));
+        c_joystick
+            .povDown()
+            .and(sys_elevator::getActiveState)
+            .onTrue(new MoveElevator(sys_elevator));
+        c_joystick
+            .povRight()
+            .and(sys_elevator::getActiveState)
+            .and(() -> !sys_elevator.getElevatorState())
+            .onTrue(new ZeroElevator(sys_elevator));
+        
     }
 
     /**

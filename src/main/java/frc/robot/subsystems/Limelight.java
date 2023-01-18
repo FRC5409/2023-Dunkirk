@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -10,17 +10,19 @@ import frc.robot.Constants.kLimelight;
 
 public class Limelight extends SubsystemBase {
 
-    private ShuffleboardTab tab = Shuffleboard.getTab("Limelight");
-    private NetworkTableEntry distanceEntry = tab.add("Distance to target: ", 0).getEntry();
+    private ShuffleboardTab tab = Shuffleboard.getTab("limelight");
+    private GenericEntry distanceEntry = tab.add("Distance to target: ", 0).getEntry();
 
     NetworkTable limeTable;
 
     double angleGoal;
     double distanceToTarget;
 
+   
     public Limelight() {
-        NetworkTableInstance.getDefault().startClientTeam(5409);
-        distanceToTarget = -1;
+        NetworkTableInstance.getDefault().startServer();
+        NetworkTableInstance.getDefault().setServerTeam(5409);
+        distanceToTarget = -1;  
         
     }
 
@@ -56,11 +58,12 @@ public class Limelight extends SubsystemBase {
     }
 
     public boolean isVisable() {
-        if (NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(-1) == 1) {
-            return true;
-        } else {
+        try {
+            return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0) == 1;
+        } catch (Exception e) { 
             return false;
         }
+    
     }
     
 }

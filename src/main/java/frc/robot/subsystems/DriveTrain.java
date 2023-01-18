@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.SensorTimeBase;
@@ -15,7 +14,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.kDriveTrain;
 import frc.robot.Constants.kPneumatics;
 
@@ -103,7 +101,7 @@ public class DriveTrain extends SubsystemBase {
 
         // Gyro and odometry
         m_gyro = new Gyro(); // new gyro? or take in parameter
-        m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());
+        m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), getLeftDistance(), getRightDistance());
     }
 
     /**
@@ -194,7 +192,7 @@ public class DriveTrain extends SubsystemBase {
 
     public void resetOdometry(Pose2d pose) {
         resetCANCoders();
-        m_odometry.resetPosition(pose, m_gyro.getRotation2d());
+        m_odometry.resetPosition(m_gyro.getRotation2d(), getLeftDistance(), getRightDistance(),  pose);
     }
     // -------------------------
 

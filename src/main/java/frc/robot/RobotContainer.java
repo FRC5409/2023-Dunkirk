@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.BallBackOff;
@@ -44,6 +45,7 @@ public class RobotContainer {
     private final Pneumatics sys_pneumatics;
     private final ExampleSubsystem sys_example;
     private final Intake sys_intake;
+    private final MiddleRollers sys_middleRollers;
     private final Shooter sys_shooter;
     private final Feeder sys_feeder;
     private final Limelight sys_limelight;
@@ -58,7 +60,7 @@ public class RobotContainer {
     private final ExampleCommand cmd_example;
     private final IntakeBall cmd_intakeBall;
     private final ShooterSpeed cmd_shooterSpeed;
-    private final BallBackOff cmd_ballBackOff;
+    //private final BallBackOff cmd_ballBackOff;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -69,6 +71,7 @@ public class RobotContainer {
         sys_pneumatics = new Pneumatics();
         sys_example = new ExampleSubsystem();
         sys_intake = new Intake();
+        sys_middleRollers = new MiddleRollers();
         sys_shooter = new Shooter();
         sys_feeder = new Feeder();
         sys_limelight = new Limelight();
@@ -81,7 +84,7 @@ public class RobotContainer {
         cmd_defaultDrive = new DefaultDrive(sys_driveTrain, c_joystick);
         cmd_toggleGear = new ToggleGear(sys_driveTrain);
         cmd_example = new ExampleCommand(sys_example);
-        cmd_intakeBall = new IntakeBall(sys_intake);
+        cmd_intakeBall = new IntakeBall(sys_intake, sys_middleRollers);
         cmd_shooterSpeed = new ShooterSpeed(sys_shooter, c_joystick, sys_feeder);
 
         sys_driveTrain.setDefaultCommand(cmd_defaultDrive);

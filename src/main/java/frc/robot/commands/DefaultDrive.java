@@ -1,14 +1,14 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.DriveTrain;
 
 public class DefaultDrive extends CommandBase {
 
     // Subsystems & hardware
     private final DriveTrain m_driveTrain;
-    private final XboxController m_controller;
+    private final CommandXboxController m_controller;
 
     // Values
     private double m_xSpeed;
@@ -26,7 +26,7 @@ public class DefaultDrive extends CommandBase {
      * @param driveTrain
      * @param controller
      */
-    public DefaultDrive(DriveTrain driveTrain, XboxController controller) {
+    public DefaultDrive(DriveTrain driveTrain, CommandXboxController controller) {
 
         m_driveTrain = driveTrain;
         m_controller = controller;

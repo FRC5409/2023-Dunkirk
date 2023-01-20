@@ -7,6 +7,8 @@ package frc.robot.subsystems;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -15,12 +17,12 @@ public class Limelight2 extends SubsystemBase {
 	/** Creates a new Limelight2. */
 
 	// Important NetworkTable values
-	NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-	NetworkTableEntry tx = table.getEntry("tx");
-	NetworkTableEntry ty = table.getEntry("ty");
-	NetworkTableEntry ta = table.getEntry("ta");
-	NetworkTableEntry tv = table.getEntry("tv");
-	NetworkTableEntry ledMode = table.getEntry("ledMode");
+	NetworkTable table;
+	NetworkTableEntry tx;
+	NetworkTableEntry ty;
+	NetworkTableEntry ta;
+	NetworkTableEntry tv;
+	NetworkTableEntry ledMode;
 
 	// Important variables
 	double angleGoal;
@@ -32,9 +34,23 @@ public class Limelight2 extends SubsystemBase {
 	double targetArea;
 	double LEDMode;
 
+	private ShuffleboardTab sb_limelight;
+
+
 	public Limelight2() {
+
 		NetworkTableInstance.getDefault().startServer();
-    NetworkTableInstance.getDefault().setServerTeam(5409);
+    	NetworkTableInstance.getDefault().setServerTeam(5409);
+
+		table = NetworkTableInstance.getDefault().getTable("limelight");
+		tx = table.getEntry("tx");
+		ty = table.getEntry("ty");
+		ta = table.getEntry("ta");
+		tv = table.getEntry("tv");
+		ledMode = table.getEntry("ledMode");
+
+		sb_limelight = Shuffleboard.getTab("limelight");
+
 		distanceToTarget = -1;
 	}
 

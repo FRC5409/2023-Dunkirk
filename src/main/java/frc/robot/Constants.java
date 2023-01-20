@@ -44,6 +44,12 @@ public final class Constants {
             public final static int kGearShiftLow = 8;
             public final static int kGearShiftHigh = 9;
         }
+
+        public static class kAiming {
+            public final static int kTargetPlay = 7; // To be found
+            public final static double kTargetSpeed = 0.5; // To be found
+            public final static double kScanningSpeed = 0.6; // To be found
+        }
     }
 
     public static class kGyro {

@@ -12,6 +12,7 @@ import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.IntakeBall;
 import frc.robot.commands.ShooterSpeed;
+import frc.robot.commands.TargetAim;
 import frc.robot.commands.ToggleGear;
 import frc.robot.commands.Elevator.MoveElevator;
 import frc.robot.commands.Elevator.ZeroElevator;
@@ -22,6 +23,7 @@ import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Limelight2;
 import frc.robot.subsystems.MiddleRollers;
 import frc.robot.subsystems.Pneumatics;
 import frc.robot.subsystems.Shooter;
@@ -49,6 +51,7 @@ public class RobotContainer {
 	private final Shooter sys_shooter;
 	private final Feeder sys_feeder;
 	private final Limelight sys_limelight;
+	private final Limelight2 sys_limelight2;
 	private final Elevator sys_elevator;
 
 	// Controller
@@ -61,6 +64,7 @@ public class RobotContainer {
 	private final IntakeBall cmd_intakeBall;
 	private final ShooterSpeed cmd_shooterSpeed;
 	//private final BallBackOff cmd_ballBackOff;
+	private final TargetAim cmd_targetAim;
 
 	/** The container for the robot. Contains subsystems, OI devices, and commands. */
 	public RobotContainer() {
@@ -75,6 +79,7 @@ public class RobotContainer {
 		sys_shooter = new Shooter();
 		sys_feeder = new Feeder();
 		sys_limelight = new Limelight();
+		sys_limelight2 = new Limelight2();
 		sys_elevator = new Elevator();
 		
 		// Controller
@@ -86,6 +91,7 @@ public class RobotContainer {
 		cmd_example = new ExampleCommand(sys_example);
 		cmd_intakeBall = new IntakeBall(sys_intake, sys_middleRollers);
 		cmd_shooterSpeed = new ShooterSpeed(sys_shooter, c_joystick, sys_feeder);
+		cmd_targetAim = new TargetAim(sys_limelight2, sys_driveTrain, c_joystick);
 
 		sys_driveTrain.setDefaultCommand(cmd_defaultDrive);
 
@@ -101,6 +107,7 @@ public class RobotContainer {
 	 */
 	private void configureButtonBindings() {
 		c_joystick.x().whileTrue(cmd_intakeBall);
+		c_joystick.y().onTrue(cmd_targetAim);
 		c_joystick.rightBumper().onTrue(cmd_toggleGear);
 
 		c_joystick.a().onTrue(Commands.runOnce(sys_pneumatics::enable));

@@ -170,13 +170,14 @@ public class DriveTrain extends SubsystemBase {
     public void changeGear(DoubleSolenoid.Value newGear) {
         try {
             m_gearShiftValue = newGear;
-            m_doubleSolenoid.set(m_gearShiftValue);
+            m_doubleSolenoid.set(newGear);
         } catch (NullPointerException exception) {
             DriverStation.reportError("Solenoids are null", exception.getStackTrace());
         }
     }
 
     public DoubleSolenoid.Value getGear() {
+        System.out.println(m_doubleSolenoid.get());
         return m_doubleSolenoid.get();
     }
     // -------------------------
@@ -204,6 +205,8 @@ public class DriveTrain extends SubsystemBase {
         SmartDashboard.putNumber("CANCoder R Vel", getRightCANCoderVelocity());
         SmartDashboard.putNumber("CANCoder L Dist", getLeftDistance());
         SmartDashboard.putNumber("CANCoder R Dist", getRightDistance());
+
+        SmartDashboard.putString("Gear", getGear().toString());
 
         // Update odometry
         m_odometry.update(m_gyro.getRotation2d(), m_cancoderLeft.getPosition(), m_cancoderRight.getPosition());

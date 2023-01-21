@@ -95,7 +95,7 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         c_joystick.x().whileTrue(cmd_intakeBall);
-        c_joystick.rightBumper().onTrue(cmd_toggleGear);
+        c_joystick.rightBumper().onTrue(new ToggleGear(sys_driveTrain));
 
         c_joystick.a().onTrue(Commands.runOnce(sys_pneumatics::enable));
         c_joystick.a().onTrue(Commands.runOnce(sys_pneumatics::disable));

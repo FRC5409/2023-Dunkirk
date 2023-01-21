@@ -13,9 +13,6 @@ public class ToggleGear extends InstantCommand {
 
         m_driveTrain = driveTrain;
         m_gearState = m_driveTrain.getGear();
-
-        // Use addRequirements() here to declare subsystem dependencies.
-        addRequirements(driveTrain);
         
     }
 

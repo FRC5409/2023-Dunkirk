@@ -57,7 +57,7 @@ public class DefaultDrive extends CommandBase {
         m_xSpeed = acceleration - deceleration;
 
         // Left stick x controls rotation
-        m_zRotation = m_controller.getLeftX();
+        m_zRotation = -m_controller.getLeftX();
 
         // Drive
         if (m_xSpeed > 0 || m_zRotation != 0) // forward

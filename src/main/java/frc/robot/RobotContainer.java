@@ -11,6 +11,8 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.IntakeBall;
 import frc.robot.commands.ShooterSpeed;
 import frc.robot.commands.ToggleGear;
+import frc.robot.commands.ToggleHighGear;
+import frc.robot.commands.ToggleLowGear;
 import frc.robot.commands.Elevator.MoveElevator;
 import frc.robot.commands.Elevator.ZeroElevator;
 import frc.robot.subsystems.DriveTrain;
@@ -53,6 +55,8 @@ public class RobotContainer {
     // Commands
     private final DefaultDrive cmd_defaultDrive;
     private final ToggleGear cmd_toggleGear;
+    private final ToggleHighGear cmd_highGear;
+    private final ToggleLowGear cmd_lowGear;
     private final ExampleCommand cmd_example;
     private final IntakeBall cmd_intakeBall;
     private final ShooterSpeed cmd_shooterSpeed;
@@ -77,6 +81,8 @@ public class RobotContainer {
         // Commands
         cmd_defaultDrive = new DefaultDrive(sys_driveTrain, c_joystick);
         cmd_toggleGear = new ToggleGear(sys_driveTrain);
+        cmd_highGear = new ToggleHighGear(sys_driveTrain);
+        cmd_lowGear = new ToggleLowGear(sys_driveTrain);
         cmd_example = new ExampleCommand(sys_example);
         cmd_intakeBall = new IntakeBall(sys_intake);
         cmd_shooterSpeed = new ShooterSpeed(sys_shooter, c_joystick, sys_feeder);
@@ -95,7 +101,9 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         c_joystick.x().whileTrue(cmd_intakeBall);
-        c_joystick.rightBumper().onTrue(new ToggleGear(sys_driveTrain));
+        c_joystick.rightBumper()
+            .whileTrue(cmd_lowGear)
+            .whileTrue(cmd_highGear);
 
         c_joystick.a().onTrue(Commands.runOnce(sys_pneumatics::enable));
         c_joystick.a().onTrue(Commands.runOnce(sys_pneumatics::disable));

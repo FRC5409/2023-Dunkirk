@@ -88,16 +88,12 @@ public class DriveTrain extends SubsystemBase {
         m_cancoderRight.configAllSettings(cancoderConfig);
 
         // Solenoids
-        try {
-            m_doubleSolenoid = new DoubleSolenoid(
-                kPneumatics.kHubModuleID,
-                kPneumatics.kPneumaticsModuleType,
-                kDriveTrain.Solenoids.kGearShiftHigh,
-                kDriveTrain.Solenoids.kGearShiftLow);
-            m_gearShiftValue = m_doubleSolenoid.get();
-        } catch (NullPointerException exception) {
-            DriverStation.reportError("Error creating Solenoid", exception.getStackTrace());
-        }
+        m_doubleSolenoid = new DoubleSolenoid(
+            kPneumatics.kHubModuleID,
+            kPneumatics.kPneumaticsModuleType,
+            kDriveTrain.Solenoids.kGearShiftHigh,
+            kDriveTrain.Solenoids.kGearShiftLow);
+        m_gearShiftValue = m_doubleSolenoid.get();
 
         // Gyro and odometry
         m_gyro = new Gyro(); // new gyro? or take in parameter
@@ -168,16 +164,12 @@ public class DriveTrain extends SubsystemBase {
      * @param newGear set to gear
      */
     public void changeGear(DoubleSolenoid.Value newGear) {
-        try {
-            m_gearShiftValue = newGear;
-            m_doubleSolenoid.set(newGear);
-        } catch (NullPointerException exception) {
-            DriverStation.reportError("Solenoids are null", exception.getStackTrace());
-        }
+        m_gearShiftValue = newGear;
+        System.out.println("reached here2");
+        m_doubleSolenoid.set(m_gearShiftValue);
     }
 
     public DoubleSolenoid.Value getGear() {
-        System.out.println(m_doubleSolenoid.get());
         return m_doubleSolenoid.get();
     }
     // -------------------------

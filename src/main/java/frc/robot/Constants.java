@@ -46,7 +46,7 @@ public final class Constants {
         }
 
         public static class kAiming {
-            public final static int kTargetPlay = 7; // To be found
+            public final static double kTargetPlay = 5.5; // To be found
             public final static double kTargetSpeed = 0.5; // To be found
             public final static double kScanningSpeed = 0.6; // To be found
         }

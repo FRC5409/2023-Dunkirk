@@ -30,6 +30,7 @@ public class TargetAim extends CommandBase {
 	@Override
 	public void initialize() {
 		sys_limelight2.turnOn();
+		// System.out.println("Initialized");
 	}
 
 	// Called every time the scheduler runs while the command is scheduled.

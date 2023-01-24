@@ -7,7 +7,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.BallBackOff;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.IntakeBall;
@@ -57,6 +56,8 @@ public class RobotContainer {
 	// Controller
 	private final CommandXboxController c_joystick;
 
+	private final XboxController m_joystick;
+
 	// Commands
 	private final DefaultDrive cmd_defaultDrive;
 	private final ToggleGear cmd_toggleGear;
@@ -69,6 +70,8 @@ public class RobotContainer {
 	/** The container for the robot. Contains subsystems, OI devices, and commands. */
 	public RobotContainer() {
 
+		m_joystick = new XboxController(0);
+
 		// Subsystems
 		sys_driveTrain = new DriveTrain();
 		sys_gyro = new Gyro();
@@ -79,7 +82,7 @@ public class RobotContainer {
 		sys_shooter = new Shooter();
 		sys_feeder = new Feeder();
 		sys_limelight = new Limelight();
-		sys_limelight2 = new Limelight2();
+		sys_limelight2 = new Limelight2(m_joystick);
 		sys_elevator = new Elevator();
 		
 		// Controller
@@ -107,7 +110,7 @@ public class RobotContainer {
 	 */
 	private void configureButtonBindings() {
 		c_joystick.x().whileTrue(cmd_intakeBall);
-		c_joystick.y().onTrue(cmd_targetAim);
+		c_joystick.y().whileTrue(cmd_targetAim);
 		c_joystick.rightBumper().onTrue(cmd_toggleGear);
 
 		c_joystick.a().onTrue(Commands.runOnce(sys_pneumatics::enable));

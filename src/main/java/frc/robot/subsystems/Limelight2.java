@@ -8,42 +8,42 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.kLimelight;
 
 public class Limelight2 extends SubsystemBase {
 
 	// Important NetworkTable values
 	NetworkTable table;
-	NetworkTableEntry tx, ty, ta, tv;
-	NetworkTableEntry ledMode;
+	NetworkTableEntry tx, ty, ta, tv, ledMode;
 
 	// Important variables
 	double angleGoal;
 	double distanceToTarget;
-	double turningDir;
-	double x, y;
-	double targetArea;
-	double LEDMode;
+	double turningDir = 0;
+
+	double x, y, targetArea, LEDMode;
 
 	// Shuffleboard Tab and Entries
 	private ShuffleboardTab sb_limelight;
-	private ShuffleboardLayout limelightLayout;
 	private GenericEntry xOffEntry, yOffEntry, targetAreaEntry, VisibilityEntry, ledModeEntry;
+
+	private final XboxController m_joystick;
 
 
 	/** Creates a new Limelight2. */
-	public Limelight2() {
+	public Limelight2(XboxController joystick) {
+
+		table = NetworkTableInstance.getDefault().getTable("limelight");
 
 		NetworkTableInstance.getDefault().startServer();
     	NetworkTableInstance.getDefault().setServerTeam(5409);
 
 		// Getting data from the NetworkTables
-		table = NetworkTableInstance.getDefault().getTable("limelight");
 		tx = table.getEntry("tx");
 		ty = table.getEntry("ty");
 		ta = table.getEntry("ta");
@@ -60,10 +60,20 @@ public class Limelight2 extends SubsystemBase {
 		ledModeEntry = sb_limelight.add("LED Mode", LEDMode).getEntry();
 
 		distanceToTarget = -1;
+
+		m_joystick = new XboxController(0);
 	}
 
 	@Override
 	public void periodic() {
+
+		double pov = m_joystick.getPOV();
+
+		if (pov == 270) {
+			turningDir = -1;
+		} else if (pov == 90) {
+			turningDir = 1;
+		}
 
 		// Reading important values periodically
 		x = tx.getDouble(0.0);
@@ -72,9 +82,9 @@ public class Limelight2 extends SubsystemBase {
 		LEDMode = ledMode.getDouble(-1);
 
 		// Getting the angle to the goal in radians (tan requires radians to work)
-		angleGoal = (Constants.kLimelight.mountAngle + y) * (Math.PI / 180);
+		angleGoal = (kLimelight.mountAngle + y) * (Math.PI / 180);
 		// Getting distance to target using trig
-		distanceToTarget = (Constants.kLimelight.targetHeight - Constants.kLimelight.heightOffFloor) / Math.tan(angleGoal);
+		distanceToTarget = (kLimelight.targetHeight - kLimelight.heightOffFloor) / Math.tan(angleGoal);
 
 		// Updating data on Shuffleboard
 		xOffEntry.setDouble(x);
@@ -90,20 +100,14 @@ public class Limelight2 extends SubsystemBase {
 	/** Turns the limelight on */
 	public void turnOn() {ledMode.setNumber(3);}
 
-	/** Gets the x position/offset */
+	/** Gets the X position/offset */
 	public double getXOffset() {return x;}
 
-	/** Gets the y position/offset */
+	/** Gets the Y position/offset */
 	public double getYOffset() {return y;}
 
 	/** Checks if the target is visibile or not */
-	public boolean isVisible() {
-        try {
-            return tv.getDouble(0) == 1;
-        } catch (Exception e) { 
-            return false;
-        }
-    }
+	public boolean isVisible() {return tv.getDouble(0) == 1;}
 
 	/** Gets the distance from the target */
 	public double getTargetDistance() {return distanceToTarget;}
@@ -116,4 +120,6 @@ public class Limelight2 extends SubsystemBase {
 
 	/** Gets the angle to the target */
 	public double getTargetAngle() {return angleGoal;}
+
+	public void setPipeline() {;}
 }

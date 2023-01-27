@@ -123,10 +123,12 @@ public final class Constants {
 
     public static class kLimelight {
         public final static double mountAngle = 45;//TODO: get real value
-        public final static double targetHeight = 140;
+        public final static double targetHeight = 140;// For 2022
+        public final static double highTargetHeight = 140;//TODO: get real value for 2023
+        public final static double lowTargetHeight = 70;//TODO: get real value for 2023
         public final static double heightOffFloor = 70;
     }
-    
+
     public static class kElevator {
 
         public final static int kLeftCAN = 20;

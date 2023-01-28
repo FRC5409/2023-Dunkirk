@@ -22,7 +22,6 @@ import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.Limelight2;
 import frc.robot.subsystems.MiddleRollers;
 import frc.robot.subsystems.Pneumatics;
 import frc.robot.subsystems.Shooter;
@@ -50,7 +49,6 @@ public class RobotContainer {
 	private final Shooter sys_shooter;
 	private final Feeder sys_feeder;
 	private final Limelight sys_limelight;
-	private final Limelight2 sys_limelight2;
 	private final Elevator sys_elevator;
 
 	// Controller
@@ -81,8 +79,7 @@ public class RobotContainer {
 		sys_middleRollers = new MiddleRollers();
 		sys_shooter = new Shooter();
 		sys_feeder = new Feeder();
-		sys_limelight = new Limelight();
-		sys_limelight2 = new Limelight2(m_joystick);
+		sys_limelight = new Limelight(m_joystick);
 		sys_elevator = new Elevator();
 		
 		// Controller
@@ -94,7 +91,7 @@ public class RobotContainer {
 		cmd_example = new ExampleCommand(sys_example);
 		cmd_intakeBall = new IntakeBall(sys_intake, sys_middleRollers);
 		cmd_shooterSpeed = new ShooterSpeed(sys_shooter, c_joystick, sys_feeder);
-		cmd_targetAim = new TargetAim(sys_limelight2, sys_driveTrain, c_joystick);
+		cmd_targetAim = new TargetAim(sys_limelight, sys_driveTrain, c_joystick);
 
 		sys_driveTrain.setDefaultCommand(cmd_defaultDrive);
 

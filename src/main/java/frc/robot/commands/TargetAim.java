@@ -7,84 +7,68 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.kDriveTrain;
+import frc.robot.Constants.kLimelight;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.Limelight2;
+import frc.robot.subsystems.Limelight;
 
 public class TargetAim extends CommandBase {
-	/** Creates a new TargetAim. */
 
-	private final Limelight2 sys_limelight2;
+	private final Limelight sys_limelight;
 	private final DriveTrain sys_drivetrain;
-	private final CommandXboxController c_joystick;
+	private final CommandXboxController m_joystick;
 
-	double xOff, forwardSpeed;
-	boolean highTarget, lowTarget;
+	double forwardSpeed, dir, turning;
 
-	public TargetAim(Limelight2 limelight2, DriveTrain drivetrain, CommandXboxController joystick) {
-		sys_limelight2 = limelight2;
+	/** Creates a new TargetAim. */
+	public TargetAim(Limelight limelight, DriveTrain drivetrain, CommandXboxController joystick) {
+
+		sys_limelight = limelight;
 		sys_drivetrain = drivetrain;
-		c_joystick = joystick;
-
-		xOff = sys_limelight2.getXOffset();
-		forwardSpeed = c_joystick.getRightTriggerAxis() - c_joystick.getLeftTriggerAxis();
+		m_joystick = joystick;
 
 		// Use addRequirements() here to declare subsystem dependencies.
-		addRequirements(sys_drivetrain);
+		addRequirements(sys_drivetrain, sys_limelight);
 	}
 
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
-		sys_limelight2.turnOn();
+		sys_limelight.turnOn();
+		sys_limelight.setData("pipeline", 0);
 		// System.out.println("Initialized");
 	}
 
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		/*checkForTargetInCrop(1);
-		checkForTargetInCrop(2);
-		
-		if (highTarget) {lockOnTarget();}
-		else if (!highTarget && lowTarget) {lockOnTarget();}*/
+
+		forwardSpeed = m_joystick.getRightTriggerAxis() - m_joystick.getLeftTriggerAxis();
+
+        if (!sys_limelight.isVisible()) {
+            //dir on the controller
+            dir = sys_limelight.getTurningDir();
+        } else {
+            //dir returns -1 or 1 depending on if it's positive or if it's negative
+            dir = sys_limelight.getXOffset() / Math.abs(sys_limelight.getXOffset());
+        }
+
+        turning = dir * kDriveTrain.kAiming.kTargetSpeed;
+
+        sys_drivetrain.arcadeDrive(forwardSpeed, turning);
+		// System.out.println("Executed");
 	}
 
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
 		sys_drivetrain.arcadeDrive(0, 0);
-		sys_limelight2.turnOff();
+		sys_limelight.turnOff();
+		// System.out.println("Ended");
 	}
 
 	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-		return false;
-	}
-
-	/** The logic for locking onto the Target */
-	private void lockOnTarget() {
-		if (Math.abs(xOff) >= kDriveTrain.kAiming.kTargetPlay) {
-			sys_drivetrain.arcadeDrive(forwardSpeed, (xOff / Math.abs(xOff)) * kDriveTrain.kAiming.kTargetSpeed);
-		} else {
-			sys_drivetrain.arcadeDrive(forwardSpeed, sys_limelight2.getTurningDir() * kDriveTrain.kAiming.kScanningSpeed);
-		}
-	}
-
-	private void checkForTargetInCrop(int level) {
-		
-		if (level == 1) {
-			sys_limelight2.setCrop(-1, 1, 0, 1);
-
-			if (sys_limelight2.isVisible()) {highTarget = true;}
-			else {highTarget = false;}
-		}
-
-		if (level == 2) {
-			sys_limelight2.setCrop(-1, 1, -1, 0);
-			
-			if (sys_limelight2.isVisible()) {lowTarget = true;}
-			else {lowTarget = false;}
-		}
+		return (Math.abs(sys_limelight.getXOffset()) <= kLimelight.targetStopAngle);
 	}
 }

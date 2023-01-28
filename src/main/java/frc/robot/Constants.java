@@ -127,6 +127,25 @@ public final class Constants {
         public final static double highTargetHeight = 140;//TODO: get real value for 2023
         public final static double lowTargetHeight = 70;//TODO: get real value for 2023
         public final static double heightOffFloor = 70;
+        public static final double targetStopAngle = 5;
+
+        public static class kCrop {
+            // public static final double[] upperHalf = {-1, 1, 0, 1};
+            // public static final double[] lowerHalf = {-1, 1, -1, 0};
+            public static final class kUpperHalf {
+                public static final double minX = -1;
+                public static final double maxX = 1;
+                public static final double minY = 0;
+                public static final double maxY = 1;
+            }
+
+            public static final class kLowerHalf {
+                public static final double minX = -1;
+                public static final double maxX = 1;
+                public static final double minY = -1;
+                public static final double maxY = 0;
+            }
+        }
     }
 
     public static class kElevator {

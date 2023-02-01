@@ -34,8 +34,8 @@ public class TargetAim extends CommandBase {
 	@Override
 	public void initialize() {
 		sys_limelight.turnOn();
-		sys_limelight.setData("pipeline", 0);
-		// System.out.println("Initialized");
+		//sys_limelight.setData("pipeline", 1);
+		System.out.println("Initialized");
 	}
 
 	// Called every time the scheduler runs while the command is scheduled.
@@ -55,7 +55,7 @@ public class TargetAim extends CommandBase {
         turning = dir * kDriveTrain.kAiming.kTargetSpeed;
 
         sys_drivetrain.arcadeDrive(forwardSpeed, turning);
-		// System.out.println("Executed");
+		System.out.println("Executed");
 	}
 
 	// Called once the command ends or is interrupted.
@@ -63,12 +63,17 @@ public class TargetAim extends CommandBase {
 	public void end(boolean interrupted) {
 		sys_drivetrain.arcadeDrive(0, 0);
 		sys_limelight.turnOff();
-		// System.out.println("Ended");
+		System.out.println("Ended");
 	}
 
 	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-		return (Math.abs(sys_limelight.getXOffset()) <= kLimelight.targetStopAngle);
+		return Math.abs(sys_limelight.getXOffset()) <= kLimelight.targetStopAngle && sys_limelight.isVisible();
 	}
 }
+/*
+ * Ignore crop
+ * Write code that sorts the mode
+ * Lower or Higher
+ */

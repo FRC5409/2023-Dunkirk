@@ -136,19 +136,15 @@ public class Limelight extends SubsystemBase {
 	/** Crops the area for whichever level required and checks if a target is visible or not */
 	public int pickTarget() {
 		setCrop(
-		kLimelight.kCrop.kUpperHalf.minX,
-		kLimelight.kCrop.kUpperHalf.maxX,
-		kLimelight.kCrop.kUpperHalf.minY,
-		kLimelight.kCrop.kUpperHalf.maxY
+		kLimelight.kCrop.kUpperHalf.minX,kLimelight.kCrop.kUpperHalf.maxX,
+		kLimelight.kCrop.kUpperHalf.minY,kLimelight.kCrop.kUpperHalf.maxY
 		);
 
 		if (isVisible()) return 1;
 
 		setCrop(
-		kLimelight.kCrop.kLowerHalf.minX,
-		kLimelight.kCrop.kLowerHalf.maxX,
-		kLimelight.kCrop.kLowerHalf.minY,
-		kLimelight.kCrop.kLowerHalf.maxY
+		kLimelight.kCrop.kLowerHalf.minX,kLimelight.kCrop.kLowerHalf.maxX,
+		kLimelight.kCrop.kLowerHalf.minY,kLimelight.kCrop.kLowerHalf.maxY
 		);
 		
 		if (isVisible()) return 0;

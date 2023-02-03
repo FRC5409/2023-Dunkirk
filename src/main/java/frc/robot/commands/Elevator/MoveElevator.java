@@ -39,7 +39,7 @@ public class MoveElevator extends CommandBase {
         if (extending) {
             if(sys_elevator.getRatchetState() == Value.kForward) {
                 sys_elevator.unlockRatchet();
-                Timer.delay(0.1);
+                Timer.delay(1);
             }  
         } else if (!extending) {
             if (sys_elevator.getRatchetState() == Value.kReverse) {

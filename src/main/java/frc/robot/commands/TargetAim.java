@@ -34,8 +34,8 @@ public class TargetAim extends CommandBase {
 	@Override
 	public void initialize() {
 		sys_limelight.turnOn();
-		//sys_limelight.setData("pipeline", 1);
-		System.out.println("Initialized");
+		// sys_limelight.setData("pipeline", 1);
+		// System.out.println("Initialized");
 	}
 
 	// Called every time the scheduler runs while the command is scheduled.
@@ -44,18 +44,18 @@ public class TargetAim extends CommandBase {
 
 		forwardSpeed = m_joystick.getRightTriggerAxis() - m_joystick.getLeftTriggerAxis();
 
-        if (!sys_limelight.isVisible()) {
-            //dir on the controller
-            dir = sys_limelight.getTurningDir();
-        } else {
-            //dir returns -1 or 1 depending on if it's positive or if it's negative
-            dir = sys_limelight.getXOffset() / Math.abs(sys_limelight.getXOffset());
-        }
+		if (!sys_limelight.isVisible()) {
+			//dir on the controller
+			dir = sys_limelight.getTurningDir();
+		} else {
+			//dir returns -1 or 1 depending on if it's positive or if it's negative
+			dir = sys_limelight.getXOffset() / Math.abs(sys_limelight.getXOffset());
+		}
 
-        turning = dir * kDriveTrain.kAiming.kTargetSpeed;
+		turning = dir * kDriveTrain.kAiming.kTargetSpeed;
 
-        sys_drivetrain.arcadeDrive(forwardSpeed, turning);
-		System.out.println("Executed");
+		sys_drivetrain.arcadeDrive(forwardSpeed, turning);
+		// System.out.println("Executed");
 	}
 
 	// Called once the command ends or is interrupted.
@@ -63,7 +63,7 @@ public class TargetAim extends CommandBase {
 	public void end(boolean interrupted) {
 		sys_drivetrain.arcadeDrive(0, 0);
 		sys_limelight.turnOff();
-		System.out.println("Ended");
+		// System.out.println("Ended");
 	}
 
 	// Returns true when the command should end.
@@ -76,4 +76,6 @@ public class TargetAim extends CommandBase {
  * Ignore crop
  * Write code that sorts the mode
  * Lower or Higher
+ * 
+ * Ignore sort mode now, go with crop
  */

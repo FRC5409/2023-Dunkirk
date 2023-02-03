@@ -106,7 +106,7 @@ public class RobotContainer {
 	 * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
 	 */
 	private void configureButtonBindings() {
-		c_joystick.x().whileTrue(cmd_intakeBall);
+		// c_joystick.x().whileTrue(cmd_intakeBall);
 		c_joystick.y().whileTrue(cmd_targetAim);
 		c_joystick.rightBumper().onTrue(cmd_toggleGear);
 

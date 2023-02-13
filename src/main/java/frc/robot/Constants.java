@@ -44,6 +44,12 @@ public final class Constants {
             public final static int kGearShiftLow = 8;
             public final static int kGearShiftHigh = 9;
         }
+
+        public static class kAiming {
+            public final static double kTargetPlay = 6; // To be found
+            public final static double kTargetSpeed = 0.45; // To be found
+            public final static double kScanningSpeed = 0.6; // To be found
+        }
     }
 
     public static class kGyro {
@@ -53,6 +59,12 @@ public final class Constants {
         public final static int kMountPoseRoll = 0;
         public final static int kMountPosePitch = 0;
         public final static int kMountPoseYaw = 0;
+    }
+
+    public static class kMiddleRollers {
+        public final static int kRollerMotorID = 8;
+        public final static double kRollersSpeed = 0.4;
+        public final static double kRollersStopped = 0.0;
     }
 
     public static class kIntake {
@@ -111,10 +123,31 @@ public final class Constants {
 
     public static class kLimelight {
         public final static double mountAngle = 45;//TODO: get real value
-        public final static double targetHeight = 140;
+        public final static double targetHeight = 140;// For 2022
+        public final static double highTargetHeight = 140;//TODO: get real value for 2023
+        public final static double lowTargetHeight = 70;//TODO: get real value for 2023
         public final static double heightOffFloor = 70;
+        public static final double targetStopAngle = 5;
+
+        public static class kCrop {
+            // public static final double[] upperHalf = {-1, 1, 0, 1};
+            // public static final double[] lowerHalf = {-1, 1, -1, 0};
+            public static final class kUpperHalf {
+                public static final double minX = -1;
+                public static final double maxX = 1;
+                public static final double minY = 0;
+                public static final double maxY = 1;
+            }
+
+            public static final class kLowerHalf {
+                public static final double minX = -1;
+                public static final double maxX = 1;
+                public static final double minY = -1;
+                public static final double maxY = 0;
+            }
+        }
     }
-    
+
     public static class kElevator {
 
         public final static int kLeftCAN = 20;

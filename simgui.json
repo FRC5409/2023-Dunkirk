@@ -1,0 +1,60 @@
+{
+  "HALProvider": {
+    "Other Devices": {
+      "Talon FX[7]": {
+        "header": {
+          "open": true
+        }
+      }
+    }
+  },
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/LiveWindow/DriveTrain": "Subsystem",
+      "/LiveWindow/ExampleSubsystem": "Subsystem",
+      "/LiveWindow/Gyro": "Subsystem",
+      "/LiveWindow/Indexer": "Subsystem",
+      "/LiveWindow/Intake": "Subsystem",
+      "/LiveWindow/Intake/Roller Motor": "Motor Controller",
+      "/LiveWindow/Limelight": "Subsystem",
+      "/LiveWindow/MiddleRollers": "Subsystem",
+      "/LiveWindow/Pneumatics": "Subsystem",
+      "/LiveWindow/Shooter": "Subsystem",
+      "/LiveWindow/Ungrouped/DifferentialDrive[1]": "DifferentialDrive",
+      "/LiveWindow/Ungrouped/Pigeon 2 [23]": "Gyro",
+      "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
+      "/LiveWindow/Ungrouped/Talon FX [0]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon FX [11]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon FX [2]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon FX [33]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon FX [4]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon FX [5]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon FX [8]": "Motor Controller",
+      "/SmartDashboard/Roller Motor": "Motor Controller",
+      "/SmartDashboard/SendableChooser[0]": "String Chooser",
+      "/SmartDashboard/test": "String Chooser"
+    },
+    "windows": {
+      "/LiveWindow/Intake": {
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables": {
+    "Shuffleboard": {
+      "Shooter": {
+        "open": true
+      },
+      "open": true
+    },
+    "SmartDashboard": {
+      "Roller Motor": {
+        "open": true
+      },
+      "open": true
+    }
+  }
+}

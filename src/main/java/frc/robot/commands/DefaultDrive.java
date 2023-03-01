@@ -59,12 +59,7 @@ public class DefaultDrive extends CommandBase {
         // Left stick x controls rotation
         m_zRotation = m_controller.getLeftX();
 
-        // Drive
-        if (m_xSpeed > 0 || m_zRotation != 0) // forward
-            m_driveTrain.arcadeDrive(m_xSpeed, -m_zRotation);
-        
-        else if (m_xSpeed < 0) // backwards
-            m_driveTrain.arcadeDrive(m_xSpeed, m_zRotation);
+        m_driveTrain.arcadeDrive(m_xSpeed, m_zRotation);
 
     }
 

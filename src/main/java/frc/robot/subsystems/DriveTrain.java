@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.kDriveTrain;
-import frc.robot.Constants.kPneumatics;
 
 public class DriveTrain extends SubsystemBase {
 
@@ -86,18 +85,6 @@ public class DriveTrain extends SubsystemBase {
         cancoderConfig.sensorTimeBase = SensorTimeBase.PerSecond;
         m_cancoderLeft.configAllSettings(cancoderConfig);
         m_cancoderRight.configAllSettings(cancoderConfig);
-
-        // Solenoids
-        try {
-            m_doubleSolenoid = new DoubleSolenoid(
-                kPneumatics.kHubModuleID,
-                kPneumatics.kPneumaticsModuleType,
-                kDriveTrain.Solenoids.kGearShiftHigh,
-                kDriveTrain.Solenoids.kGearShiftLow);
-            m_gearShiftValue = m_doubleSolenoid.get();
-        } catch (NullPointerException exception) {
-            DriverStation.reportError("Error creating Solenoid", exception.getStackTrace());
-        }
 
         // Gyro and odometry
         m_gyro = new Gyro(); // new gyro? or take in parameter

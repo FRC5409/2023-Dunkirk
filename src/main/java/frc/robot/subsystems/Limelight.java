@@ -63,7 +63,10 @@ public class Limelight extends SubsystemBase {
         } catch (Exception e) { 
             return false;
         }
-    
+    }
+
+    public boolean isOn() {
+        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("LEDMode").getInteger(-1) == 3;
     }
     
 }

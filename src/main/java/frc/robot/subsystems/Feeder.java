@@ -10,12 +10,10 @@ public class Feeder extends SubsystemBase {
 
     private final CANSparkMax feederMot;
 
-    private boolean isFeeding = false;
-
     public Feeder() {
         feederMot = new CANSparkMax(kFeeder.feederID, MotorType.kBrushless);
+
         configMot();
-        stopFeeding();
     }
 
     @Override
@@ -34,16 +32,10 @@ public class Feeder extends SubsystemBase {
 
 
     public void feed() {
-        if (!isFeeding) {
-            isFeeding = true;
-            feederMot.set(kFeeder.feedSpeed);
-        }
+        feederMot.set(kFeeder.feedSpeed);
     }
 
     public void stopFeeding() {
-        if (isFeeding) {
-            isFeeding = false;
-            feederMot.set(0);
-        }
+        feederMot.set(0);
     }
 }

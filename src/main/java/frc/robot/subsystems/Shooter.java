@@ -47,7 +47,6 @@ public class Shooter extends SubsystemBase {
     public void simulationPeriodic() {}
 
     public void configMots() {
-
         leftMot.configFactoryDefault();
         rightMot.configFactoryDefault();
 
@@ -58,8 +57,6 @@ public class Shooter extends SubsystemBase {
         rightMot.setInverted(true);
 
         setPIDFvalues(kShooter.kPID.kP, kShooter.kPID.kI, kShooter.kPID.kD, kShooter.kPID.kF);
-
-        //cant burn flash
     }
 
     public void setPIDFvalues(double p, double i, double d, double f) {
@@ -116,8 +113,8 @@ public class Shooter extends SubsystemBase {
         return distance;
     }
 
-    // public boolean cargo() {
-    //     return ToFFeeder.getRange() <= kShooter.cargoIsThere;//sees if cargo is in the indexer
-    // }
+    public void setVolts(double volts) {
+        leftMot.setVoltage(volts);
+    }
 
 }

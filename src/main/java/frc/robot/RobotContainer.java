@@ -6,13 +6,21 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.Constants.kTurret.scanningDirection;
+import frc.robot.Constants.kTurret.state;
 import frc.robot.commands.DefaultDrive;
-import frc.robot.commands.ShooterSpeed;
+import frc.robot.commands.Shooter.FiringCommand;
+import frc.robot.commands.Turret.LockOnTarget;
+import frc.robot.commands.Turret.Scan;
+import frc.robot.commands.Turret.TurretGoTo;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Turret;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 /**
@@ -28,6 +36,7 @@ public class RobotContainer {
     public final DriveTrain sys_driveTrain;
     private final Gyro sys_gyro;
     private final Shooter sys_shooter;
+    private final Turret sys_turret;
     private final Feeder sys_feeder;
     private final Limelight sys_limelight;
 
@@ -37,7 +46,6 @@ public class RobotContainer {
 
     // Commands
     private final DefaultDrive cmd_defaultDrive;
-    private final ShooterSpeed cmd_shooterSpeed;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -46,6 +54,7 @@ public class RobotContainer {
         sys_driveTrain = new DriveTrain();
         sys_gyro = new Gyro();
         sys_shooter = new Shooter();
+        sys_turret = new Turret();
         sys_feeder = new Feeder();
         sys_limelight = new Limelight();
         
@@ -55,7 +64,6 @@ public class RobotContainer {
 
         // Commands
         cmd_defaultDrive = new DefaultDrive(sys_driveTrain, joystickMain);
-        cmd_shooterSpeed = new ShooterSpeed(sys_shooter, joystickMain, sys_feeder);
 
         sys_driveTrain.setDefaultCommand(cmd_defaultDrive);
 
@@ -70,7 +78,35 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        
+        joystickMain.leftBumper().onTrue(
+            new ConditionalCommand(
+                //if it's not scanning then start scanning
+                new Scan(sys_turret, sys_limelight)
+                .alongWith(Commands.runOnce(() -> sys_turret.setState(state.kScaning)))
+
+                .andThen(new LockOnTarget(sys_turret, sys_limelight)),
+
+                //if it's scanning then stop scanning and reset
+                new TurretGoTo(sys_turret, 0)
+                .alongWith(
+                    Commands.runOnce(() -> sys_limelight.turnOffLimelight()),
+                    Commands.runOnce(() -> sys_turret.setState(state.kOff))
+                ),
+
+                () -> !sys_turret.isBeingUsed()
+            )
+        );
+
+        joystickMain.rightBumper()
+            .and(() -> sys_turret.isBeingUsed()).whileTrue(
+                new FiringCommand(sys_shooter, sys_turret, sys_feeder)
+            );
+
+        joystickMain.povLeft()
+            .onTrue(Commands.runOnce(() -> sys_turret.setScanningDir(scanningDirection.kLeft)));
+
+        joystickMain.povRight()
+            .onTrue(Commands.runOnce(() -> sys_turret.setScanningDir(scanningDirection.kRight)));
     }
 
 }

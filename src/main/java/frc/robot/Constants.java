@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -39,11 +37,6 @@ public final class Constants {
             public final static double kWheelDiameter = 0.09404; // m
             public final static double kWheelCircumference = Math.PI * kWheelDiameter; // m
         }
-
-        public static class Solenoids {
-            public final static int kGearShiftLow = 8;
-            public final static int kGearShiftHigh = 9;
-        }
     }
 
     public static class kGyro {
@@ -55,36 +48,14 @@ public final class Constants {
         public final static int kMountPoseYaw = 0;
     }
 
-    public static class kIntake {
-        public static class kRollers {
-            public final static int kIntakeMotorID = 11;
-            public final static double kIntakeRollersSpeed = 0.4;
-            public final static double kIntakeRollersStopped = 0.0;
-        }
-
-        public static class kDoubleSolenoids {
-            public final static int kLeftFwdChannel = 4;
-            public final static int kLeftBwdChannel = 5;
-            public final static int kRightFwdChannel = 10;
-            public final static int kRightBwdChannel = 11;
-        }
-    }
-
-    public static class kPneumatics {
-        public final static int kHubModuleID = 2;
-
-        public final static int kMinPressure = 90;
-        public final static int kMaxPressure = 120;
-
-        public final static PneumaticsModuleType kPneumaticsModuleType = PneumaticsModuleType.REVPH;
-    }
-
     public static class kShooter {
         public final static int leftMotID = 5;
         public final static int rightMotID = 8;
         public final static int ToFID = 11;
 
         public final static double shooterRPMPlay = 50;
+
+        public final static int shooterPrepSpeed = 1000;
 
         public static class kPID {
             public final static double kP = 0.42;
@@ -99,6 +70,39 @@ public final class Constants {
             public final static double[] shooterDataX = {  15,   30,   45,   60,   75,   80,  105,  120,  135,  150};//distance to target
             public final static double[] shooterDataY = {1800, 1900, 2000, 2100, 2600, 3000, 3800, 4300, 4600, 5000};//speed to spin at
         }
+    }
+
+    public static class kTurret {
+
+        public enum state {
+            kScaning,
+            kLocked,
+            kLocking,
+            kOff
+        }
+
+        public enum scanningDirection {
+            kLeft,
+            kRight
+        }
+
+        public final static int CANID = -1;
+
+        public final static int currentLimit = 20;
+
+        public final static int maxScanOutput = 3; //in Volts
+        public final static int CosDiv = 50;
+
+        public final static int lockingSpeed = 4; //in volts
+
+        public final static double kP = 0.05;
+        public final static double kI = 0;
+        public final static double kD = 0;
+
+        public final static double encoderThreshold = 0.1;
+        public final static double targetingThreshold = 1;
+
+        public final static double maxPosition = 1;
     }
 
     public static class kFeeder {

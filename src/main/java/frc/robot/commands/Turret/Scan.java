@@ -2,7 +2,7 @@ package frc.robot.commands.Turret;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.kTurret;
-import frc.robot.Constants.kTurret.scanningDirection;
+import frc.robot.Constants.kTurret.ScanningDirection;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Turret;
 
@@ -36,7 +36,7 @@ public class Scan extends CommandBase {
         if (m_turrent.getPosition() < -kTurret.maxPosition || m_turrent.getPosition() > kTurret.maxPosition) {
             m_turrent.stopMot();
         } else {
-            if (m_turrent.getScanningDir() == scanningDirection.kLeft) {
+            if (m_turrent.getScanningDir() == ScanningDirection.kLeft) {
                 m_turrent.setVolts(-volts);
             } else {
                 m_turrent.setVolts(volts);

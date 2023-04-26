@@ -74,14 +74,14 @@ public final class Constants {
 
     public static class kTurret {
 
-        public enum state {
+        public enum State {
             kScaning,
             kLocked,
             kLocking,
             kOff
         }
 
-        public enum scanningDirection {
+        public enum ScanningDirection {
             kLeft,
             kRight
         }
@@ -109,6 +109,14 @@ public final class Constants {
         public final static int feederID = 9;
 
         public final static double feedSpeed = 0.4;
+    }
+
+    public static class kIndexer {
+        public final static int CANID = 8;
+
+        public final static int currentLimit = 20;
+
+        public final static double indexerSpeed = 0.4;
     }
 
     public static class kLimelight {

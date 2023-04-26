@@ -2,7 +2,7 @@ package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.kShooter;
-import frc.robot.Constants.kTurret.state;
+import frc.robot.Constants.kTurret.State;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
@@ -35,7 +35,7 @@ public class FiringCommand extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        if (m_turret.getState() == state.kLocked) {
+        if (m_turret.getState() == State.kLocked) {
             spinShooterAt(2500);
             if (Math.abs(m_shooter.getAverageSpeed() - 2500) < kShooter.shooterRPMPlay) {
                 feed();

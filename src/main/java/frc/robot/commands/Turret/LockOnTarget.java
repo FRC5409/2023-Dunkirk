@@ -2,7 +2,7 @@ package frc.robot.commands.Turret;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.kTurret;
-import frc.robot.Constants.kTurret.state;
+import frc.robot.Constants.kTurret.State;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Turret;
 
@@ -23,7 +23,7 @@ public class LockOnTarget extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        m_turret.setState(state.kLocking);
+        m_turret.setState(State.kLocking);
 
         if (!m_limelight.isOn())
             m_limelight.turnOnLimelight();
@@ -43,7 +43,7 @@ public class LockOnTarget extends CommandBase {
                     m_turret.setVolts(-kTurret.lockingSpeed);
                 }
             }
-            m_turret.setState(state.kLocking);
+            m_turret.setState(State.kLocking);
 
         } else if (xOff > kTurret.targetingThreshold) {
             //right of target
@@ -53,12 +53,12 @@ public class LockOnTarget extends CommandBase {
                     m_turret.setVolts(kTurret.lockingSpeed);
                 }
             }
-            m_turret.setState(state.kLocking);
+            m_turret.setState(State.kLocking);
 
         } else {
             //on target
             m_turret.stopMot();
-            m_turret.setState(state.kLocked);
+            m_turret.setState(State.kLocked);
         }
     }
 

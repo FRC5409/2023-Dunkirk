@@ -6,9 +6,10 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.Constants.kTurret.scanningDirection;
-import frc.robot.Constants.kTurret.state;
+import frc.robot.Constants.kTurret.ScanningDirection;
+import frc.robot.Constants.kTurret.State;
 import frc.robot.commands.DefaultDrive;
+import frc.robot.commands.Indexer.IntakeCargo;
 import frc.robot.commands.Shooter.FiringCommand;
 import frc.robot.commands.Turret.LockOnTarget;
 import frc.robot.commands.Turret.Scan;
@@ -16,6 +17,7 @@ import frc.robot.commands.Turret.TurretGoTo;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Gyro;
+import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
@@ -38,6 +40,7 @@ public class RobotContainer {
     private final Shooter sys_shooter;
     private final Turret sys_turret;
     private final Feeder sys_feeder;
+    private final Indexer sys_indexer;
     private final Limelight sys_limelight;
 
     // Controller
@@ -56,6 +59,7 @@ public class RobotContainer {
         sys_shooter = new Shooter();
         sys_turret = new Turret();
         sys_feeder = new Feeder();
+        sys_indexer = new Indexer();
         sys_limelight = new Limelight();
         
         // Controller
@@ -82,7 +86,7 @@ public class RobotContainer {
             new ConditionalCommand(
                 //if it's not scanning then start scanning
                 new Scan(sys_turret, sys_limelight)
-                .alongWith(Commands.runOnce(() -> sys_turret.setState(state.kScaning)))
+                .alongWith(Commands.runOnce(() -> sys_turret.setState(State.kScaning)))
 
                 .andThen(new LockOnTarget(sys_turret, sys_limelight)),
 
@@ -90,7 +94,7 @@ public class RobotContainer {
                 new TurretGoTo(sys_turret, 0)
                 .alongWith(
                     Commands.runOnce(() -> sys_limelight.turnOffLimelight()),
-                    Commands.runOnce(() -> sys_turret.setState(state.kOff))
+                    Commands.runOnce(() -> sys_turret.setState(State.kOff))
                 ),
 
                 () -> !sys_turret.isBeingUsed()
@@ -102,11 +106,14 @@ public class RobotContainer {
                 new FiringCommand(sys_shooter, sys_turret, sys_feeder)
             );
 
+        joystickMain.y()
+            .whileTrue(new IntakeCargo(sys_indexer));
+
         joystickMain.povLeft()
-            .onTrue(Commands.runOnce(() -> sys_turret.setScanningDir(scanningDirection.kLeft)));
+            .onTrue(Commands.runOnce(() -> sys_turret.setScanningDir(ScanningDirection.kLeft)));
 
         joystickMain.povRight()
-            .onTrue(Commands.runOnce(() -> sys_turret.setScanningDir(scanningDirection.kRight)));
+            .onTrue(Commands.runOnce(() -> sys_turret.setScanningDir(ScanningDirection.kRight)));
     }
 
 }

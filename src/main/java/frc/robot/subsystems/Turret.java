@@ -10,15 +10,15 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.kTurret;
-import frc.robot.Constants.kTurret.scanningDirection;
-import frc.robot.Constants.kTurret.state;
+import frc.robot.Constants.kTurret.ScanningDirection;
+import frc.robot.Constants.kTurret.State;
 
 public class Turret extends SubsystemBase {
 
     private final CANSparkMax turretMot;
 
-    private state currentState = state.kOff;
-    private scanningDirection scanDir = scanningDirection.kLeft;
+    private State currentState = State.kOff;
+    private ScanningDirection scanDir = ScanningDirection.kLeft;
 
     private final boolean debug = true;
 
@@ -100,7 +100,7 @@ public class Turret extends SubsystemBase {
      * Sets the turret state
      * @param State kOff, kScanning, kLocking, kLocked
      */
-    public void setState(state State) {
+    public void setState(State State) {
         currentState = State;
     }
 
@@ -108,7 +108,7 @@ public class Turret extends SubsystemBase {
      * Gets the current turrent state
      * @return kOff, kScanning, kLocking, kLocked
      */
-    public state getState() {
+    public State getState() {
         return currentState;
     }
 
@@ -118,14 +118,14 @@ public class Turret extends SubsystemBase {
      * @return true if it's being used by something
      */
     public boolean isBeingUsed() {
-        return getState() != state.kOff;
+        return getState() != State.kOff;
     }
 
     /**
      * Set which way should be scanned
      * @param dir kLeft, kRight
      */
-    public void setScanningDir(scanningDirection dir) {
+    public void setScanningDir(ScanningDirection dir) {
         scanDir = dir;
     }
 
@@ -133,7 +133,7 @@ public class Turret extends SubsystemBase {
      * Get the current perfered scanning direction
      * @return kLeft, kRight
      */
-    public scanningDirection getScanningDir() {
+    public ScanningDirection getScanningDir() {
         return scanDir;
     }
 

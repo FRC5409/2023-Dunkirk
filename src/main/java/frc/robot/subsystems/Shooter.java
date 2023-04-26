@@ -63,10 +63,10 @@ public class Shooter extends SubsystemBase {
     }
 
     public void setPIDFvalues(double p, double i, double d, double f) {
-        leftMot.config_kP(0, p, kShooter.timeOutMs);
-        leftMot.config_kI(0, i, kShooter.timeOutMs);
-        leftMot.config_kD(0, d, kShooter.timeOutMs);
-        leftMot.config_kF(0, f, kShooter.timeOutMs);
+        leftMot.config_kP(0, p);
+        leftMot.config_kI(0, i);
+        leftMot.config_kD(0, d);
+        leftMot.config_kF(0, f);
     }
 
     public double getVelocity() {

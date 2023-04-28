@@ -10,63 +10,113 @@ import frc.robot.Constants.kLimelight;
 
 public class Limelight extends SubsystemBase {
 
-    private ShuffleboardTab tab = Shuffleboard.getTab("limelight");
-    private GenericEntry distanceEntry = tab.add("Distance to target: ", 0).getEntry();
+    public enum LedMode {
+        kModePipeline(0), kModeOff(1), kModeBlink(2), kModeOn(3);
 
-    NetworkTable limeTable;
+        LedMode(double value) {
+            this.value = value;
+        }
 
-    double angleGoal;
-    double distanceToTarget;
+        public final double value;
+    }
+
+    private ShuffleboardTab limeTab;
+    private GenericEntry distanceEntry;
+    private GenericEntry angleEntry;
+
+    private final NetworkTable limeTable;
+
+    private final boolean debug = true;
 
    
     public Limelight() {
         NetworkTableInstance.getDefault().startServer();
         NetworkTableInstance.getDefault().setServerTeam(5409);
-        distanceToTarget = -1;  
-        
+
+        limeTable = NetworkTableInstance.getDefault().getTable("limelight");
+
+        if (debug) {
+            limeTab = Shuffleboard.getTab("limelight");
+            distanceEntry = limeTab.add("Distance to target: ", 0).getEntry();
+            angleEntry = limeTab.add("Angle to target", 0).getEntry();
+        }
     }
 
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
 
-        if (isVisable()) {
-            angleGoal = (kLimelight.mountAngle + getYOffset()) * (3.14159 / 180);//getting the angle to the goal in radians (tan requires radians to work)
-            distanceToTarget = (kLimelight.targetHeight - kLimelight.heightOffFloor) / Math.tan(angleGoal);//getting distance to target
+        if (debug) {
+            if (isVisable()) {
+                distanceEntry.setDouble(getDistanceToTarget());
+                angleEntry.setDouble(getAngleToTarget());
+            }
         }
-
-        distanceEntry.setDouble(distanceToTarget);
     }
 
     @Override
     public void simulationPeriodic() {}
 
-    public void turnOffLimelight() {
-        NetworkTableInstance.getDefault().getTable("limelight").getEntry("LEDMode").setNumber(1);
+    /**
+     * Sets the limelight LED state
+     * @param mode the mode you want to set it to
+     */
+    public void setLedMode(LedMode mode) {
+        limeTable.getEntry("LEDMode").setNumber(mode.value);
     }
 
-    public void turnOnLimelight() {
-        NetworkTableInstance.getDefault().getTable("limelight").getEntry("LEDMode").setNumber(3);
+    /**
+     * Gets the X angle to the target
+     * @return angle in degrees
+     */
+    public double getXAngle() {
+        return limeTable.getEntry("tx").getDouble(-1);
     }
 
-    public double getXOffset() {
-        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(-1);
+    /**
+     * Gets the Y angle to the target
+     * @return angle in degrees
+     */
+    public double getYAngle() {
+        return limeTable.getEntry("ty").getDouble(-1);
     }
 
-    public double getYOffset() {
-        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(-1);
-    }
-
+    /**
+     * Is a target visable
+     * @return true or false
+     */
     public boolean isVisable() {
-        try {
-            return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0) == 1;
-        } catch (Exception e) { 
-            return false;
-        }
+        return limeTable.getEntry("tv").getDouble(0) == 1;
     }
 
+    /**
+     * Is the limelight on
+     * @return true or false
+     */
     public boolean isOn() {
-        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("LEDMode").getInteger(-1) == 3;
+        return limeTable.getEntry("LEDMode").getInteger(-1) == 3;
+    }
+
+    /**
+     * @deprecated tx returns angle to target
+     * @return angle to target
+     */
+    public double getAngleToTarget() {
+        double vpw = 2 * Math.tan(kLimelight.HORIZONTAL_FOV / 2);
+        double nx = getXAngle();
+
+        double x = vpw / 2 * nx;
+
+        double ax = Math.atan2(1, x);
+
+        return ax;
+    }
+
+    public double getDistanceToTarget() {
+        double angleGoal = (kLimelight.mountAngle + getYAngle()) * (Math.PI / 180);//getting the angle to the goal in radians (tan requires radians to work)
+        double distanceToTarget = (kLimelight.targetHeight - kLimelight.heightOffFloor) / Math.tan(angleGoal);//getting distance to target
+
+        return distanceToTarget;
     }
     
 }

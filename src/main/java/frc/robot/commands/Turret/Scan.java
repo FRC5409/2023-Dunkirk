@@ -6,6 +6,7 @@ import frc.robot.Constants.kTurret.ScanningDirection;
 import frc.robot.Constants.kTurret.State;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.Limelight.LedMode;
 
 public class Scan extends CommandBase {
 
@@ -25,7 +26,7 @@ public class Scan extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        m_limelight.turnOnLimelight();
+        m_limelight.setLedMode(LedMode.kModeOn);
         m_turrent.setState(State.kScaning);
         time = 0;
     }
@@ -33,7 +34,7 @@ public class Scan extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double position = Math.sin(time / kTurret.CosDiv) * (kTurret.maxPosition - kTurret.targetingThreshold);
+        double position = Math.sin(time / kTurret.turretSpeed) * kTurret.maxPosition;
 
         m_turrent.setRefrence(position);
 
@@ -51,7 +52,7 @@ public class Scan extends CommandBase {
     }
 
     public void scanUsingVolts(int time) {
-        double volts = Math.cos(time / kTurret.CosDiv) * kTurret.maxScanOutput;
+        double volts = Math.cos(time / kTurret.turretSpeed) * kTurret.maxScanOutput;
         
         if (m_turrent.getPosition() < -kTurret.maxPosition || m_turrent.getPosition() > kTurret.maxPosition) {
             m_turrent.stopMot();

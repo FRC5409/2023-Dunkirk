@@ -4,7 +4,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -17,13 +16,15 @@ public class Turret extends SubsystemBase {
 
     private final CANSparkMax turretMot;
 
-    private State currentState = State.kOff;
-    private ScanningDirection scanDir = ScanningDirection.kLeft;
+    private State currentState           = State.kOff;
+    private ScanningDirection scanDir    = ScanningDirection.kLeft;
+
+    private ShuffleboardTab  turretTab;
+    private GenericEntry     encoderPosEntry;
+    private GenericEntry     angleEntry;
+
 
     private final boolean debug = true;
-
-    private ShuffleboardTab turretTab;
-    private GenericEntry encoderPosEntry;
 
     public Turret() {
         turretMot = new CANSparkMax(kTurret.CANID, MotorType.kBrushless);
@@ -38,8 +39,9 @@ public class Turret extends SubsystemBase {
         setPID(kTurret.kP, kTurret.kI, kTurret.kD);
 
         if (debug) {
-            turretTab = Shuffleboard.getTab("Turret");
-            encoderPosEntry = turretTab.add("Position", getPosition()).getEntry();
+            turretTab        = Shuffleboard.getTab("Turret");
+            encoderPosEntry  = turretTab.add("Position", getPosition()).getEntry();
+            angleEntry       = turretTab.add("Angle", getAngle()).getEntry();
         }
     }
 
@@ -84,6 +86,13 @@ public class Turret extends SubsystemBase {
      * @param pos the position you want to go to
      */
     public void setRefrence(double pos) {
+        //safety check
+        if (pos > kTurret.maxPosition)
+            pos = kTurret.maxPosition;
+
+        if (pos < -kTurret.maxPosition)
+            pos = -kTurret.maxPosition;
+
         turretMot.getPIDController().setReference(pos, ControlType.kPosition);
     }
 
@@ -94,6 +103,23 @@ public class Turret extends SubsystemBase {
      */
     public double getPosition() {
         return turretMot.getEncoder().getPosition();
+    }
+
+    /**
+     * Gets the angle of the current turret position
+     * @return angle in degrees
+     */
+    public double getAngle() {
+        return convertToEncoder(getPosition());
+    }
+
+    /**
+     * Converts back to the encoder units
+     * @param input angle in degrees
+     * @return Encoder unit
+     */
+    public double convertToEncoder(double input) {
+        return input * (kTurret.maxPosition / kTurret.maxAngle);
     }
 
     /**
@@ -142,6 +168,7 @@ public class Turret extends SubsystemBase {
         // This method will be called once per scheduler run
         if (debug) {
             encoderPosEntry.setDouble(getPosition());
+            angleEntry.setDouble(getAngle());
         }
     }
 

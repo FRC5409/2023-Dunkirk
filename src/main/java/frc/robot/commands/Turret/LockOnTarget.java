@@ -5,6 +5,7 @@ import frc.robot.Constants.kTurret;
 import frc.robot.Constants.kTurret.State;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.Limelight.LedMode;
 
 public class LockOnTarget extends CommandBase {
 
@@ -26,14 +27,46 @@ public class LockOnTarget extends CommandBase {
         m_turret.setState(State.kLocking);
 
         if (!m_limelight.isOn())
-            m_limelight.turnOnLimelight();
+            m_limelight.setLedMode(LedMode.kModeOn);
 
+        //Try here first to see how accurate it is
+        updateLocation();
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double xOff = m_limelight.getXOffset();
+        
+    }
+
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {}
+
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return !m_limelight.isVisable();
+    }
+
+    public void updateLocation() {
+        double offset = m_turret.getAngle();
+
+        double desiredSetpoint = offset + m_limelight.getXAngle();
+
+        if (desiredSetpoint > kTurret.maxAngle)
+            desiredSetpoint = kTurret.maxAngle;
+
+        if (desiredSetpoint < -kTurret.maxAngle)
+            desiredSetpoint = -kTurret.maxAngle;
+
+        desiredSetpoint = m_turret.convertToEncoder(desiredSetpoint);
+
+        m_turret.setRefrence(desiredSetpoint);
+    }
+
+    public void oldTargetingCode() {
+        double xOff = m_limelight.getXAngle();
         double volts = m_turret.getVolts();
         if (xOff < -kTurret.targetingThreshold) {
             //left of target
@@ -60,15 +93,5 @@ public class LockOnTarget extends CommandBase {
             m_turret.stopMot();
             m_turret.setState(State.kLocked);
         }
-    }
-
-    // Called once the command ends or is interrupted.
-    @Override
-    public void end(boolean interrupted) {}
-
-    // Returns true when the command should end.
-    @Override
-    public boolean isFinished() {
-        return false;
     }
 }

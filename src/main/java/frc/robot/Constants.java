@@ -86,23 +86,24 @@ public final class Constants {
             kRight
         }
 
-        public final static int CANID = -1;
+        public final static int CANID                    = -1;
 
-        public final static int currentLimit = 20;
+        public final static int currentLimit             = 20;
 
-        public final static int maxScanOutput = 3; //in Volts
-        public final static int CosDiv = 50;
+        public final static int maxScanOutput            = 3;   //in Volts
+        public final static int turretSpeed              = 50;  //bigger the number slower the movement
 
-        public final static int lockingSpeed = 4; //in volts
+        public final static int lockingSpeed             = 4; //in volts
 
-        public final static double kP = 0.05;
-        public final static double kI = 0;
-        public final static double kD = 0;
+        public final static double kP                    = 0.05;
+        public final static double kI                    = 0;
+        public final static double kD                    = 0;
 
-        public final static double encoderThreshold = 0.1;
-        public final static double targetingThreshold = 1;
+        public final static double encoderThreshold      = 0.1;
+        public final static double targetingThreshold    = 1;
 
-        public final static double maxPosition = 1;
+        public final static double maxPosition           = 1.76;// Encoder max position
+        public final static int maxAngle                 = 90;  //   Angle max position
     }
 
     public static class kFeeder {
@@ -123,6 +124,10 @@ public final class Constants {
         public final static double mountAngle = 45;
         public final static double targetHeight = 140;
         public final static double heightOffFloor = 70;
+
+        public final static int HORIZONTAL_FOV = 54;
+        public final static int VERTICAL_FOV = 41;
+
     }
     
 }

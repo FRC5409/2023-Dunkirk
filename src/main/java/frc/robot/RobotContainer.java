@@ -46,6 +46,7 @@ public class RobotContainer {
     // Controller
     private final CommandXboxController joystickMain;
     private final CommandXboxController joystickSecondary;
+    private final CommandXboxController joystickTesting;
 
     // Commands
     private final DefaultDrive cmd_defaultDrive;
@@ -65,6 +66,7 @@ public class RobotContainer {
         // Controller
         joystickMain = new CommandXboxController(0);
         joystickSecondary = new CommandXboxController(1);
+        joystickTesting = new CommandXboxController(2);
 
         // Commands
         cmd_defaultDrive = new DefaultDrive(sys_driveTrain, joystickMain);
@@ -82,12 +84,13 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
+
+        /* Main Joystick Button Bindings */
+
         joystickMain.leftBumper().onTrue(
             new ConditionalCommand(
                 //if it's not scanning then start scanning
                 new Scan(sys_turret, sys_limelight)
-                .alongWith(Commands.runOnce(() -> sys_turret.setState(State.kScaning)))
-
                 .andThen(new LockOnTarget(sys_turret, sys_limelight)),
 
                 //if it's scanning then stop scanning and reset
@@ -114,6 +117,15 @@ public class RobotContainer {
 
         joystickMain.povRight()
             .onTrue(Commands.runOnce(() -> sys_turret.setScanningDir(ScanningDirection.kRight)));
+
+        /* Secondary Joystick Button Bindings */
+
+
+        /* Testing Button Bindings */
+
+        joystickTesting.leftBumper()
+            .onTrue(new Scan(sys_turret, sys_limelight)
+        );
     }
 
 }

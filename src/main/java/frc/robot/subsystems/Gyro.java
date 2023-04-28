@@ -3,8 +3,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.sensors.Pigeon2Configuration;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
-
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -16,6 +16,13 @@ public class Gyro extends SubsystemBase {
 
     // Config Pigeon
     private final Pigeon2Configuration pigeon_config;
+
+    // Accerlerometor on the roborio
+    private final BuiltInAccelerometer m_accelerometer;
+
+    private double headingSpeed = 0;
+
+    private final boolean debug = true;
 
     /**
      * Wrapper for the Pigeon gyro.
@@ -41,6 +48,8 @@ public class Gyro extends SubsystemBase {
         pigeon_config.MountPoseYaw = Constants.kGyro.kMountPoseYaw;
 
         m_pigeon.configAllSettings(pigeon_config);
+
+        m_accelerometer = new BuiltInAccelerometer();
 
     }
 
@@ -84,18 +93,34 @@ public class Gyro extends SubsystemBase {
         // https://api.ctr-electronics.com/phoenix/release/java/com/ctre/phoenix/sensors/BasePigeon.html#getLastError()
         return m_pigeon.getLastError();
     }
+
+    public double getForwardAccel() {
+        //TODO: Confirm that it is getZ() and not getX();
+        return -m_accelerometer.getZ() * 9.81;
+    }
+
+    public double getForwardSpeed() {
+        return headingSpeed;
+    }
+
     // ------------------------------
 
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
+
+        headingSpeed += getForwardAccel();
         
-        SmartDashboard.putNumber("Gyro Angle", getAngle());
-        SmartDashboard.putNumber("Gyro Rate", getRate());
-        SmartDashboard.putNumber("Gyro Rotation", getRotation2d().getDegrees());
-        SmartDashboard.putNumber("Gyro Yaw", getYaw());
-        SmartDashboard.putNumber("Gyro Pitch", getPitch());
-        SmartDashboard.putNumber("Gyro Roll", getRoll());
+        if (debug) {
+            SmartDashboard.putNumber("Gyro Angle", getAngle());
+            SmartDashboard.putNumber("Gyro Rate", getRate());
+            SmartDashboard.putNumber("Gyro Rotation", getRotation2d().getDegrees());
+            SmartDashboard.putNumber("Gyro Yaw", getYaw());
+            SmartDashboard.putNumber("Gyro Pitch", getPitch());
+            SmartDashboard.putNumber("Gyro Roll", getRoll());
+
+            SmartDashboard.putNumber("Forward Speed", getForwardSpeed());
+        }
     }
 
     @Override

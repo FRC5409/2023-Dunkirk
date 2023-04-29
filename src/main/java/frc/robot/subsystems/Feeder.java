@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -17,7 +16,6 @@ public class Feeder extends SubsystemBase {
 
     private final CANSparkMax                feederMot;
     private final RelativeEncoder            feederEnc;
-    private final SparkMaxPIDController      feederCtrl;
 
     private ShuffleboardTab                  feederTab;
     private GenericEntry                     feederVelocityEntry;
@@ -30,8 +28,6 @@ public class Feeder extends SubsystemBase {
         configMot();
 
         feederEnc = feederMot.getEncoder();
-
-        feederCtrl = feederMot.getPIDController();
 
         if (debug || kConfig.masterDebug) {
             feederTab = Shuffleboard.getTab("Feeder");
@@ -70,14 +66,14 @@ public class Feeder extends SubsystemBase {
      * Starts feeding the cargo to the shooter
      */
     public void feed() {
-        feederCtrl.setReference(kFeeder.feedSpeed, ControlType.kVelocity);
+        feederMot.getPIDController().setReference(kFeeder.feedSpeed, ControlType.kVelocity);
     }
 
     /**
      * Stops feeding cargo (uses PID to stop feeding cargo)
      */
     public void stopFeeding() {
-        feederCtrl.setReference(0, ControlType.kVelocity);
+        feederMot.getPIDController().setReference(0, ControlType.kVelocity);
     }
 
     /**
@@ -101,9 +97,9 @@ public class Feeder extends SubsystemBase {
      * @param d derivative
      */
     public void setPID(double p, double i, double d) {
-        feederCtrl.setP(p);
-        feederCtrl.setI(i);
-        feederCtrl.setD(d);
+        feederMot.getPIDController().setP(p);
+        feederMot.getPIDController().setI(i);
+        feederMot.getPIDController().setD(d);
     }
 
     /**
@@ -111,6 +107,6 @@ public class Feeder extends SubsystemBase {
      * @param feedForward Feed-Forward
      */
     public void setFeedForward(double feedForward) {
-        feederCtrl.setFF(feedForward);
+        feederMot.getPIDController().setFF(feedForward);
     }
 }

@@ -25,6 +25,8 @@ public class Gyro extends SubsystemBase {
 
     private double headingSpeed = 0;
 
+    private final boolean doShuffleBoard;
+
     private ShuffleboardTab gyroTab;
     private GenericEntry angleEntry, rateEntry, rotationEntry, yawEntry, pitchEntry, rollEntry, speedEntry;
 
@@ -43,7 +45,7 @@ public class Gyro extends SubsystemBase {
      * Roll is about +X
      * Yaw is about +Z
      */
-    public Gyro() {
+    public Gyro(boolean shuffleBoard) {
         m_pigeon = new WPI_Pigeon2(Constants.kGyro.kPigeonCAN);
 
         // Configure Pigeon
@@ -57,16 +59,21 @@ public class Gyro extends SubsystemBase {
 
         m_accelerometer = new BuiltInAccelerometer();
 
-        if (debug || kConfig.masterDebug) {
-            gyroTab = Shuffleboard.getTab("Gyro");
+        doShuffleBoard = shuffleBoard;
 
-            angleEntry       = gyroTab.add("Angle", 0).getEntry();
-            rateEntry        = gyroTab.add("Rate", 0).getEntry();
-            rotationEntry    = gyroTab.add("Rotation", 0).getEntry();
-            yawEntry         = gyroTab.add("Yaw", 0).getEntry();
-            pitchEntry       = gyroTab.add("Pitch", 0).getEntry();
-            rollEntry        = gyroTab.add("Roll", 0).getEntry();
-            speedEntry       = gyroTab.add("Speed", 0).getEntry();
+        if (debug || kConfig.masterDebug && doShuffleBoard) {
+
+            System.out.println("lets see if this happens twice");
+
+            gyroTab          = Shuffleboard.getTab("Pigeon Gyro Tab");
+
+            angleEntry       = gyroTab.add("Pigeon Angle", 0).getEntry();
+            rateEntry        = gyroTab.add("Pigeon Rate", 0).getEntry();
+            rotationEntry    = gyroTab.add("Pigeon Rotation", 0).getEntry();
+            yawEntry         = gyroTab.add("Pigeon Yaw", 0).getEntry();
+            pitchEntry       = gyroTab.add("Pigeon Pitch", 0).getEntry();
+            rollEntry        = gyroTab.add("Pigeon Roll", 0).getEntry();
+            speedEntry       = gyroTab.add("Pigeon Speed", 0).getEntry();
         }
 
     }
@@ -129,7 +136,7 @@ public class Gyro extends SubsystemBase {
 
         headingSpeed += getForwardAccel();
         
-        if (debug || kConfig.masterDebug) {
+        if (debug || kConfig.masterDebug && doShuffleBoard) {
             angleEntry      .setDouble(getAngle());
             rateEntry       .setDouble(getRate());
             rotationEntry   .setDouble(getRotation2d().getDegrees());

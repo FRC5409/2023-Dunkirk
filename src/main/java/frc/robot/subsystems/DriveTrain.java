@@ -85,7 +85,7 @@ public class DriveTrain extends SubsystemBase {
         m_cancoderRight.configAllSettings(cancoderConfig);
 
         // Gyro and odometry
-        m_gyro = new Gyro(); // new gyro? or take in parameter
+        m_gyro = new Gyro(false); // new gyro? or take in parameter
         m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), getLeftDistance(), getRightDistance());
     }
 

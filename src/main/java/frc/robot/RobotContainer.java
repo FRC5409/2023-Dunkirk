@@ -38,7 +38,7 @@ public class RobotContainer {
 
     // Subsystems
     public final DriveTrain sys_driveTrain;
-    private final Gyro sys_gyro;
+    private Gyro sys_gyro;
     private final Shooter sys_shooter;
     private final Turret sys_turret;
     private final Feeder sys_feeder;
@@ -58,7 +58,7 @@ public class RobotContainer {
 
         // Subsystems
         sys_driveTrain       = new DriveTrain();
-        sys_gyro             = new Gyro();
+        sys_gyro             = new Gyro(true);
         sys_shooter          = new Shooter();
         sys_turret           = new Turret();
         sys_feeder           = new Feeder();

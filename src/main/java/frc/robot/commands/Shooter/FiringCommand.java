@@ -1,7 +1,6 @@
 package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.InterpolatedData;
 import frc.robot.Constants.kShooter;
 import frc.robot.Constants.kTurret.State;
 import frc.robot.subsystems.Feeder;
@@ -9,6 +8,7 @@ import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
+import frc.robot.util.InterpolatedData;
 
 public class FiringCommand extends CommandBase {
 

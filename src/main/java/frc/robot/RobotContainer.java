@@ -131,6 +131,14 @@ public class RobotContainer {
         joystickTesting.leftBumper()
             .onTrue(new Scan(sys_turret, sys_limelight).andThen(Commands.runOnce(() -> sys_limelight.setLedMode(LedMode.kModeOff)))
         );
+
+        joystickTesting.povLeft()
+            .onTrue(new TurretGoTo(sys_turret, -0.5)
+        );
+
+        joystickTesting.povRight()
+            .onTrue(new TurretGoTo(sys_turret, 0.5)
+        );
     }
 
 }

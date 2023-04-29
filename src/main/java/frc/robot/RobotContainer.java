@@ -128,7 +128,7 @@ public class RobotContainer {
         /* Testing Button Bindings */
 
         joystickTesting.leftBumper()
-            .onTrue(new Scan(sys_turret, sys_limelight)
+            .onTrue(new Scan(sys_turret, sys_limelight).andThen(Commands.runOnce(() -> sys_limelight.setLedMode(LedMode.kModeOff)))
         );
     }
 

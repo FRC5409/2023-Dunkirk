@@ -168,8 +168,8 @@ public class Turret extends SubsystemBase {
      * Get the current perfered scanning direction
      * @return kLeft, kRight
      */
-    public int getScanningDir() {
-        return scanDir.value;
+    public ScanningDirection getScanningDir() {
+        return scanDir;
     }
 
     @Override

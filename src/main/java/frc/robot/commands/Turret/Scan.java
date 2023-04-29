@@ -33,7 +33,7 @@ public class Scan extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double position = Math.sin(time / kTurret.turretSpeed) * kTurret.maxPosition * m_turrent.getScanningDir();
+        double position = Math.sin(time / kTurret.turretSpeed) * kTurret.maxPosition * m_turrent.getScanningDir().value;
 
         m_turrent.setRefrence(position);
 
@@ -56,7 +56,7 @@ public class Scan extends CommandBase {
         if (m_turrent.getPosition() < -kTurret.maxPosition || m_turrent.getPosition() > kTurret.maxPosition) {
             m_turrent.stopMot();
         } else {
-            m_turrent.setVolts(volts * m_turrent.getScanningDir());
+            m_turrent.setVolts(volts * m_turrent.getScanningDir().value);
         }
     }
 }

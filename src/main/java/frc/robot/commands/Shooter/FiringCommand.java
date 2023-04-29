@@ -12,11 +12,11 @@ import frc.robot.util.InterpolatedData;
 
 public class FiringCommand extends CommandBase {
 
-    private final Shooter m_shooter;
-    private final Turret m_turret;
-    private final Feeder m_feeder;
-    private final Indexer m_indexer;
-    private final Limelight m_limelight;
+    private final Shooter    m_shooter;
+    private final Turret     m_turret;
+    private final Feeder     m_feeder;
+    private final Indexer    m_indexer;
+    private final Limelight  m_limelight;
 
     private int currentSpeed = -1;
     private boolean isFeeding = false;

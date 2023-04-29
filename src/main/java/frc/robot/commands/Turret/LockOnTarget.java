@@ -58,17 +58,15 @@ public class LockOnTarget extends CommandBase {
     }
 
     public void updateLocation() {
-        double offset = m_turret.getAngle();
+        double offset = m_turret.getPosition();
 
-        double desiredSetpoint = offset + m_limelight.getXAngle();
+        double desiredSetpoint = offset + m_turret.convertToEncoder(m_limelight.getXAngle());
 
-        if (desiredSetpoint > kTurret.maxAngle)
-            desiredSetpoint = kTurret.maxAngle;
+        if (desiredSetpoint > kTurret.maxPosition)
+            desiredSetpoint = kTurret.maxPosition;
 
-        if (desiredSetpoint < -kTurret.maxAngle)
-            desiredSetpoint = -kTurret.maxAngle;
-
-        desiredSetpoint = m_turret.convertToEncoder(desiredSetpoint);
+        if (desiredSetpoint < -kTurret.maxPosition)
+            desiredSetpoint = -kTurret.maxPosition;
 
         m_turret.setRefrence(desiredSetpoint);
     }

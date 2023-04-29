@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.kShooter;
 import frc.robot.Constants.kTurret.State;
 import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 
@@ -12,17 +13,19 @@ public class FiringCommand extends CommandBase {
     private final Shooter m_shooter;
     private final Turret m_turret;
     private final Feeder m_feeder;
+    private final Indexer m_indexer;
 
     private int currentSpeed = -1;
     private boolean isFeeding = false;
 
-    public FiringCommand(Shooter shooter, Turret turret, Feeder feeder) {
+    public FiringCommand(Shooter shooter, Turret turret, Feeder feeder, Indexer indexer) {
         // Use addRequirements() here to declare subsystem dependencies.
         m_shooter = shooter;
         m_turret = turret;
         m_feeder = feeder;
+        m_indexer = indexer;
 
-        addRequirements(m_shooter, m_feeder);
+        addRequirements(m_shooter, m_feeder, m_indexer);
         
     }
 
@@ -79,6 +82,7 @@ public class FiringCommand extends CommandBase {
     public void feed() {
         if (!isFeeding) {
             m_feeder.feed();
+            m_indexer.startIntaking();
             isFeeding = false;
         }
     }
@@ -89,6 +93,7 @@ public class FiringCommand extends CommandBase {
     public void stopFeeding() {
         if (isFeeding) {
             m_feeder.stopFeeding();
+            m_indexer.stopIntaking();
             isFeeding = true;
         }
     }

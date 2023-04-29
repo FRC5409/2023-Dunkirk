@@ -110,7 +110,7 @@ public class RobotContainer {
 
         joystickMain.rightBumper()
             .and(() -> sys_turret.isBeingUsed()).whileTrue(
-                new FiringCommand(sys_shooter, sys_turret, sys_feeder)
+                new FiringCommand(sys_shooter, sys_turret, sys_feeder, sys_indexer)
             );
 
         joystickMain.y()

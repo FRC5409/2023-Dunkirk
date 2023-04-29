@@ -6,7 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.Constants.kTurret.ScanningDirection;
+import frc.robot.subsystems.Turret.ScanningDirection;
 import frc.robot.Constants.kTurret.State;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.Indexer.IntakeCargo;

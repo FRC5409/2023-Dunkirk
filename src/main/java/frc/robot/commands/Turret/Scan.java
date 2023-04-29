@@ -2,7 +2,6 @@ package frc.robot.commands.Turret;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.kTurret;
-import frc.robot.Constants.kTurret.ScanningDirection;
 import frc.robot.Constants.kTurret.State;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Turret;
@@ -34,7 +33,7 @@ public class Scan extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double position = Math.sin(time / kTurret.turretSpeed) * kTurret.maxPosition;
+        double position = Math.sin(time / kTurret.turretSpeed) * kTurret.maxPosition * m_turrent.getScanningDir();
 
         m_turrent.setRefrence(position);
 
@@ -57,11 +56,7 @@ public class Scan extends CommandBase {
         if (m_turrent.getPosition() < -kTurret.maxPosition || m_turrent.getPosition() > kTurret.maxPosition) {
             m_turrent.stopMot();
         } else {
-            if (m_turrent.getScanningDir() == ScanningDirection.kLeft) {
-                m_turrent.setVolts(-volts);
-            } else {
-                m_turrent.setVolts(volts);
-            }
+            m_turrent.setVolts(volts * m_turrent.getScanningDir());
         }
     }
 }

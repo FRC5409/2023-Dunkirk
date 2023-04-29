@@ -9,10 +9,19 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.kTurret;
-import frc.robot.Constants.kTurret.ScanningDirection;
 import frc.robot.Constants.kTurret.State;
 
 public class Turret extends SubsystemBase {
+
+    public enum ScanningDirection {
+        kLeft(-1), kRight(1);
+
+        ScanningDirection(int value) {
+            this.value = value;
+        }
+
+        public final int value;
+    }
 
     private final CANSparkMax turretMot;
 
@@ -159,8 +168,8 @@ public class Turret extends SubsystemBase {
      * Get the current perfered scanning direction
      * @return kLeft, kRight
      */
-    public ScanningDirection getScanningDir() {
-        return scanDir;
+    public int getScanningDir() {
+        return scanDir.value;
     }
 
     @Override

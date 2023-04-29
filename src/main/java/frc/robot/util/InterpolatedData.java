@@ -1,5 +1,11 @@
 package frc.robot.util;
 
+/**
+ * InterpolatedData is for interpolating data (duh),
+ * also has finding the closest point in an array
+ * 
+ * @author Alexander Szura
+ */
 public final class InterpolatedData {
 
     /**
@@ -14,11 +20,11 @@ public final class InterpolatedData {
 
     /**
      * Uses interpolated data to find the new shooter speed
-     * @param x1
-     * @param y1
-     * @param x2
-     * @param y2
-     * @param x
+     * @param x1 first point X
+     * @param y1 first point Y
+     * @param x2 second point X
+     * @param y2 second point Y
+     * @param x x position in between those 2 points
      * @return New interpolated data
      */
     public static double getInterpolatedSpeed(double x1, double y1, double x2, double y2, double x) {//gets the new interpolated speed

@@ -61,7 +61,7 @@ public class FiringCommand extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        spinShooterAt(0);
+        stopShooting();
         stopFeeding();
     }
 
@@ -90,7 +90,7 @@ public class FiringCommand extends CommandBase {
         if (!isFeeding) {
             m_feeder.feed();
             m_indexer.startIntaking();
-            isFeeding = false;
+            isFeeding = true;
         }
     }
 
@@ -101,8 +101,15 @@ public class FiringCommand extends CommandBase {
         if (isFeeding) {
             m_feeder.stopFeeding();
             m_indexer.stopIntaking();
-            isFeeding = true;
+            isFeeding = false;
         }
+    }
+
+    /**
+     * Stops the shooter motor
+     */
+    public void stopShooting() {
+        m_shooter.stopMot();
     }
 
     public double getShooterSpeed() {

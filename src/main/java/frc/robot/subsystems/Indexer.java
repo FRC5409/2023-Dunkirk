@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -8,7 +9,8 @@ import frc.robot.Constants.kIndexer;
 
 public class Indexer extends SubsystemBase {
 
-    private final CANSparkMax indexerMot;
+    private final CANSparkMax        indexerMot;
+    private final RelativeEncoder    indexerEnc;
 
     public Indexer() {
         indexerMot = new CANSparkMax(kIndexer.CANID, MotorType.kBrushless);
@@ -20,6 +22,8 @@ public class Indexer extends SubsystemBase {
         indexerMot.setInverted(true);
 
         indexerMot.burnFlash();
+
+        indexerEnc = indexerMot.getEncoder();
     }
 
     @Override
@@ -34,12 +38,26 @@ public class Indexer extends SubsystemBase {
         
     }
 
+    /**
+     * Starts intaking cargo
+     */
     public void startIntaking() {
         indexerMot.set(kIndexer.indexerSpeed);
     }
 
+    /**
+     * Stop intaking cargo
+     */
     public void stopIntaking() {
         indexerMot.set(0);
+    }
+
+    /**
+     * Gets the velocity of the indexer
+     * @return
+     */
+    public double getVelocity() {
+        return indexerEnc.getVelocity();
     }
 
 }

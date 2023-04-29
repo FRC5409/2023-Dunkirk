@@ -101,7 +101,8 @@ public class RobotContainer {
                 new TurretGoTo(sys_turret, 0)
                 .alongWith(
                     Commands.runOnce(() -> sys_limelight.setLedMode(LedMode.kModeOff)),
-                    Commands.runOnce(() -> sys_turret.setState(State.kOff))
+                    Commands.runOnce(() -> sys_turret.setState(State.kOff)),
+                    Commands.runOnce(() -> sys_shooter.stopMot(), sys_shooter)
                 ),
 
                 () -> !sys_turret.isBeingUsed()
@@ -110,7 +111,7 @@ public class RobotContainer {
 
         joystickMain.rightBumper()
             .and(() -> sys_turret.isBeingUsed()).whileTrue(
-                new FiringCommand(sys_shooter, sys_turret, sys_feeder, sys_indexer)
+                new FiringCommand(sys_shooter, sys_turret, sys_feeder, sys_indexer, sys_limelight)
             );
 
         joystickMain.y()

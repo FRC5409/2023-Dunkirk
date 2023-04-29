@@ -3,42 +3,46 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.kConfig;
 import frc.robot.Constants.kShooter;
 
 public class Shooter extends SubsystemBase {
 
-    private final XboxController m_joystick;
-
     private final WPI_TalonFX leftMot;
     private final WPI_TalonFX rightMot;
 
-    // private final TimeOfFlight ToFFeeder;
+    private double currentRPM;
 
-    private double distance;
+    private ShuffleboardTab  shooterTab;
+    private GenericEntry     speedEntry;
+    private GenericEntry     desiredSpeedEntry;
 
-    private boolean isFeeding = false;
+    private final boolean debug = false;
 
     public Shooter() {
         leftMot = new WPI_TalonFX(kShooter.leftMotID);
         rightMot = new WPI_TalonFX(kShooter.rightMotID); 
 
-        // ToFFeeder = new TimeOfFlight(kShooter.ToFID);
-
-        m_joystick = new XboxController(0);
-
         configMots();
 
-        distance = 10;
+        currentRPM = 0;
 
-        stopMotors();
+        if (debug || kConfig.masterDebug) {
+            shooterTab           = Shuffleboard.getTab("Shooter");
+            speedEntry           = shooterTab.add("Speed", 0).getEntry();
+            desiredSpeedEntry    = shooterTab.add("Desired Speed", 0).getEntry();
+        }
     }
 
     @Override
     public void periodic() {
-        if (Math.abs(m_joystick.getRightY()) >= 0.01) {//joystick drift
-            distance -= m_joystick.getRightY() * 0.3;//changed the distance for teseting
+        if (debug || kConfig.masterDebug) {
+            speedEntry.setDouble(getAverageSpeed());
+            desiredSpeedEntry.setDouble(currentRPM);
         }
     }
 
@@ -58,6 +62,13 @@ public class Shooter extends SubsystemBase {
         setPIDFvalues(kShooter.kPID.kP, kShooter.kPID.kI, kShooter.kPID.kD, kShooter.kPID.kF);
     }
 
+    /**
+     * Sets the PIDF values of the PID controller
+     * @param p
+     * @param i
+     * @param d
+     * @param f
+     */
     public void setPIDFvalues(double p, double i, double d, double f) {
         leftMot.config_kP(0, p);
         leftMot.config_kI(0, i);
@@ -65,55 +76,46 @@ public class Shooter extends SubsystemBase {
         leftMot.config_kF(0, f);
     }
 
+    /**
+     * @deprecated use getAverageSpeed();
+     * @return getAverageSpeed
+     */
     public double getVelocity() {
         return getAverageSpeed();
     }
 
+    /**
+     * Gets the absolute average speed of the shooter in RPM
+     * @return
+     */
     public double getAverageSpeed() {
         return (Math.abs(leftMot.getSelectedSensorVelocity()) + Math.abs(rightMot.getSelectedSensorVelocity())) / 2 / 2048.0 * 600;//convers to RPM
     }
 
+    /**
+     * Spins the motor at a set RPM
+     * @param RPM The RPM you want to spin at
+     */
     public void spinMotAtSpeed(double RPM) {
+        currentRPM = RPM;
         leftMot.set(TalonFXControlMode.Velocity, RPM * 2048.0 / 600.0);//spins at RPM
     }
 
-    public void feed() {
-        if (!isFeeding) {
-            isFeeding = true;
-        }
-    }
-
-    public void stopFeeding() {
-        if (isFeeding) {
-            isFeeding = false;
-        }
-    }
-
-    public void stopMotors() {
-        leftMot.set(0);
-        isFeeding = false;
-    }
-
-    public int closestPoint() {//finds the closest point at index x
-        return (int) Math.round(distance / 15) - 1;//going up by 15 inches per step
-    }
-
-    public double getInterpolatedSpeed(double x1, double y1, double x2, double y2, double x) {//gets the new interpolated speed
-        // Y = ( ( X - X1 )( Y2 - Y1) / ( X2 - X1) ) + Y1
-        // Y: finding interpolated Y value
-        // X: Target X cordinant
-        // X1, Y1: first point
-        // X2, Y2: second point
-
-        return ((x - x1) * (y2 - y1) / (x2 - x1)) + y1;
-    }
-
-    public double getTargetDistance() {
-        return distance;
-    }
-
+    /**
+     * Sets the volts of the shooter
+     * @param volts Volts you want to give the shooter
+     */
     public void setVolts(double volts) {
+        currentRPM = -1;
         leftMot.setVoltage(volts);
+    }
+
+    /**
+     * Stops the motor from spinning
+     */
+    public void stopMot() {
+        currentRPM = -1;
+        leftMot.set(0);
     }
 
 }

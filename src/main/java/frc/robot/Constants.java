@@ -17,7 +17,10 @@ public final class Constants {
     public static class kConfig {
                                                /*   Team 5409   */
         public static final int teamNumber           = 5409;  
-    }                                          /*  The Chargers */
+                                               /*  The Chargers */
+
+        public static final boolean masterDebug = true;
+    }
 
     public static class kDriveTrain {
 
@@ -74,6 +77,7 @@ public final class Constants {
         // public final static double cargoIsThere = 30;
 
         public static class kShooterData {
+            public final static int shooterSteps = 15;
             public final static double[] shooterDataX = {  15,   30,   45,   60,   75,   80,  105,  120,  135,  150};//distance to target
             public final static double[] shooterDataY = {1800, 1900, 2000, 2100, 2600, 3000, 3800, 4300, 4600, 5000};//speed to spin at
         }
@@ -111,7 +115,14 @@ public final class Constants {
     public static class kFeeder {
         public final static int feederID = 9;
 
+        public final static int currentLimit = 20;
+
         public final static double feedSpeed = 0.4;
+
+        public final static double kP = 0.00015;
+        public final static double kI = 0;
+        public final static double kD = 0;
+        public final static double kF = 0.0002;
     }
 
     public static class kIndexer {

@@ -11,7 +11,6 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.kDriveTrain;
 
@@ -185,11 +184,6 @@ public class DriveTrain extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        
-        SmartDashboard.putNumber("CANCoder L Vel", getLeftCANCoderVelocity());
-        SmartDashboard.putNumber("CANCoder R Vel", getRightCANCoderVelocity());
-        SmartDashboard.putNumber("CANCoder L Dist", getLeftDistance());
-        SmartDashboard.putNumber("CANCoder R Dist", getRightDistance());
 
         // Update odometry
         m_odometry.update(m_gyro.getRotation2d(), m_cancoderLeft.getPosition(), m_cancoderRight.getPosition());

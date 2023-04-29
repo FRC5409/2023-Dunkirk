@@ -4,10 +4,13 @@ import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.sensors.Pigeon2Configuration;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.kConfig;
 
 public class Gyro extends SubsystemBase {
 
@@ -22,7 +25,10 @@ public class Gyro extends SubsystemBase {
 
     private double headingSpeed = 0;
 
-    private final boolean debug = true;
+    private ShuffleboardTab gyroTab;
+    private GenericEntry angleEntry, rateEntry, rotationEntry, yawEntry, pitchEntry, rollEntry, speedEntry;
+
+    private final boolean debug = false;
 
     /**
      * Wrapper for the Pigeon gyro.
@@ -50,6 +56,18 @@ public class Gyro extends SubsystemBase {
         m_pigeon.configAllSettings(pigeon_config);
 
         m_accelerometer = new BuiltInAccelerometer();
+
+        if (debug || kConfig.masterDebug) {
+            gyroTab = Shuffleboard.getTab("Gyro");
+
+            angleEntry       = gyroTab.add("Angle", 0).getEntry();
+            rateEntry        = gyroTab.add("Rate", 0).getEntry();
+            rotationEntry    = gyroTab.add("Rotation", 0).getEntry();
+            yawEntry         = gyroTab.add("Yaw", 0).getEntry();
+            pitchEntry       = gyroTab.add("Pitch", 0).getEntry();
+            rollEntry        = gyroTab.add("Roll", 0).getEntry();
+            speedEntry       = gyroTab.add("Speed", 0).getEntry();
+        }
 
     }
 
@@ -111,15 +129,14 @@ public class Gyro extends SubsystemBase {
 
         headingSpeed += getForwardAccel();
         
-        if (debug) {
-            SmartDashboard.putNumber("Gyro Angle", getAngle());
-            SmartDashboard.putNumber("Gyro Rate", getRate());
-            SmartDashboard.putNumber("Gyro Rotation", getRotation2d().getDegrees());
-            SmartDashboard.putNumber("Gyro Yaw", getYaw());
-            SmartDashboard.putNumber("Gyro Pitch", getPitch());
-            SmartDashboard.putNumber("Gyro Roll", getRoll());
-
-            SmartDashboard.putNumber("Forward Speed", getForwardSpeed());
+        if (debug || kConfig.masterDebug) {
+            angleEntry      .setDouble(getAngle());
+            rateEntry       .setDouble(getRate());
+            rotationEntry   .setDouble(getRotation2d().getDegrees());
+            yawEntry        .setDouble(getYaw());
+            pitchEntry      .setDouble(getPitch());
+            rollEntry       .setDouble(getRoll());
+            speedEntry      .setDouble(getForwardSpeed());
         }
     }
 

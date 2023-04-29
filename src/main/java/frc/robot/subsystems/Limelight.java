@@ -28,7 +28,7 @@ public class Limelight extends SubsystemBase {
 
     private final NetworkTable limeTable;
 
-    private final boolean debug = true;
+    private final boolean debug = false;
 
    
     public Limelight() {
@@ -37,7 +37,7 @@ public class Limelight extends SubsystemBase {
 
         limeTable            = NetworkTableInstance.getDefault().getTable("limelight");
 
-        if (debug) {
+        if (debug || kConfig.masterDebug) {
             limeTab          = Shuffleboard.getTab("limelight");
             distanceEntry    = limeTab.add("Distance to target: ", 0).getEntry();
             angleEntry       = limeTab.add("Angle to target", 0).getEntry();
@@ -49,7 +49,7 @@ public class Limelight extends SubsystemBase {
     public void periodic() {
         // This method will be called once per scheduler run
 
-        if (debug) {
+        if (debug || kConfig.masterDebug) {
             if (isVisable()) {
                 distanceEntry.setDouble(getDistanceToTarget());
                 angleEntry.setDouble(getXAngle());

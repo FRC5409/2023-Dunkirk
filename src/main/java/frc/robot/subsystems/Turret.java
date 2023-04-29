@@ -8,6 +8,7 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.kConfig;
 import frc.robot.Constants.kTurret;
 import frc.robot.Constants.kTurret.State;
 
@@ -35,7 +36,7 @@ public class Turret extends SubsystemBase {
     private GenericEntry     angleEntry;
 
 
-    private final boolean debug = true;
+    private final boolean debug = false;
 
     public Turret() {
         turretMot = new CANSparkMax(kTurret.CANID, MotorType.kBrushless);
@@ -51,7 +52,7 @@ public class Turret extends SubsystemBase {
 
         setPID(kTurret.kP, kTurret.kI, kTurret.kD);
 
-        if (debug) {
+        if (debug || kConfig.masterDebug) {
             turretTab        = Shuffleboard.getTab("Turret");
             encoderPosEntry  = turretTab.add("Position", getPosition()).getEntry();
             angleEntry       = turretTab.add("Angle", getAngle()).getEntry();
@@ -185,7 +186,7 @@ public class Turret extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        if (debug) {
+        if (debug || kConfig.masterDebug) {
             encoderPosEntry.setDouble(getPosition());
             angleEntry.setDouble(getAngle());
         }

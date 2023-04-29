@@ -1,10 +1,12 @@
 package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.InterpolatedData;
 import frc.robot.Constants.kShooter;
 import frc.robot.Constants.kTurret.State;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 
@@ -14,16 +16,18 @@ public class FiringCommand extends CommandBase {
     private final Turret m_turret;
     private final Feeder m_feeder;
     private final Indexer m_indexer;
+    private final Limelight m_limelight;
 
     private int currentSpeed = -1;
     private boolean isFeeding = false;
 
-    public FiringCommand(Shooter shooter, Turret turret, Feeder feeder, Indexer indexer) {
+    public FiringCommand(Shooter shooter, Turret turret, Feeder feeder, Indexer indexer, Limelight limelight) {
         // Use addRequirements() here to declare subsystem dependencies.
         m_shooter = shooter;
         m_turret = turret;
         m_feeder = feeder;
         m_indexer = indexer;
+        m_limelight = limelight;
 
         addRequirements(m_shooter, m_feeder, m_indexer);
         
@@ -38,9 +42,12 @@ public class FiringCommand extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+
+        double shooterSpeed = 2500; //Replace with interpolated data later
+
         if (m_turret.getState() == State.kLocked) {
-            spinShooterAt(2500);
-            if (Math.abs(m_shooter.getAverageSpeed() - 2500) < kShooter.shooterRPMPlay) {
+            spinShooterAt((int) Math.round(shooterSpeed));
+            if (Math.abs(m_shooter.getAverageSpeed() - shooterSpeed) < kShooter.shooterRPMPlay) {
                 feed();
             } else {
                 stopFeeding();
@@ -96,6 +103,24 @@ public class FiringCommand extends CommandBase {
             m_indexer.stopIntaking();
             isFeeding = true;
         }
+    }
+
+    public double getShooterSpeed() {
+        double distanceToTarget = m_limelight.getDistanceToTarget();
+        int closestPoint = InterpolatedData.closestPoint(distanceToTarget, kShooter.kShooterData.shooterSteps);
+
+        double dataX[] = kShooter.kShooterData.shooterDataX;
+        double dataY[] = kShooter.kShooterData.shooterDataY;
+
+        double interpolatedSpeed = InterpolatedData.getInterpolatedSpeed(
+            dataX[closestPoint],
+            dataY[closestPoint],
+            dataX[closestPoint + 1],
+            dataY[closestPoint + 1],
+            distanceToTarget
+        );
+
+        return interpolatedSpeed;
     }
 
 }

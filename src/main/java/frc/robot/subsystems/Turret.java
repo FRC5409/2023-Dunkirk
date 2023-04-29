@@ -28,6 +28,8 @@ public class Turret extends SubsystemBase {
     private State currentState           = State.kOff;
     private ScanningDirection scanDir    = ScanningDirection.kLeft;
 
+    private double pos;
+
     private ShuffleboardTab  turretTab;
     private GenericEntry     encoderPosEntry;
     private GenericEntry     angleEntry;
@@ -44,6 +46,8 @@ public class Turret extends SubsystemBase {
         turretMot.burnFlash();
 
         turretMot.getEncoder().setPosition(0);
+
+        pos = 0;
 
         setPID(kTurret.kP, kTurret.kI, kTurret.kD);
 
@@ -102,7 +106,13 @@ public class Turret extends SubsystemBase {
         if (pos < -kTurret.maxPosition)
             pos = -kTurret.maxPosition;
 
+        this.pos = pos;
+
         turretMot.getPIDController().setReference(pos, ControlType.kPosition);
+    }
+
+    public boolean atSetpoint() {
+        return Math.abs(pos - getPosition()) <= kTurret.encoderThreshold;
     }
 
 

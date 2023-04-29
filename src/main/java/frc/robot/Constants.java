@@ -102,7 +102,7 @@ public final class Constants {
         public final static double kD                    = 0;
 
         public final static double encoderThreshold      = 0.1;
-        public final static double targetingThreshold    = 1;
+        public final static double angleThreshold        = 1;
 
         public final static double maxPosition           = 1.76;// Encoder max position
         public final static int maxAngle                 = 90;  //   Angle max position

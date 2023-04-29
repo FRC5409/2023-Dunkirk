@@ -12,6 +12,8 @@ public class LockOnTarget extends CommandBase {
     private final Turret m_turret;
     private final Limelight m_limelight;
 
+    private final boolean updateLocation = false;
+
     public LockOnTarget(Turret turret, Limelight limelight) {
         // Use addRequirements() here to declare subsystem dependencies.
         m_turret = turret;
@@ -36,7 +38,13 @@ public class LockOnTarget extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        
+        if (updateLocation) {
+            if (m_turret.atSetpoint()) {
+                if (Math.abs(m_limelight.getXAngle()) >= kTurret.angleThreshold) {
+                    updateLocation();
+                }
+            }
+        }
     }
 
     // Called once the command ends or is interrupted.
@@ -68,7 +76,7 @@ public class LockOnTarget extends CommandBase {
     public void oldTargetingCode() {
         double xOff = m_limelight.getXAngle();
         double volts = m_turret.getVolts();
-        if (xOff < -kTurret.targetingThreshold) {
+        if (xOff < -kTurret.angleThreshold) {
             //left of target
             if (volts != -kTurret.lockingSpeed) {
                 //doesn't let it go past it's max turning position
@@ -78,7 +86,7 @@ public class LockOnTarget extends CommandBase {
             }
             m_turret.setState(State.kLocking);
 
-        } else if (xOff > kTurret.targetingThreshold) {
+        } else if (xOff > kTurret.angleThreshold) {
             //right of target
             if (volts != kTurret.lockingSpeed) {
                 //doesn't let it go past it's max turning position

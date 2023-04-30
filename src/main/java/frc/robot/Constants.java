@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import frc.robot.subsystems.Turret;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -111,6 +113,8 @@ public final class Constants {
 
         public final static double maxPosition           = 1.76;// Encoder max position
         public final static int maxAngle                 = 90;  //   Angle max position
+
+        public final static Turret.ScanningDirection defaultScanDir = Turret.ScanningDirection.kLeft;
     }
 
     public static class kFeeder {

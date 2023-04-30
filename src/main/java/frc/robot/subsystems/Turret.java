@@ -15,7 +15,7 @@ import frc.robot.Constants.kTurret.State;
 public class Turret extends SubsystemBase {
 
     public enum ScanningDirection {
-        kLeft(-1), kRight(1);
+        kLeft(-1), kRight(1), kNotSelected(kTurret.defaultScanDir.value);
 
         ScanningDirection(int value) {
             this.value = value;
@@ -27,7 +27,7 @@ public class Turret extends SubsystemBase {
     private final CANSparkMax turretMot;
 
     private State currentState           = State.kOff;
-    private ScanningDirection scanDir    = ScanningDirection.kLeft;
+    private ScanningDirection scanDir    = ScanningDirection.kNotSelected;
 
     private double pos;
 

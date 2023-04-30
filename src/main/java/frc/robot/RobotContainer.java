@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.Turret.ScanningDirection;
+import frc.robot.Constants.kTurret;
 import frc.robot.Constants.kTurret.State;
 import frc.robot.commands.Drive.DefaultDrive;
 import frc.robot.commands.Indexer.IntakeCargo;
@@ -118,10 +119,22 @@ public class RobotContainer {
             .whileTrue(new IntakeCargo(sys_indexer));
 
         joystickMain.povLeft()
-            .onTrue(Commands.runOnce(() -> sys_turret.setScanningDir(ScanningDirection.kLeft)));
+            .onTrue(
+                Commands.runOnce(() -> sys_turret.setScanningDir(ScanningDirection.kLeft))
+                .alongWith(new TurretGoTo(sys_turret, -(kTurret.maxPosition / 3)))
+            );
 
         joystickMain.povRight()
-            .onTrue(Commands.runOnce(() -> sys_turret.setScanningDir(ScanningDirection.kRight)));
+            .onTrue(
+                Commands.runOnce(() -> sys_turret.setScanningDir(ScanningDirection.kRight))
+                .alongWith(new TurretGoTo(sys_turret, (kTurret.maxPosition / 3)))
+            );
+
+        joystickMain.povUp()
+            .onTrue(
+                Commands.runOnce(() -> sys_turret.setScanningDir(kTurret.defaultScanDir))
+                .alongWith(new TurretGoTo(sys_turret, 0))
+            );
 
         /* Secondary Joystick Button Bindings */
 

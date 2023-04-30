@@ -183,6 +183,10 @@ public class Turret extends SubsystemBase {
         return scanDir;
     }
 
+    public void setNeutralMode(IdleMode mode) {
+        turretMot.setIdleMode(mode);
+    }
+
     @Override
     public void periodic() {
         // This method will be called once per scheduler run

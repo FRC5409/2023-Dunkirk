@@ -116,8 +116,8 @@ public class FiringCommand extends CommandBase {
         double distanceToTarget = m_limelight.getDistanceToTarget();
         int closestPoint = InterpolatedData.closestPoint(distanceToTarget, kShooter.kShooterData.shooterSteps);
 
-        double dataX[] = kShooter.kShooterData.shooterDataX;
-        double dataY[] = kShooter.kShooterData.shooterDataY;
+        int dataX[] = kShooter.kShooterData.shooterDataX;
+        int dataY[] = kShooter.kShooterData.shooterDataY;
 
         double interpolatedSpeed = InterpolatedData.getInterpolatedSpeed(
             dataX[closestPoint],

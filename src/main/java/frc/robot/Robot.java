@@ -5,7 +5,7 @@
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-
+import com.revrobotics.CANSparkMax.IdleMode;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
     new Trigger(this::isEnabled)
     .negate()
     .debounce(5)
-    .onTrue(new SetCoastMode(m_robotContainer.sys_driveTrain));
+    .onTrue(new SetCoastMode(m_robotContainer.sys_driveTrain, m_robotContainer.sys_turret));
   }
 
   /**
@@ -65,7 +65,11 @@ public class Robot extends TimedRobot {
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
-  public void autonomousInit() {}
+  public void autonomousInit() {
+    // Enable brake mode
+    m_robotContainer.sys_driveTrain.setNeutralMode(NeutralMode.Brake);
+    m_robotContainer.sys_turret.setNeutralMode(IdleMode.kBrake);
+  }
 
   /** This function is called periodically during autonomous. */
   @Override
@@ -83,6 +87,7 @@ public class Robot extends TimedRobot {
 
     // Enable brake mode
     m_robotContainer.sys_driveTrain.setNeutralMode(NeutralMode.Brake);
+    m_robotContainer.sys_turret.setNeutralMode(IdleMode.kBrake);
   }
 
   /** This function is called periodically during operator control. */
@@ -96,6 +101,7 @@ public class Robot extends TimedRobot {
 
     // Enable brake mode
     m_robotContainer.sys_driveTrain.setNeutralMode(NeutralMode.Brake);
+    m_robotContainer.sys_turret.setNeutralMode(IdleMode.kBrake);
   }
 
   /** This function is called periodically during test mode. */
@@ -107,6 +113,7 @@ public class Robot extends TimedRobot {
   public void simulationInit() {
     // Enable brake mode
     m_robotContainer.sys_driveTrain.setNeutralMode(NeutralMode.Brake);
+    m_robotContainer.sys_turret.setNeutralMode(IdleMode.kBrake);
   }
 
   /** This function is called periodically whilst in simulation. */

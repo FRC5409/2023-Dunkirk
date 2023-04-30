@@ -37,13 +37,13 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
 
     // Subsystems
-    private final Gyro sys_gyro;
-    public final DriveTrain sys_driveTrain;
-    private final Shooter sys_shooter;
-    private final Turret sys_turret;
-    private final Feeder sys_feeder;
-    private final Indexer sys_indexer;
-    private final Limelight sys_limelight;
+    public final Gyro           sys_gyro;
+    public final DriveTrain     sys_driveTrain;
+    public final Shooter        sys_shooter;
+    public final Turret         sys_turret;
+    public final Feeder         sys_feeder;
+    public final Indexer        sys_indexer;
+    public final Limelight      sys_limelight;
 
     // Controller
     private final CommandXboxController joystickMain;
@@ -125,6 +125,31 @@ public class RobotContainer {
 
         /* Secondary Joystick Button Bindings */
 
+        joystickSecondary.leftBumper().onTrue(
+            new ConditionalCommand(
+                //if it's not scanning then start scanning
+                new RepeatCommand(
+                    new Scan(sys_turret, sys_limelight)
+                    .andThen(new LockOnTarget(sys_turret, sys_limelight))
+                ),
+
+                //if it's scanning then stop scanning and reset
+                new TurretGoTo(sys_turret, 0)
+                .alongWith(
+                    Commands.runOnce(() -> sys_limelight.setLedMode(LedMode.kModeOff)),
+                    Commands.runOnce(() -> sys_turret.setState(State.kOff)),
+                    Commands.runOnce(() -> sys_shooter.stopMot(), sys_shooter)
+                ),
+
+                () -> !sys_turret.isBeingUsed()
+            )
+        );
+
+        joystickSecondary.rightBumper()
+            .and(() -> sys_turret.isBeingUsed()).whileTrue(
+                new FiringCommand(sys_shooter, sys_turret, sys_feeder, sys_indexer, sys_limelight)
+            );
+
 
         /* Testing Button Bindings */
 
@@ -132,6 +157,7 @@ public class RobotContainer {
             .onTrue(new Scan(sys_turret, sys_limelight).andThen(Commands.runOnce(() -> sys_limelight.setLedMode(LedMode.kModeOff)))
         );
 
+        //TODO: Make sure these values dont kill the turret
         joystickTesting.povLeft()
             .onTrue(new TurretGoTo(sys_turret, -0.5)
         );

@@ -57,7 +57,7 @@ public class RobotContainer {
     public RobotContainer() {
 
         // Subsystems
-        sys_gyro             = new Gyro(true);
+        sys_gyro             = new Gyro();
         sys_driveTrain       = new DriveTrain(sys_gyro);
         sys_shooter          = new Shooter();
         sys_turret           = new Turret();

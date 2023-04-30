@@ -45,7 +45,7 @@ public class DriveTrain extends SubsystemBase {
      * Pneumatics code crash error:
      * https://docs.wpilib.org/en/stable/docs/yearly-overview/known-issues.html#code-crash-when-initializing-a-ph-pcm-related-device
      */
-    public DriveTrain() {
+    public DriveTrain(Gyro gyro) {
 
         // Motors
         m_motorLeft1 = new WPI_TalonFX(kDriveTrain.kMotors.kLeft1CAN);
@@ -85,7 +85,7 @@ public class DriveTrain extends SubsystemBase {
         m_cancoderRight.configAllSettings(cancoderConfig);
 
         // Gyro and odometry
-        m_gyro = new Gyro(false); // new gyro? or take in parameter
+        m_gyro = gyro;
         m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), getLeftDistance(), getRightDistance());
     }
 

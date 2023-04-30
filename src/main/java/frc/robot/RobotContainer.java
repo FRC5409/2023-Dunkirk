@@ -37,8 +37,8 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
 
     // Subsystems
+    private final Gyro sys_gyro;
     public final DriveTrain sys_driveTrain;
-    private Gyro sys_gyro;
     private final Shooter sys_shooter;
     private final Turret sys_turret;
     private final Feeder sys_feeder;
@@ -57,8 +57,8 @@ public class RobotContainer {
     public RobotContainer() {
 
         // Subsystems
-        sys_driveTrain       = new DriveTrain();
         sys_gyro             = new Gyro(true);
+        sys_driveTrain       = new DriveTrain(sys_gyro);
         sys_shooter          = new Shooter();
         sys_turret           = new Turret();
         sys_feeder           = new Feeder();

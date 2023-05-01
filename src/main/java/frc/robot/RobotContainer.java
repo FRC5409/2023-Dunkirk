@@ -12,6 +12,7 @@ import frc.robot.Constants.kTurret.State;
 import frc.robot.commands.Drive.DefaultDrive;
 import frc.robot.commands.Indexer.IntakeCargo;
 import frc.robot.commands.Shooter.FiringCommand;
+import frc.robot.commands.Shooter.TrainingShooterCommand;
 import frc.robot.commands.Turret.LockOnTarget;
 import frc.robot.commands.Turret.Scan;
 import frc.robot.commands.Turret.TurretGoTo;
@@ -178,6 +179,9 @@ public class RobotContainer {
         joystickTesting.povRight()
             .onTrue(new TurretGoTo(sys_turret, 0.5)
         );
+
+        joystickTesting.rightBumper()
+            .whileTrue(new TrainingShooterCommand(sys_shooter));
     }
 
 }

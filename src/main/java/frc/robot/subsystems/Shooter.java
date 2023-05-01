@@ -21,6 +21,9 @@ public class Shooter extends SubsystemBase {
     private GenericEntry     speedEntry;
     private GenericEntry     desiredSpeedEntry;
 
+    private ShuffleboardTab  trainingTab;
+    private GenericEntry     shooterSpeedEntry;
+
     private final boolean debug = false;
 
     public Shooter() {
@@ -35,6 +38,11 @@ public class Shooter extends SubsystemBase {
             shooterTab           = Shuffleboard.getTab("Shooter");
             speedEntry           = shooterTab.add("Speed", 0).getEntry();
             desiredSpeedEntry    = shooterTab.add("Desired Speed", 0).getEntry();
+        }
+        
+        if (kConfig.training) {
+            trainingTab          = Shuffleboard.getTab("Training");
+            shooterSpeedEntry    = trainingTab.add("Shooter Speed", 1000).getEntry();
         }
     }
 
@@ -116,6 +124,10 @@ public class Shooter extends SubsystemBase {
     public void stopMot() {
         currentRPM = -1;
         leftMot.set(0);
+    }
+
+    public double getTrainingSpeed() {
+        return shooterSpeedEntry.getDouble(0);
     }
 
 }

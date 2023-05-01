@@ -26,6 +26,8 @@ public class Limelight extends SubsystemBase {
     private GenericEntry angleEntry;
     private GenericEntry customAngleEntry;
 
+    private ShuffleboardTab  trainingTab;
+
     private final NetworkTable limeTable;
 
     private final boolean debug = false;
@@ -38,10 +40,18 @@ public class Limelight extends SubsystemBase {
         limeTable            = NetworkTableInstance.getDefault().getTable("limelight");
 
         if (debug || kConfig.masterDebug) {
-            limeTab          = Shuffleboard.getTab("limelight");
-            distanceEntry    = limeTab.add("Distance to target: ", 0).getEntry();
-            angleEntry       = limeTab.add("Angle to target", 0).getEntry();
-            customAngleEntry = limeTab.add("Custom Angle", 0).getEntry();
+            limeTab              = Shuffleboard.getTab("limelight");
+            if (kConfig.training) {
+                trainingTab      = Shuffleboard.getTab("Training");
+                distanceEntry    = trainingTab.add("Distance to target", 0).getEntry();
+            } else {
+                distanceEntry    = limeTab.add("Distance to target", 0).getEntry();
+            }
+            angleEntry           = limeTab.add("Angle to target", 0).getEntry();
+            customAngleEntry     = limeTab.add("Custom Angle", 0).getEntry();
+        } else if (kConfig.training) {
+            trainingTab      = Shuffleboard.getTab("Training");
+            distanceEntry    = trainingTab.add("Distance to target", 0).getEntry();
         }
     }
 
@@ -55,6 +65,8 @@ public class Limelight extends SubsystemBase {
                 angleEntry.setDouble(getXAngle());
                 customAngleEntry.setDouble(getAngleToTarget());
             }
+        } else if (kConfig.training) {
+            distanceEntry.setDouble(getDistanceToTarget());
         }
     }
 

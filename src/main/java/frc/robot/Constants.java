@@ -21,7 +21,8 @@ public final class Constants {
         public static final int teamNumber           = 5409;  
                                                /*  The Chargers */
 
-        public static final boolean masterDebug = true;
+        public static final boolean masterDebug  = true;
+        public static final boolean training     = true;
     }
 
     public static class kDriveTrain {

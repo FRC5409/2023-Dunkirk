@@ -12,6 +12,8 @@ public class LockOnTarget extends CommandBase {
     private final Turret m_turret;
     private final Limelight m_limelight;
 
+    private int seeingTime = 0;
+
     private final boolean updateLocation = false;
 
     public LockOnTarget(Turret turret, Limelight limelight) {
@@ -26,6 +28,8 @@ public class LockOnTarget extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+        seeingTime = 0;
+
         m_turret.setState(State.kLocking);
 
         if (!m_limelight.isOn())
@@ -39,11 +43,19 @@ public class LockOnTarget extends CommandBase {
     @Override
     public void execute() {
         if (updateLocation) {
-            if (m_turret.atSetpoint()) {
-                if (Math.abs(m_limelight.getXAngle()) >= kTurret.angleThreshold) {
-                    updateLocation();
+            if (m_limelight.isVisable()) {
+                if (m_turret.atSetpoint()) {
+                    if (Math.abs(m_limelight.getXAngle()) >= kTurret.angleThreshold) {
+                        updateLocation();
+                    }
                 }
             }
+        }
+
+        if (!m_limelight.isVisable()) {
+            seeingTime++;
+        } else {
+            seeingTime = 0;
         }
     }
 
@@ -54,7 +66,8 @@ public class LockOnTarget extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return !m_limelight.isVisable();
+        //when not seen for x amount of time, finish
+        return seeingTime > kTurret.maxNotSeeingTargetTime;
     }
 
     public void updateLocation() {

@@ -25,7 +25,8 @@ public class Scan extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        m_limelight.setLedMode(LedMode.kModeOn);
+        if (!m_limelight.isOn())
+            m_limelight.setLedMode(LedMode.kModeOn);
         m_turrent.setState(State.kScaning);
 
         time = (int) Math.round(Math.asin(m_turrent.getPosition() / kTurret.maxPosition) * kTurret.turretSpeed);

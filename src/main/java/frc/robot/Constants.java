@@ -115,6 +115,8 @@ public final class Constants {
         public final static double maxPosition           = 1.76;// Encoder max position
         public final static int maxAngle                 = 90;  //   Angle max position
 
+        public final static int maxNotSeeingTargetTime = 5;
+
         public final static Turret.ScanningDirection defaultScanDir = Turret.ScanningDirection.kLeft;
     }
 

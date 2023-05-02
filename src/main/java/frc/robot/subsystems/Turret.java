@@ -42,8 +42,11 @@ public class Turret extends SubsystemBase {
         turretMot = new CANSparkMax(kTurret.CANID, MotorType.kBrushless);
 
         turretMot.restoreFactoryDefaults();
+
         turretMot.setIdleMode(IdleMode.kBrake);
         turretMot.setSmartCurrentLimit(kTurret.currentLimit);
+        //TODO: make sure left is negative and right is positive
+
         turretMot.burnFlash();
 
         turretMot.getEncoder().setPosition(0);

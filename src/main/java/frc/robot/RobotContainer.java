@@ -96,7 +96,7 @@ public class RobotContainer {
                 //if it's not scanning then start scanning
                 new RepeatCommand(
                     new Scan(sys_turret, sys_limelight)
-                    .andThen(new LockOnTarget(sys_turret, sys_limelight))
+                    .andThen(new LockOnTarget(sys_turret, sys_limelight, false))
                 ),
 
                 //if it's scanning then stop scanning and reset
@@ -151,7 +151,7 @@ public class RobotContainer {
                 //if it's not scanning then start scanning
                 new RepeatCommand(
                     new Scan(sys_turret, sys_limelight)
-                    .andThen(new LockOnTarget(sys_turret, sys_limelight))
+                    .andThen(new LockOnTarget(sys_turret, sys_limelight, false))
                 ),
 
                 //if it's scanning then stop scanning and reset

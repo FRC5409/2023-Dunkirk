@@ -21,8 +21,12 @@ public class Limelight extends SubsystemBase {
         public final double value;
     }
 
+    private double distance = 0;
+    private double lastDistance = 0;
+
     private ShuffleboardTab limeTab;
     private GenericEntry distanceEntry;
+    private GenericEntry distanceChange;
     private GenericEntry angleEntry;
     private GenericEntry customAngleEntry;
 
@@ -42,16 +46,19 @@ public class Limelight extends SubsystemBase {
         if (debug || kConfig.masterDebug) {
             limeTab              = Shuffleboard.getTab("limelight");
             if (kConfig.training) {
-                trainingTab      = Shuffleboard.getTab("Training");
-                distanceEntry    = trainingTab.add("Distance to target", 0).getEntry();
+                trainingTab       = Shuffleboard.getTab("Training");
+                distanceEntry     = trainingTab.add("Distance to target", 0).getEntry();
+                distanceChange    = trainingTab.add("Distance change", 0).getEntry();
             } else {
                 distanceEntry    = limeTab.add("Distance to target", 0).getEntry();
+                distanceChange   = limeTab.add("Distance change", 0).getEntry();
             }
             angleEntry           = limeTab.add("Angle to target", 0).getEntry();
             customAngleEntry     = limeTab.add("Custom Angle", 0).getEntry();
         } else if (kConfig.training) {
             trainingTab      = Shuffleboard.getTab("Training");
             distanceEntry    = trainingTab.add("Distance to target", 0).getEntry();
+            distanceChange    = trainingTab.add("Distance change", 0).getEntry();
         }
     }
 
@@ -64,10 +71,16 @@ public class Limelight extends SubsystemBase {
                 distanceEntry.setDouble(getDistanceToTarget());
                 angleEntry.setDouble(getXAngle());
                 customAngleEntry.setDouble(getAngleToTarget());
+                distanceChange.setDouble(getDistanceChange());
             }
         } else if (kConfig.training) {
             distanceEntry.setDouble(getDistanceToTarget());
+            distanceChange.setDouble(getDistanceChange());
         }
+
+        lastDistance = distance;
+        distance = getDistanceToTarget();
+
     }
 
     @Override
@@ -165,6 +178,14 @@ public class Limelight extends SubsystemBase {
         double distanceToTarget = (kLimelight.targetHeight - kLimelight.heightOffFloor) / Math.tan(angleGoal);
 
         return distanceToTarget;
+    }
+
+    /**
+     * Gets the change of distance over 2 ticks
+     * @return The change of distance
+     */
+    public double getDistanceChange() {
+        return distance - lastDistance;
     }
     
 }

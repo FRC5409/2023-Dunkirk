@@ -125,7 +125,7 @@ public final class Constants {
 
         public final static Turret.ScanningDirection defaultScanDir = Turret.ScanningDirection.kLeft;
 
-        public final static double[] driveOffsetX = {0,  0.5,   1,  1.5,   2,  2.5,   3,  3.5,   4,  4.5};
+        public final static double[] driveOffsetX = {0,    5,  10,   15,  20,   25,  30,   35,  40,   45};//TODO: Tune these values
         public final static double[] driveOffsetY = {0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45};//TODO: Tune these values
 
         public final static double driveBySteps = driveOffsetX[1] - driveOffsetX[0];

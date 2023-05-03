@@ -3,7 +3,6 @@ package frc.robot.commands.Turret;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.kTurret;
 import frc.robot.Constants.kTurret.State;
-import frc.robot.subsystems.Gyroscope;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Limelight.LedMode;
@@ -13,30 +12,20 @@ public class LockOnTarget extends CommandBase {
 
     private final Turret     m_turret;
     private final Limelight  m_limelight;
-    private       Gyroscope  m_gyro;
     private final boolean    enableDriveBy;
 
     private int seeingTime = 0;
 
     private final boolean updateLocation = false;
 
-    public LockOnTarget(Turret turret, Limelight limelight) {
+    public LockOnTarget(Turret turret, Limelight limelight, boolean driveBy) {
         // Use addRequirements() here to declare subsystem dependencies.
         m_turret = turret;
         m_limelight = limelight;
-        enableDriveBy = false;
+        enableDriveBy = driveBy;
 
         addRequirements(m_turret);
         
-    }
-
-    public LockOnTarget(Turret turret, Limelight limelight, Gyroscope gyro) {
-        m_turret = turret;
-        m_limelight = limelight;
-        m_gyro = gyro;
-        enableDriveBy = true;
-
-        addRequirements(m_turret);
     }
 
     // Called when the command is initially scheduled.
@@ -90,7 +79,8 @@ public class LockOnTarget extends CommandBase {
         double offset = m_turret.getPosition();
 
         if (enableDriveBy) {
-            int closestPoint = InterpolatedData.closestPoint(Math.abs(m_gyro.getForwardSpeed()), kTurret.driveBySteps);
+            double distanceChange = m_limelight.getDistanceChange();
+            int closestPoint = InterpolatedData.closestPoint(Math.abs(distanceChange), kTurret.driveBySteps);
             double[] dataX = kTurret.driveOffsetX;
             double[] dataY = kTurret.driveOffsetY;
 
@@ -99,8 +89,8 @@ public class LockOnTarget extends CommandBase {
                     dataY[closestPoint],
                     dataX[closestPoint + 1],
                     dataY[closestPoint + 1],
-                    Math.abs(m_gyro.getForwardSpeed())
-                ) * m_gyro.getForwardSpeed() > 0 ? -1 : 1;
+                    Math.abs(distanceChange)
+                ) * distanceChange > 0 ? -1 : 1;
         }
 
         double desiredSetpoint = offset + m_turret.convertToEncoder(m_limelight.getXAngle()) + m_turret.getTurretOffset();

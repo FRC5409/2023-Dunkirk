@@ -1,7 +1,6 @@
 package frc.robot.commands.Turret;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.kTurret;
 import frc.robot.subsystems.Turret;
 
 public class TurretGoTo extends CommandBase {
@@ -37,7 +36,7 @@ public class TurretGoTo extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return Math.abs(m_turret.getPosition() - position) <= kTurret.encoderThreshold;
+        return m_turret.atSetpoint();
     }
 
 }

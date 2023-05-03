@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.kConfig;
 
-public class Gyro extends SubsystemBase {
+public class Gyroscope extends SubsystemBase {
 
     // Pigeon hardware
     private final WPI_Pigeon2 m_pigeon;
@@ -43,7 +43,7 @@ public class Gyro extends SubsystemBase {
      * Roll is about +X
      * Yaw is about +Z
      */
-    public Gyro() {
+    public Gyroscope() {
         m_pigeon = new WPI_Pigeon2(Constants.kGyro.kPigeonCAN);
 
         // Configure Pigeon

@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.networktables.GenericEntry;
@@ -63,6 +64,13 @@ public class Shooter extends SubsystemBase {
 
         leftMot.setNeutralMode(NeutralMode.Coast);
         rightMot.setNeutralMode(NeutralMode.Coast);
+
+        SupplyCurrentLimitConfiguration currentLimit = new SupplyCurrentLimitConfiguration();
+        currentLimit.enable = true;
+        currentLimit.currentLimit = kShooter.currentLimit;
+
+        leftMot.configSupplyCurrentLimit(currentLimit);
+        rightMot.configSupplyCurrentLimit(currentLimit);
     
         rightMot.follow(leftMot);//following to shoot at the same speed
         rightMot.setInverted(true);

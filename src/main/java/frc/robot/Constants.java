@@ -64,6 +64,7 @@ public final class Constants {
     public static class kShooter {
         public final static int leftMotID = 5;
         public final static int rightMotID = 8;
+        public final static int currentLimit = 20;
         public final static int ToFID = 11;
 
         public final static double shooterRPMPlay = 50;
@@ -77,13 +78,16 @@ public final class Constants {
             public final static double kF = 0.0505;
         }
 
-        // public final static double cargoIsThere = 30;
-
         public static class kShooterData {
             public final static int[] shooterDataX = {  15,   30,   45,   60,   75,   80,  105,  120,  135,  150};//distance to target
             public final static int[] shooterDataY = {1800, 1900, 2000, 2100, 2600, 3000, 3800, 4300, 4600, 5000};//speed to spin at
 
             public final static int shooterSteps = shooterDataX[1] - shooterDataX[0];
+
+            public final static double[] driveSpeedX = {0, 0.5,   1,  1.5,   2,  2.5,   3,  3.5,   4,  4.5};
+            public final static double[] driveSpeedY = {0,  50, 100,  150, 200,  250, 300,  350, 400,  450};//TODO: Tune these values
+
+            public final static double driveBySteps = driveSpeedX[1] - driveSpeedX[0];
         }
     }
 
@@ -96,7 +100,7 @@ public final class Constants {
             kOff
         }
 
-        public final static int CANID                    = -1;
+        public final static int CANID                    = -1;//TODO: Find can id for turret
 
         public final static int currentLimit             = 20;
 
@@ -120,6 +124,11 @@ public final class Constants {
         public final static int maxNotSeeingTargetTime   = 5;
 
         public final static Turret.ScanningDirection defaultScanDir = Turret.ScanningDirection.kLeft;
+
+        public final static double[] driveOffsetX = {0,  0.5,   1,  1.5,   2,  2.5,   3,  3.5,   4,  4.5};
+        public final static double[] driveOffsetY = {0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45};//TODO: Tune these values
+
+        public final static double driveBySteps = driveOffsetX[1] - driveOffsetX[0];
     }
 
     public static class kFeeder {

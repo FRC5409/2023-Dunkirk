@@ -19,6 +19,16 @@ public final class InterpolatedData {
     }
 
     /**
+     * Find the closes index in an array
+     * @param value the value you give it
+     * @param steps how many steps is each point
+     * @return index of the closest point - 1
+     */
+    public static int closestPoint(double value, double steps) {
+        return (int) Math.round(value / steps) - 1;
+    }
+
+    /**
      * Uses interpolated data to find the new shooter speed
      * @param x1 first point X
      * @param y1 first point Y

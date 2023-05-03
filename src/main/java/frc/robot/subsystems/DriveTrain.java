@@ -36,7 +36,7 @@ public class DriveTrain extends SubsystemBase {
     private DoubleSolenoid.Value m_gearShiftValue;
 
     // Gyro + odometry for tracking robot pose
-    private final Gyro m_gyro;
+    private final Gyroscope m_gyro;
     private final DifferentialDriveOdometry m_odometry;
 
     /**
@@ -45,7 +45,7 @@ public class DriveTrain extends SubsystemBase {
      * Pneumatics code crash error:
      * https://docs.wpilib.org/en/stable/docs/yearly-overview/known-issues.html#code-crash-when-initializing-a-ph-pcm-related-device
      */
-    public DriveTrain(Gyro gyro) {
+    public DriveTrain(Gyroscope gyro) {
 
         // Motors
         m_motorLeft1 = new WPI_TalonFX(kDriveTrain.kMotors.kLeft1CAN);

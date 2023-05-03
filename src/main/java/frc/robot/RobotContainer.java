@@ -18,7 +18,7 @@ import frc.robot.commands.Turret.Scan;
 import frc.robot.commands.Turret.TurretGoTo;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Feeder;
-import frc.robot.subsystems.Gyro;
+import frc.robot.subsystems.Gyroscope;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
@@ -39,7 +39,7 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
 
     // Subsystems
-    public final Gyro           sys_gyro;
+    public final Gyroscope           sys_gyro;
     public final DriveTrain     sys_driveTrain;
     public final Shooter        sys_shooter;
     public final Turret         sys_turret;
@@ -59,7 +59,7 @@ public class RobotContainer {
     public RobotContainer() {
 
         // Subsystems
-        sys_gyro             = new Gyro();
+        sys_gyro             = new Gyroscope();
         sys_driveTrain       = new DriveTrain(sys_gyro);
         sys_shooter          = new Shooter();
         sys_turret           = new Turret();

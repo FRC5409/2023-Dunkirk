@@ -3,14 +3,18 @@ package frc.robot.commands.Turret;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.kTurret;
 import frc.robot.Constants.kTurret.State;
+import frc.robot.subsystems.Gyroscope;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Limelight.LedMode;
+import frc.robot.util.InterpolatedData;
 
 public class LockOnTarget extends CommandBase {
 
-    private final Turret m_turret;
-    private final Limelight m_limelight;
+    private final Turret     m_turret;
+    private final Limelight  m_limelight;
+    private       Gyroscope  m_gyro;
+    private final boolean    enableDriveBy;
 
     private int seeingTime = 0;
 
@@ -20,9 +24,19 @@ public class LockOnTarget extends CommandBase {
         // Use addRequirements() here to declare subsystem dependencies.
         m_turret = turret;
         m_limelight = limelight;
+        enableDriveBy = false;
 
         addRequirements(m_turret);
         
+    }
+
+    public LockOnTarget(Turret turret, Limelight limelight, Gyroscope gyro) {
+        m_turret = turret;
+        m_limelight = limelight;
+        m_gyro = gyro;
+        enableDriveBy = true;
+
+        addRequirements(m_turret);
     }
 
     // Called when the command is initially scheduled.
@@ -74,6 +88,20 @@ public class LockOnTarget extends CommandBase {
         m_turret.setState(State.kLocking);
 
         double offset = m_turret.getPosition();
+
+        if (enableDriveBy) {
+            int closestPoint = InterpolatedData.closestPoint(Math.abs(m_gyro.getForwardSpeed()), kTurret.driveBySteps);
+            double[] dataX = kTurret.driveOffsetX;
+            double[] dataY = kTurret.driveOffsetY;
+
+            offset += InterpolatedData.getInterpolatedSpeed(
+                    dataX[closestPoint],
+                    dataY[closestPoint],
+                    dataX[closestPoint + 1],
+                    dataY[closestPoint + 1],
+                    Math.abs(m_gyro.getForwardSpeed())
+                ) * m_gyro.getForwardSpeed() > 0 ? -1 : 1;
+        }
 
         double desiredSetpoint = offset + m_turret.convertToEncoder(m_limelight.getXAngle()) + m_turret.getTurretOffset();
 

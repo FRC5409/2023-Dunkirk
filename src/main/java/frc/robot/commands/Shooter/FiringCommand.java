@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.kShooter;
 import frc.robot.Constants.kTurret.State;
 import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.Gyroscope;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
@@ -17,6 +18,8 @@ public class FiringCommand extends CommandBase {
     private final Feeder     m_feeder;
     private final Indexer    m_indexer;
     private final Limelight  m_limelight;
+    private       Gyroscope  m_gyro;
+    private final boolean    enableDriveBy;
 
     private int currentSpeed = -1;
     private boolean isFeeding = false;
@@ -28,9 +31,22 @@ public class FiringCommand extends CommandBase {
         m_feeder = feeder;
         m_indexer = indexer;
         m_limelight = limelight;
+        m_gyro = null;
+        enableDriveBy = false;
+        
+        addRequirements(m_shooter, m_feeder, m_indexer);
+    }
+
+    public FiringCommand(Shooter shooter, Turret turret, Feeder feeder, Indexer indexer, Limelight limelight, Gyroscope gyro) {
+        m_shooter = shooter;
+        m_turret = turret;
+        m_feeder = feeder;
+        m_indexer = indexer;
+        m_limelight = limelight;
+        m_gyro = gyro;
+        enableDriveBy = true;
 
         addRequirements(m_shooter, m_feeder, m_indexer);
-        
     }
 
     // Called when the command is initially scheduled.
@@ -42,8 +58,21 @@ public class FiringCommand extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-
         double shooterSpeed = 2500; //Replace with interpolated data later
+
+        if (enableDriveBy) {
+            int closestPoint = InterpolatedData.closestPoint(Math.abs(m_gyro.getForwardSpeed()), kShooter.kShooterData.driveBySteps);
+            double[] dataX = kShooter.kShooterData.driveSpeedX;
+            double[] dataY = kShooter.kShooterData.driveSpeedY;
+
+            shooterSpeed += InterpolatedData.getInterpolatedSpeed(
+                    dataX[closestPoint],
+                    dataY[closestPoint],
+                    dataX[closestPoint + 1],
+                    dataY[closestPoint + 1],
+                    Math.abs(m_gyro.getForwardSpeed())
+                ) * m_gyro.getForwardSpeed() > 0 ? -1 : 1;
+        }
 
         if (m_turret.getState() == State.kLocked) {
             spinShooterAt((int) Math.round(shooterSpeed));

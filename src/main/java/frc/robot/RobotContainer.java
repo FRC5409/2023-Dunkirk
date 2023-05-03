@@ -137,6 +137,13 @@ public class RobotContainer {
                 .alongWith(new TurretGoTo(sys_turret, 0))
             );
 
+        joystickMain.x().and(() -> sys_turret.isBeingUsed())
+            .onTrue(
+                Commands.runOnce(() -> sys_turret.setTurretOffset(kTurret.wrongCargoOffset * (sys_turret.getPosition() >= 0 ? -1 : 1)))
+            ).onFalse(
+                Commands.runOnce(() -> sys_turret.setTurretOffset(0))
+            );
+
         /* Secondary Joystick Button Bindings */
 
         joystickSecondary.leftBumper().onTrue(
@@ -182,6 +189,7 @@ public class RobotContainer {
 
         joystickTesting.rightBumper()
             .whileTrue(new TrainingShooterCommand(sys_shooter));
+
     }
 
 }

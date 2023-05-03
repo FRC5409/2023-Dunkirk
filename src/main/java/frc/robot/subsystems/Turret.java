@@ -31,10 +31,11 @@ public class Turret extends SubsystemBase {
 
     private double pos;
 
+    private double offset;
+
     private ShuffleboardTab  turretTab;
     private GenericEntry     encoderPosEntry;
     private GenericEntry     angleEntry;
-
 
     private final boolean debug = false;
 
@@ -51,7 +52,8 @@ public class Turret extends SubsystemBase {
 
         turretMot.getEncoder().setPosition(0);
 
-        pos = 0;
+        pos      = 0;
+        offset   = 0;
 
         setPID(kTurret.kP, kTurret.kI, kTurret.kD);
 
@@ -186,8 +188,28 @@ public class Turret extends SubsystemBase {
         return scanDir;
     }
 
+    /**
+     * Sets the neutral mode of the turret
+     * @param mode kBreak, kCoast
+     */
     public void setNeutralMode(IdleMode mode) {
         turretMot.setIdleMode(mode);
+    }
+
+    /**
+     * Sets the offset of the turret
+     * @param offset offset in position
+     */
+    public void setTurretOffset(double offset) {
+        this.offset = offset;
+    }
+
+    /**
+     * Gets the applied turret offset
+     * @return offset in position
+     */
+    public double getTurretOffset() {
+        return offset;
     }
 
     @Override

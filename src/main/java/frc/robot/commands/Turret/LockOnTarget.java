@@ -30,8 +30,6 @@ public class LockOnTarget extends CommandBase {
     public void initialize() {
         seeingTime = 0;
 
-        m_turret.setState(State.kLocking);
-
         if (!m_limelight.isOn())
             m_limelight.setLedMode(LedMode.kModeOn);
 
@@ -47,6 +45,8 @@ public class LockOnTarget extends CommandBase {
                 if (m_turret.atSetpoint()) {
                     if (Math.abs(m_limelight.getXAngle()) >= kTurret.angleThreshold) {
                         updateLocation();
+                    } else {
+                        m_turret.setState(State.kLocked);
                     }
                 }
             }
@@ -71,9 +71,11 @@ public class LockOnTarget extends CommandBase {
     }
 
     public void updateLocation() {
+        m_turret.setState(State.kLocking);
+
         double offset = m_turret.getPosition();
 
-        double desiredSetpoint = offset + m_turret.convertToEncoder(m_limelight.getXAngle());
+        double desiredSetpoint = offset + m_turret.convertToEncoder(m_limelight.getXAngle()) + m_turret.getTurretOffset();
 
         if (desiredSetpoint > kTurret.maxPosition)
             desiredSetpoint = kTurret.maxPosition;

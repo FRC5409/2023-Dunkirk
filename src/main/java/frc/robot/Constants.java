@@ -103,19 +103,21 @@ public final class Constants {
         public final static int maxScanOutput            = 3;   //in Volts
         public final static int turretSpeed              = 50;  //bigger the number slower the movement
 
-        public final static int lockingSpeed             = 4; //in volts
+        public final static int lockingSpeed             = 4;   //in volts
 
         public final static double kP                    = 0.05;
         public final static double kI                    = 0;
         public final static double kD                    = 0;
 
         public final static double encoderThreshold      = 0.1;
-        public final static double angleThreshold        = 1;
+        public final static double angleThreshold        = 5;
 
-        public final static double maxPosition           = 1.76;// Encoder max position
-        public final static int maxAngle                 = 90;  //   Angle max position
+        public final static double maxPosition           = 1.76;    // Encoder max position
+        public final static int maxAngle                 = 90;      // Angle max position
 
-        public final static int maxNotSeeingTargetTime = 5;
+        public final static double wrongCargoOffset      = 0.4;
+
+        public final static int maxNotSeeingTargetTime   = 5;
 
         public final static Turret.ScanningDirection defaultScanDir = Turret.ScanningDirection.kLeft;
     }

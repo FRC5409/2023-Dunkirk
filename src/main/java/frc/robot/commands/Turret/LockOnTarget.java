@@ -18,6 +18,8 @@ public class LockOnTarget extends CommandBase {
 
     private final boolean updateLocation = false;
 
+    private boolean guessDrive = false;
+
     public LockOnTarget(Turret turret, Limelight limelight, boolean driveBy) {
         // Use addRequirements() here to declare subsystem dependencies.
         m_turret = turret;
@@ -43,14 +45,14 @@ public class LockOnTarget extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        if (updateLocation) {
-            if (m_limelight.isVisable()) {
-                if (m_turret.atSetpoint()) {
-                    if (Math.abs(m_limelight.getXAngle()) >= kTurret.angleThreshold) {
+        if (m_limelight.isVisable()) {
+            if (m_turret.atSetpoint()) {
+                if (Math.abs(m_limelight.getXAngle()) >= kTurret.angleThreshold) {
+                    if (updateLocation) {
                         updateLocation();
-                    } else {
-                        m_turret.setState(State.kLocked);
                     }
+                } else {
+                    m_turret.setState(State.kLocked);
                 }
             }
         }
@@ -79,18 +81,23 @@ public class LockOnTarget extends CommandBase {
         double offset = m_turret.getPosition();
 
         if (enableDriveBy) {
-            double distanceChange = m_limelight.getDistanceChange();
-            int closestPoint = InterpolatedData.closestPoint(Math.abs(distanceChange), kTurret.driveBySteps);
-            double[] dataX = kTurret.driveOffsetX;
-            double[] dataY = kTurret.driveOffsetY;
+            if (guessDrive) {
+                double distanceChange = m_limelight.getDistanceChange();
+                int closestPoint = InterpolatedData.closestPoint(Math.abs(distanceChange), kTurret.driveBySteps);
+                double[] dataX = kTurret.driveOffsetX;
+                double[] dataY = kTurret.driveOffsetY;
 
-            offset += InterpolatedData.getInterpolatedSpeed(
-                    dataX[closestPoint],
-                    dataY[closestPoint],
-                    dataX[closestPoint + 1],
-                    dataY[closestPoint + 1],
-                    Math.abs(distanceChange)
-                ) * distanceChange > 0 ? -1 : 1;
+                offset += InterpolatedData.getInterpolatedSpeed(
+                        dataX[closestPoint],
+                        dataY[closestPoint],
+                        dataX[closestPoint + 1],
+                        dataY[closestPoint + 1],
+                        Math.abs(distanceChange)
+                    ) * distanceChange > 0 ? -1 : 1;
+            } else {
+                double angleChange = m_limelight.getAngleChange();
+                offset += angleChange;
+            }
         }
 
         double desiredSetpoint = offset + m_turret.convertToEncoder(m_limelight.getXAngle()) + m_turret.getTurretOffset();

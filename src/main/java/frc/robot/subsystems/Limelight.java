@@ -21,8 +21,10 @@ public class Limelight extends SubsystemBase {
         public final double value;
     }
 
-    private double distance = 0;
-    private double lastDistance = 0;
+    private double distance      = 0;
+    private double lastDistance  = 0;
+    private double angle         = 0;
+    private double lastAngle     = 0;
 
     private ShuffleboardTab limeTab;
     private GenericEntry distanceEntry;
@@ -79,7 +81,9 @@ public class Limelight extends SubsystemBase {
         }
 
         lastDistance = distance;
-        distance = getDistanceToTarget();
+        lastAngle    = angle;
+        distance     = getDistanceToTarget();
+        angle        = getXAngle();
 
     }
 
@@ -186,6 +190,14 @@ public class Limelight extends SubsystemBase {
      */
     public double getDistanceChange() {
         return distance - lastDistance;
+    }
+
+    /**
+     * Gets the change of the angle over 2 ticks
+     * @return The change of angle
+     */
+    public double getAngleChange() {
+        return angle - lastAngle;
     }
     
 }

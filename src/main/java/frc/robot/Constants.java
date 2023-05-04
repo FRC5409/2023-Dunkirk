@@ -94,10 +94,16 @@ public final class Constants {
     public static class kTurret {
 
         public enum State {
-            kScaning,
-            kLocked,
-            kLocking,
-            kOff
+            kScaning(1),
+            kLocked(3),
+            kLocking(2),
+            kOff(0);
+            
+            State(int value) {
+                this.value = value;
+            }
+    
+            public final int value;
         }
 
         public final static int CANID                    = -1;//TODO: Find can id for turret

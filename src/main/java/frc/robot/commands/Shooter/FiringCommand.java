@@ -2,6 +2,7 @@ package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.kShooter;
+import frc.robot.Constants.kShooter.kShooterData;
 import frc.robot.Constants.kTurret.State;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Gyroscope;
@@ -23,6 +24,8 @@ public class FiringCommand extends CommandBase {
 
     private int currentSpeed = -1;
     private boolean isFeeding = false;
+
+    private boolean guessDrive = false;
 
     public FiringCommand(Shooter shooter, Turret turret, Feeder feeder, Indexer indexer, Limelight limelight) {
         // Use addRequirements() here to declare subsystem dependencies.
@@ -61,17 +64,34 @@ public class FiringCommand extends CommandBase {
         double shooterSpeed = 2500; //Replace with interpolated data later
 
         if (enableDriveBy) {
-            int closestPoint = InterpolatedData.closestPoint(Math.abs(m_gyro.getForwardSpeed()), kShooter.kShooterData.driveBySteps);
-            double[] dataX = kShooter.kShooterData.driveSpeedX;
-            double[] dataY = kShooter.kShooterData.driveSpeedY;
+            if (guessDrive) {
+                int closestPoint = InterpolatedData.closestPoint(Math.abs(m_gyro.getForwardSpeed()), kShooter.kShooterData.driveBySteps);
+                double[] dataX = kShooterData.driveSpeedX;
+                double[] dataY = kShooterData.driveSpeedY;
 
-            shooterSpeed += InterpolatedData.getInterpolatedSpeed(
+                shooterSpeed += InterpolatedData.getInterpolatedSpeed(
+                        dataX[closestPoint],
+                        dataY[closestPoint],
+                        dataX[closestPoint + 1],
+                        dataY[closestPoint + 1],
+                        Math.abs(m_gyro.getForwardSpeed())
+                    ) * m_gyro.getForwardSpeed() > 0 ? -1 : 1;
+
+            } else {
+                double distanceChange = m_limelight.getDistanceChange();
+                int closestPoint = InterpolatedData.closestPoint(Math.abs(distanceChange), kShooterData.shooterSteps);
+                int[] dataX = kShooterData.shooterDataX;
+                int[] dataY = kShooterData.shooterDataY;
+
+                shooterSpeed += InterpolatedData.getInterpolatedSpeed(
                     dataX[closestPoint],
                     dataY[closestPoint],
                     dataX[closestPoint + 1],
                     dataY[closestPoint + 1],
-                    Math.abs(m_gyro.getForwardSpeed())
-                ) * m_gyro.getForwardSpeed() > 0 ? -1 : 1;
+                    Math.abs(distanceChange)
+                ) * distanceChange > 0 ? 1: -1;
+                
+            }
         }
 
         if (m_turret.getState() == State.kLocked) {
@@ -141,12 +161,16 @@ public class FiringCommand extends CommandBase {
         m_shooter.stopMot();
     }
 
+    /**
+     * Gets the shooter speed based on the distance to the target
+     * @return shooter speed in RPM
+     */
     public double getShooterSpeed() {
         double distanceToTarget = m_limelight.getDistanceToTarget();
-        int closestPoint = InterpolatedData.closestPoint(distanceToTarget, kShooter.kShooterData.shooterSteps);
+        int closestPoint = InterpolatedData.closestPoint(distanceToTarget, kShooterData.shooterSteps);
 
-        int dataX[] = kShooter.kShooterData.shooterDataX;
-        int dataY[] = kShooter.kShooterData.shooterDataY;
+        int dataX[] = kShooterData.shooterDataX;
+        int dataY[] = kShooterData.shooterDataY;
 
         double interpolatedSpeed = InterpolatedData.getInterpolatedSpeed(
             dataX[closestPoint],

@@ -116,6 +116,13 @@ public class RobotContainer {
                 new FiringCommand(sys_shooter, sys_turret, sys_feeder, sys_indexer, sys_limelight)
             );
 
+        joystickMain.x().and(() -> sys_turret.isBeingUsed())
+            .onTrue(
+                Commands.runOnce(() -> sys_turret.setTurretOffset(kTurret.wrongCargoOffset * (sys_turret.getPosition() >= 0 ? -1 : 1)))
+            ).onFalse(
+                Commands.runOnce(() -> sys_turret.setTurretOffset(0))
+            );
+
         joystickMain.y()
             .whileTrue(new IntakeCargo(sys_indexer));
 
@@ -135,13 +142,6 @@ public class RobotContainer {
             .onTrue(
                 Commands.runOnce(() -> sys_turret.setScanningDir(kTurret.defaultScanDir))
                 .alongWith(new TurretGoTo(sys_turret, 0))
-            );
-
-        joystickMain.x().and(() -> sys_turret.isBeingUsed())
-            .onTrue(
-                Commands.runOnce(() -> sys_turret.setTurretOffset(kTurret.wrongCargoOffset * (sys_turret.getPosition() >= 0 ? -1 : 1)))
-            ).onFalse(
-                Commands.runOnce(() -> sys_turret.setTurretOffset(0))
             );
 
         /* Secondary Joystick Button Bindings */

@@ -36,6 +36,7 @@ public class Turret extends SubsystemBase {
     private ShuffleboardTab  turretTab;
     private GenericEntry     encoderPosEntry;
     private GenericEntry     angleEntry;
+    private GenericEntry     stateEntry;
 
     private final boolean debug = false;
 
@@ -61,6 +62,7 @@ public class Turret extends SubsystemBase {
             turretTab        = Shuffleboard.getTab("Turret");
             encoderPosEntry  = turretTab.add("Position", getPosition()).getEntry();
             angleEntry       = turretTab.add("Angle", getAngle()).getEntry();
+            stateEntry       = turretTab.add("State", 0).getEntry();
         }
     }
 
@@ -212,12 +214,21 @@ public class Turret extends SubsystemBase {
         return offset;
     }
 
+    /**
+     * Getting the state value, this is for shuffleboard debuging
+     * @return The current state value
+     */
+    public int getStateNumber() {
+        return currentState.value;
+    }
+
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
         if (debug || kConfig.masterDebug) {
             encoderPosEntry.setDouble(getPosition());
             angleEntry.setDouble(getAngle());
+            stateEntry.setInteger(getStateNumber());
         }
     }
 

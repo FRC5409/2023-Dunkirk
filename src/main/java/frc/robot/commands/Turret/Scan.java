@@ -11,7 +11,7 @@ public class Scan extends CommandBase {
 
     private final Turret m_turrent;
     private final Limelight m_limelight;
-    private int time;
+    private double time;
 
     public Scan(Turret turrent, Limelight limelight) {
         // Use addRequirements() here to declare subsystem dependencies.
@@ -29,15 +29,18 @@ public class Scan extends CommandBase {
             m_limelight.setLedMode(LedMode.kModeOn);
         m_turrent.setState(State.kScaning);
 
-        time = (int) Math.round(Math.asin(m_turrent.getPosition() / kTurret.maxPosition) * kTurret.turretSpeed);
+        // time = Math.asin(m_turrent.getPosition() / kTurret.maxPosition);
+        // System.out.println(time);
+
+        time = 0;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        time++;
+        time += (1.0 / kTurret.turretSpeed);
 
-        double position = Math.sin(time / kTurret.turretSpeed) * kTurret.maxPosition * m_turrent.getScanningDir().value;
+        double position = Math.sin(time) * kTurret.maxPosition * m_turrent.getScanningDir().value;
 
         m_turrent.setRefrence(position);
     }

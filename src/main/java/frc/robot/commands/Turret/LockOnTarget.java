@@ -16,7 +16,7 @@ public class LockOnTarget extends CommandBase {
 
     private int seeingTime = 0;
 
-    private final boolean updateLocation = false;
+    private final boolean updateLocation = true;
 
     private boolean guessDrive = false;
 

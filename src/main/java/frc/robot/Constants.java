@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import frc.robot.subsystems.Turret;
 
 /**
@@ -91,6 +92,15 @@ public final class Constants {
         }
     }
 
+    public static class kPneumatics {
+        public final static int kHubModuleID = 2;
+
+        public final static int kMinPressure = 90;
+        public final static int kMaxPressure = 120;
+
+        public final static PneumaticsModuleType kPneumaticsModuleType = PneumaticsModuleType.REVPH;
+    }
+
     public static class kTurret {
 
         public enum State {
@@ -106,23 +116,23 @@ public final class Constants {
             public final int value;
         }
 
-        public final static int CANID                    = -1;//TODO: Find can id for turret
+        public final static int CANID                    = 12;
 
         public final static int currentLimit             = 20;
 
         public final static int maxScanOutput            = 3;   //in Volts
-        public final static int turretSpeed              = 50;  //bigger the number slower the movement
+        public final static int turretSpeed              = 20;  //bigger the number slower the movement
 
         public final static int lockingSpeed             = 4;   //in volts
 
-        public final static double kP                    = 0.05;
+        public final static double kP                    = 0.15;
         public final static double kI                    = 0;
         public final static double kD                    = 0;
 
-        public final static double encoderThreshold      = 0.1;
-        public final static double angleThreshold        = 5;
+        public final static double encoderThreshold      = 1;
+        public final static double angleThreshold        = 1.5;
 
-        public final static double maxPosition           = 1.76;    // Encoder max position
+        public final static double maxPosition           = 72.5;    // Encoder max position
         public final static int maxAngle                 = 90;      // Angle max position
 
         public final static double wrongCargoOffset      = 0.4;

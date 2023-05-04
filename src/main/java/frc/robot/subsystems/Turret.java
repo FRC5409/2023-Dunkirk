@@ -29,7 +29,7 @@ public class Turret extends SubsystemBase {
     private State currentState           = State.kOff;
     private ScanningDirection scanDir    = ScanningDirection.kNotSelected;
 
-    private double pos;
+    private double encoderPos;
 
     private double offset;
 
@@ -47,16 +47,14 @@ public class Turret extends SubsystemBase {
 
         turretMot.setIdleMode(IdleMode.kBrake);
         turretMot.setSmartCurrentLimit(kTurret.currentLimit);
-        //TODO: make sure left is negative and right is positive
+        setPID(kTurret.kP, kTurret.kI, kTurret.kD);
 
         turretMot.burnFlash();
 
         turretMot.getEncoder().setPosition(0);
 
-        pos      = 0;
-        offset   = 0;
-
-        setPID(kTurret.kP, kTurret.kI, kTurret.kD);
+        encoderPos = 0;
+        offset     = 0;
 
         if (debug || kConfig.masterDebug) {
             turretTab        = Shuffleboard.getTab("Turret");
@@ -114,13 +112,13 @@ public class Turret extends SubsystemBase {
         if (pos < -kTurret.maxPosition)
             pos = -kTurret.maxPosition;
 
-        this.pos = pos;
+        encoderPos = pos;
 
-        turretMot.getPIDController().setReference(pos, ControlType.kPosition);
+        turretMot.getPIDController().setReference(encoderPos, ControlType.kPosition);
     }
 
     public boolean atSetpoint() {
-        return Math.abs(pos - getPosition()) <= kTurret.encoderThreshold;
+        return Math.abs(encoderPos - getPosition()) <= kTurret.encoderThreshold;
     }
 
 
@@ -146,7 +144,7 @@ public class Turret extends SubsystemBase {
      * @return Encoder unit
      */
     public double convertToEncoder(double input) {
-        return input * (kTurret.maxPosition / kTurret.maxAngle);
+        return input * (kTurret.maxAngle / kTurret.maxPosition);
     }
 
     /**

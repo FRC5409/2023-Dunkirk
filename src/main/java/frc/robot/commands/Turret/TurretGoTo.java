@@ -14,7 +14,6 @@ public class TurretGoTo extends CommandBase {
         position = pos;
 
         addRequirements(m_turret);
-        
     }
 
     // Called when the command is initially scheduled.

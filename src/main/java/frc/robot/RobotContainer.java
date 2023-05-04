@@ -24,6 +24,7 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Limelight.LedMode;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
@@ -92,22 +93,16 @@ public class RobotContainer {
         /* Main Joystick Button Bindings */
 
         joystickMain.leftBumper().onTrue(
-            new ConditionalCommand(
-                //if it's not scanning then start scanning
-                new RepeatCommand(
-                    new Scan(sys_turret, sys_limelight)
-                    .andThen(new LockOnTarget(sys_turret, sys_limelight, false))
-                ),
-
-                //if it's scanning then stop scanning and reset
-                new TurretGoTo(sys_turret, 0)
-                .alongWith(
-                    Commands.runOnce(() -> sys_limelight.setLedMode(LedMode.kModeOff)),
-                    Commands.runOnce(() -> sys_turret.setState(State.kOff)),
-                    Commands.runOnce(() -> sys_shooter.stopMot(), sys_shooter)
-                ),
-
-                () -> !sys_turret.isBeingUsed()
+            new RepeatCommand(
+                new Scan(sys_turret, sys_limelight)
+                .andThen(new LockOnTarget(sys_turret, sys_limelight, false))
+            )
+        ).onFalse(
+            new TurretGoTo(sys_turret, 0)
+            .alongWith(
+                Commands.runOnce(() -> sys_limelight.setLedMode(LedMode.kModeOff)),
+                Commands.runOnce(() -> sys_turret.setState(State.kOff)),
+                Commands.runOnce(() -> sys_shooter.stopMot(), sys_shooter)
             )
         );
 
@@ -129,13 +124,13 @@ public class RobotContainer {
         joystickMain.povLeft()
             .onTrue(
                 Commands.runOnce(() -> sys_turret.setScanningDir(ScanningDirection.kLeft))
-                .alongWith(new TurretGoTo(sys_turret, -(kTurret.maxPosition / 3)))
+                .alongWith(new TurretGoTo(sys_turret, -(kTurret.maxPosition / 2)))
             );
 
         joystickMain.povRight()
             .onTrue(
                 Commands.runOnce(() -> sys_turret.setScanningDir(ScanningDirection.kRight))
-                .alongWith(new TurretGoTo(sys_turret, (kTurret.maxPosition / 3)))
+                .alongWith(new TurretGoTo(sys_turret, (kTurret.maxPosition / 2)))
             );
 
         joystickMain.povUp()
@@ -178,14 +173,8 @@ public class RobotContainer {
             .onTrue(new Scan(sys_turret, sys_limelight).andThen(Commands.runOnce(() -> sys_limelight.setLedMode(LedMode.kModeOff)))
         );
 
-        //TODO: Make sure these values dont kill the turret
-        joystickTesting.povLeft()
-            .onTrue(new TurretGoTo(sys_turret, -0.5)
-        );
-
-        joystickTesting.povRight()
-            .onTrue(new TurretGoTo(sys_turret, 0.5)
-        );
+        joystickTesting.povUp()
+            .onTrue(new TurretGoTo(sys_turret, 0));
 
         joystickTesting.rightBumper()
             .whileTrue(new TrainingShooterCommand(sys_shooter));

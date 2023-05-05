@@ -132,10 +132,15 @@ public final class Constants {
         public final static double encoderThreshold      = 1;
         public final static double angleThreshold        = 1.5;
 
-        public final static double maxPosition           = 72.5;    // Encoder max position
-        public final static int maxAngle                 = 90;      // Angle max position
+        public final static double maxPosition           = 72.5;    // Encoder max position //TODO: Find the max position
+        public final static int maxAngle                 = 100;      // Angle max position
 
-        public final static double wrongCargoOffset      = 0.4;
+        public final static double NinetyDegreePosition  = 72.5;
+        public final static int    NinetyDegree          = 90;
+        
+        public final static double angleToPosition = NinetyDegreePosition / NinetyDegree;
+
+        public final static double wrongCargoOffset      = 15;
 
         public final static int maxNotSeeingTargetTime   = 5;
 

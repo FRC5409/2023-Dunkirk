@@ -29,7 +29,7 @@ public class Scan extends CommandBase {
             m_limelight.setLedMode(LedMode.kModeOn);
         m_turrent.setState(State.kScaning);
 
-        time = Math.round(Math.asin(m_turrent.getPosition() / kTurret.maxPosition) * kTurret.turretSpeed) / kTurret.turretSpeed;
+        time = Math.round(Math.asin(m_turrent.getPosition() / kTurret.maxPosition) * 100) / 100;
         System.out.println(time);
 
         time = 0;
@@ -55,13 +55,4 @@ public class Scan extends CommandBase {
         return m_limelight.isVisable();
     }
 
-    public void scanUsingVolts(int time) {
-        double volts = Math.cos(time / kTurret.turretSpeed) * kTurret.maxScanOutput;
-        
-        if (m_turrent.getPosition() < -kTurret.maxPosition || m_turrent.getPosition() > kTurret.maxPosition) {
-            m_turrent.stopMot();
-        } else {
-            m_turrent.setVolts(volts * m_turrent.getScanningDir().value);
-        }
-    }
 }

@@ -111,33 +111,4 @@ public class LockOnTarget extends CommandBase {
         m_turret.setRefrence(desiredSetpoint);
     }
 
-    public void oldTargetingCode() {
-        double xOff = m_limelight.getXAngle();
-        double volts = m_turret.getVolts();
-        if (xOff < -kTurret.angleThreshold) {
-            //left of target
-            if (volts != -kTurret.lockingSpeed) {
-                //doesn't let it go past it's max turning position
-                if (m_turret.getPosition() > -kTurret.maxPosition) {
-                    m_turret.setVolts(-kTurret.lockingSpeed);
-                }
-            }
-            m_turret.setState(State.kLocking);
-
-        } else if (xOff > kTurret.angleThreshold) {
-            //right of target
-            if (volts != kTurret.lockingSpeed) {
-                //doesn't let it go past it's max turning position
-                if (m_turret.getPosition() < kTurret.maxPosition) {
-                    m_turret.setVolts(kTurret.lockingSpeed);
-                }
-            }
-            m_turret.setState(State.kLocking);
-
-        } else {
-            //on target
-            m_turret.stopMot();
-            m_turret.setState(State.kLocked);
-        }
-    }
 }

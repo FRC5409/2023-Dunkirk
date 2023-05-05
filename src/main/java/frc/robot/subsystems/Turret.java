@@ -144,7 +144,7 @@ public class Turret extends SubsystemBase {
      * @return Encoder unit
      */
     public double convertToEncoder(double input) {
-        return input * (kTurret.maxAngle / kTurret.maxPosition);
+        return input * kTurret.angleToPosition;
     }
 
     /**

@@ -29,6 +29,8 @@ public class Feeder extends SubsystemBase {
 
         feederEnc = feederMot.getEncoder();
 
+        stopFeeding();
+
         if (debug || kConfig.masterDebug) {
             feederTab = Shuffleboard.getTab("Feeder");
             feederVelocityEntry = feederTab.add("Velocity", getEncoderVelocity()).getEntry();

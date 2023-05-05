@@ -29,8 +29,8 @@ public class Scan extends CommandBase {
             m_limelight.setLedMode(LedMode.kModeOn);
         m_turrent.setState(State.kScaning);
 
-        // time = Math.asin(m_turrent.getPosition() / kTurret.maxPosition);
-        // System.out.println(time);
+        time = Math.round(Math.asin(m_turrent.getPosition() / kTurret.maxPosition) * kTurret.turretSpeed) / kTurret.turretSpeed;
+        System.out.println(time);
 
         time = 0;
     }

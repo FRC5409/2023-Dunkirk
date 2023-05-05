@@ -40,6 +40,20 @@ public class FiringCommand extends CommandBase {
         addRequirements(m_shooter, m_feeder, m_indexer);
     }
 
+    public FiringCommand(Shooter shooter, Turret turret, Feeder feeder, Indexer indexer, Limelight limelight, boolean driveBy) {
+        // Use addRequirements() here to declare subsystem dependencies.
+        m_shooter = shooter;
+        m_turret = turret;
+        m_feeder = feeder;
+        m_indexer = indexer;
+        m_limelight = limelight;
+        m_gyro = null;
+        enableDriveBy = driveBy;
+        guessDrive = false;
+        
+        addRequirements(m_shooter, m_feeder, m_indexer);
+    }
+
     public FiringCommand(Shooter shooter, Turret turret, Feeder feeder, Indexer indexer, Limelight limelight, Gyroscope gyro) {
         m_shooter = shooter;
         m_turret = turret;
@@ -102,7 +116,7 @@ public class FiringCommand extends CommandBase {
                 stopFeeding();
             }
         } else {
-            spinShooterAt(kShooter.shooterPrepSpeed);
+            // spinShooterAt(kShooter.shooterPrepSpeed);
             stopFeeding();
         }
     }

@@ -24,7 +24,6 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Limelight.LedMode;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
@@ -92,12 +91,14 @@ public class RobotContainer {
 
         /* Main Joystick Button Bindings */
 
-        joystickMain.leftBumper().onTrue(
+        joystickMain.leftBumper().and(() -> !sys_turret.isBeingUsed()).onTrue(
             new RepeatCommand(
                 new Scan(sys_turret, sys_limelight)
                 .andThen(new LockOnTarget(sys_turret, sys_limelight, false))
             )
-        ).onFalse(
+        );
+
+        joystickMain.leftBumper().and(() -> sys_turret.isBeingUsed()).onTrue(
             new TurretGoTo(sys_turret, 0)
             .alongWith(
                 Commands.runOnce(() -> sys_limelight.setLedMode(LedMode.kModeOff)),
@@ -169,15 +170,8 @@ public class RobotContainer {
 
         /* Testing Button Bindings */
 
-        joystickTesting.leftBumper()
-            .onTrue(new Scan(sys_turret, sys_limelight).andThen(Commands.runOnce(() -> sys_limelight.setLedMode(LedMode.kModeOff)))
-        );
-
-        joystickTesting.povUp()
-            .onTrue(new TurretGoTo(sys_turret, 0));
-
         joystickTesting.rightBumper()
-            .whileTrue(new TrainingShooterCommand(sys_shooter));
+            .whileTrue(new TrainingShooterCommand(sys_shooter, sys_limelight));
 
     }
 

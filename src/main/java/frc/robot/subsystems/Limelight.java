@@ -30,7 +30,6 @@ public class Limelight extends SubsystemBase {
     private GenericEntry distanceEntry;
     private GenericEntry distanceChange;
     private GenericEntry angleEntry;
-    private GenericEntry customAngleEntry;
 
     private ShuffleboardTab  trainingTab;
 
@@ -56,7 +55,6 @@ public class Limelight extends SubsystemBase {
                 distanceChange   = limeTab.add("Distance change", 0).getEntry();
             }
             angleEntry           = limeTab.add("Angle to target", 0).getEntry();
-            customAngleEntry     = limeTab.add("Custom Angle", 0).getEntry();
         } else if (kConfig.training) {
             trainingTab      = Shuffleboard.getTab("Training");
             distanceEntry    = trainingTab.add("Distance to target", 0).getEntry();
@@ -72,7 +70,6 @@ public class Limelight extends SubsystemBase {
             if (isVisable()) {
                 distanceEntry.setDouble(getDistanceToTarget());
                 angleEntry.setDouble(getXAngle());
-                customAngleEntry.setDouble(getAngleToTarget());
                 distanceChange.setDouble(getDistanceChange());
             }
         } else if (kConfig.training) {
@@ -156,21 +153,6 @@ public class Limelight extends SubsystemBase {
      */
     public void setData(String data, Number value) {
         limeTable.getEntry(data).setNumber(value);
-    }
-
-    /**
-     * @deprecated tx returns angle to target
-     * @return angle to target
-     */
-    public double getAngleToTarget() {
-        double vpw = 2 * Math.tan(kLimelight.HORIZONTAL_FOV / 2);
-        double nx = (double) getData("tx0");
-
-        double x = vpw / 2 * nx;
-
-        double ax = Math.atan2(1, x);
-
-        return ax;
     }
 
     /**

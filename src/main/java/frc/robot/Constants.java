@@ -135,6 +135,8 @@ public final class Constants {
         public final static double maxPosition           = 72.5;    // Encoder max position //TODO: Find the max position
         public final static int maxAngle                 = 100;      // Angle max position
 
+        public final static double maxVolts             = 10;
+
         public final static double NinetyDegreePosition  = 72.5;
         public final static int    NinetyDegree          = 90;
         

@@ -9,30 +9,35 @@ import frc.robot.subsystems.Limelight.LedMode;
 
 public class Scan extends CommandBase {
 
-    private final Turret m_turrent;
+    private final Turret m_turret;
     private final Limelight m_limelight;
     private double time;
 
     public Scan(Turret turrent, Limelight limelight) {
         // Use addRequirements() here to declare subsystem dependencies.
-        m_turrent = turrent;
+        m_turret = turrent;
         m_limelight = limelight;
 
-        addRequirements(m_turrent);
+        addRequirements(m_turret);
         
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+        m_turret.setMaxSpeed(kTurret.maxVolts);
+
         if (!m_limelight.isOn())
             m_limelight.setLedMode(LedMode.kModeOn);
-        m_turrent.setState(State.kScaning);
+            
+        m_turret.setState(State.kScaning);
 
-        time = Math.round(Math.asin(m_turrent.getPosition() / kTurret.maxPosition) * 100) / 100;
+        time = Math.round(Math.asin(m_turret.getPosition() / kTurret.maxPosition) * 100) / 100;
         System.out.println(time);
 
         time = 0;
+
+        m_turret.enable();
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -40,9 +45,9 @@ public class Scan extends CommandBase {
     public void execute() {
         time += (1.0 / kTurret.turretSpeed);
 
-        double position = Math.sin(time) * kTurret.maxPosition * m_turrent.getScanningDir().value;
+        double position = Math.sin(time) * kTurret.maxPosition * m_turret.getScanningDir().value;
 
-        m_turrent.setRefrence(position);
+        m_turret.setRefrence(position);
     }
 
     // Called once the command ends or is interrupted.

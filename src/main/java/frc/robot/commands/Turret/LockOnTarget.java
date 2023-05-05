@@ -33,6 +33,7 @@ public class LockOnTarget extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+        m_turret.setMaxSpeed(kTurret.maxVolts);
         seeingTime = 0;
 
         if (!m_limelight.isOn())
@@ -40,13 +41,14 @@ public class LockOnTarget extends CommandBase {
 
         //Try here first to see how accurate it is
         updateLocation();
+        m_turret.enable();
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
         if (m_limelight.isVisable()) {
-            if (m_turret.atSetpoint()) {
+            if (m_turret.getController().atSetpoint()) {
                 if (Math.abs(m_limelight.getXAngle()) >= kTurret.angleThreshold) {
                     if (updateLocation) {
                         updateLocation();

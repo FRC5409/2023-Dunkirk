@@ -1,6 +1,7 @@
 package frc.robot.commands.Turret;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.kTurret;
 import frc.robot.subsystems.Turret;
 
 public class TurretGoTo extends CommandBase {
@@ -20,6 +21,8 @@ public class TurretGoTo extends CommandBase {
     @Override
     public void initialize() {
         m_turret.setRefrence(position);
+        m_turret.setMaxSpeed(kTurret.maxVolts);
+        m_turret.enable();
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -29,13 +32,13 @@ public class TurretGoTo extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        m_turret.stopMot();
+        m_turret.disable();
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return m_turret.atSetpoint();
+        return m_turret.getController().atSetpoint();
     }
 
 }

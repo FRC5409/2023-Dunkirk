@@ -1,18 +1,18 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.kConfig;
 import frc.robot.Constants.kTurret;
 import frc.robot.Constants.kTurret.State;
 
-public class Turret extends SubsystemBase {
+public class Turret extends PIDSubsystem {
 
     public enum ScanningDirection {
         kLeft(-1), kRight(1), kNotSelected(kTurret.defaultScanDir.value);
@@ -29,9 +29,9 @@ public class Turret extends SubsystemBase {
     private State currentState           = State.kOff;
     private ScanningDirection scanDir    = ScanningDirection.kNotSelected;
 
-    private double encoderPos;
-
     private double offset;
+
+    private double maxSpeed = kTurret.maxVolts;
 
     private ShuffleboardTab  turretTab;
     private GenericEntry     encoderPosEntry;
@@ -41,19 +41,20 @@ public class Turret extends SubsystemBase {
     private final boolean debug = false;
 
     public Turret() {
+        super(new PIDController(kTurret.kP, kTurret.kI, kTurret.kD));
         turretMot = new CANSparkMax(kTurret.CANID, MotorType.kBrushless);
+        getController().setTolerance(kTurret.encoderThreshold);
 
         turretMot.restoreFactoryDefaults();
 
         turretMot.setIdleMode(IdleMode.kBrake);
         turretMot.setSmartCurrentLimit(kTurret.currentLimit);
-        setPID(kTurret.kP, kTurret.kI, kTurret.kD);
+        // setPID(kTurret.kP, kTurret.kI, kTurret.kD);
 
         turretMot.burnFlash();
 
         turretMot.getEncoder().setPosition(0);
 
-        encoderPos = 0;
         offset     = 0;
 
         if (debug || kConfig.masterDebug) {
@@ -71,9 +72,9 @@ public class Turret extends SubsystemBase {
      * @param kD d
      */
     public void setPID(double kP, double kI, double kD) {
-        turretMot.getPIDController().setP(kP);
-        turretMot.getPIDController().setI(kI);
-        turretMot.getPIDController().setD(kD);
+        m_controller.setP(kP);
+        m_controller.setI(kI);
+        m_controller.setD(kD);
     }
 
     /**
@@ -90,6 +91,29 @@ public class Turret extends SubsystemBase {
      */
     public double getVolts() {
         return turretMot.getBusVoltage();
+    }
+
+    @Override
+    public void useOutput(double output, double setpoint) {
+        if (output > maxSpeed)
+            output = maxSpeed;
+        if (output < -maxSpeed) 
+            output = -maxSpeed;
+
+        setVolts(output);
+    }
+
+    @Override
+    public double getMeasurement() {
+        return getPosition();
+    }
+
+    /**
+     * Sets the max speed the turret can be applied to
+     * @param volts Max volts that be applied at once
+     */
+    public void setMaxSpeed(double volts) {
+        maxSpeed = volts;
     }
 
 
@@ -112,13 +136,8 @@ public class Turret extends SubsystemBase {
         if (pos < -kTurret.maxPosition)
             pos = -kTurret.maxPosition;
 
-        encoderPos = pos;
-
-        turretMot.getPIDController().setReference(encoderPos, ControlType.kPosition);
-    }
-
-    public boolean atSetpoint() {
-        return Math.abs(encoderPos - getPosition()) <= kTurret.encoderThreshold;
+        // turretMot.getPIDController().setReference(encoderPos, ControlType.kPosition);
+        setSetpoint(pos);
     }
 
 
@@ -161,6 +180,14 @@ public class Turret extends SubsystemBase {
      */
     public State getState() {
         return currentState;
+    }
+
+    /**
+     * Getting the state value, this is for shuffleboard debuging
+     * @return The current state value
+     */
+    public int getStateNumber() {
+        return currentState.value;
     }
 
 
@@ -212,16 +239,9 @@ public class Turret extends SubsystemBase {
         return offset;
     }
 
-    /**
-     * Getting the state value, this is for shuffleboard debuging
-     * @return The current state value
-     */
-    public int getStateNumber() {
-        return currentState.value;
-    }
-
     @Override
     public void periodic() {
+        super.periodic();
         // This method will be called once per scheduler run
         if (debug || kConfig.masterDebug) {
             encoderPosEntry.setDouble(getPosition());

@@ -10,6 +10,7 @@ import frc.robot.subsystems.Turret.ScanningDirection;
 import frc.robot.Constants.kTurret;
 import frc.robot.Constants.kTurret.State;
 import frc.robot.commands.Drive.DefaultDrive;
+import frc.robot.commands.Feeder.RunFeeder;
 import frc.robot.commands.Indexer.IntakeCargo;
 import frc.robot.commands.Indexer.ReverseIndexer;
 import frc.robot.commands.Shooter.FiringCommand;
@@ -27,6 +28,7 @@ import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Limelight.LedMode;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -176,6 +178,14 @@ public class RobotContainer {
 
         joystickTesting.rightBumper()
             .whileTrue(new TrainingShooterCommand(sys_shooter, sys_limelight));
+
+        joystickTesting.leftBumper()
+            .whileTrue(
+                new ParallelCommandGroup(
+                    new RunFeeder(sys_feeder),
+                    new IntakeCargo(sys_indexer)
+                )
+            );
 
     }
 

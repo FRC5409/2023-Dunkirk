@@ -11,6 +11,7 @@ import frc.robot.Constants.kTurret;
 import frc.robot.Constants.kTurret.State;
 import frc.robot.commands.Drive.DefaultDrive;
 import frc.robot.commands.Indexer.IntakeCargo;
+import frc.robot.commands.Indexer.ReverseIndexer;
 import frc.robot.commands.Shooter.FiringCommand;
 import frc.robot.commands.Shooter.TrainingShooterCommand;
 import frc.robot.commands.Turret.LockOnTarget;
@@ -121,6 +122,9 @@ public class RobotContainer {
 
         joystickMain.y()
             .whileTrue(new IntakeCargo(sys_indexer));
+
+        joystickMain.start()
+            .whileTrue(new ReverseIndexer(sys_indexer));
 
         joystickMain.povLeft()
             .onTrue(

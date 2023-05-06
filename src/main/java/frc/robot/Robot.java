@@ -84,7 +84,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     m_robotContainer.sys_turret.setMaxSpeed(2);
-    m_robotContainer.sys_turret.setSetpoint(0);
+    m_robotContainer.sys_turret.setRefrence(0);
     m_robotContainer.sys_turret.enable();
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to

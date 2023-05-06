@@ -53,8 +53,15 @@ public class Indexer extends SubsystemBase {
     }
 
     /**
+     * Reverses the indexer motor
+     */
+    public void reverseIntake() {
+        indexerMot.set(-kIndexer.indexerSpeed);
+    }
+
+    /**
      * Gets the velocity of the indexer
-     * @return
+     * @return The encoder velocity
      */
     public double getVelocity() {
         return indexerEnc.getVelocity();

@@ -37,7 +37,6 @@ public class Scan extends CommandBase {
 
         time = 0;
 
-        m_turret.enable();
     }
 
     // Called every time the scheduler runs while the command is scheduled.

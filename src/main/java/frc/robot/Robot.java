@@ -74,7 +74,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     // Enable brake mode
     m_robotContainer.sys_driveTrain.setNeutralMode(NeutralMode.Brake);
-    m_robotContainer.sys_turret.setNeutralMode(IdleMode.kBrake);
+    m_robotContainer.sys_turret.setIdleMode(IdleMode.kBrake);
   }
 
   /** This function is called periodically during autonomous. */
@@ -96,7 +96,7 @@ public class Robot extends TimedRobot {
 
     // Enable brake mode
     m_robotContainer.sys_driveTrain.setNeutralMode(NeutralMode.Brake);
-    m_robotContainer.sys_turret.setNeutralMode(IdleMode.kBrake);
+    m_robotContainer.sys_turret.setIdleMode(IdleMode.kBrake);
   }
 
   /** This function is called periodically during operator control. */
@@ -110,7 +110,7 @@ public class Robot extends TimedRobot {
 
     // Enable brake mode
     m_robotContainer.sys_driveTrain.setNeutralMode(NeutralMode.Brake);
-    m_robotContainer.sys_turret.setNeutralMode(IdleMode.kBrake);
+    m_robotContainer.sys_turret.setIdleMode(IdleMode.kBrake);
   }
 
   /** This function is called periodically during test mode. */
@@ -122,7 +122,7 @@ public class Robot extends TimedRobot {
   public void simulationInit() {
     // Enable brake mode
     m_robotContainer.sys_driveTrain.setNeutralMode(NeutralMode.Brake);
-    m_robotContainer.sys_turret.setNeutralMode(IdleMode.kBrake);
+    m_robotContainer.sys_turret.setIdleMode(IdleMode.kBrake);
   }
 
   /** This function is called periodically whilst in simulation. */

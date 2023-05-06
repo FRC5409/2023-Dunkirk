@@ -24,7 +24,7 @@ public class SetCoastMode extends InstantCommand {
     @Override
     public void initialize() {
         m_driveTrain.setNeutralMode(NeutralMode.Coast);
-        m_turret.setNeutralMode(IdleMode.kCoast);
+        m_turret.setIdleMode(IdleMode.kCoast);
     }
 
     @Override

@@ -138,6 +138,9 @@ public class Turret extends PIDSubsystem {
 
         // turretMot.getPIDController().setReference(encoderPos, ControlType.kPosition);
         setSetpoint(pos);
+
+        if (!isEnabled())
+            enable();
     }
 
 
@@ -219,7 +222,7 @@ public class Turret extends PIDSubsystem {
      * Sets the neutral mode of the turret
      * @param mode kBreak, kCoast
      */
-    public void setNeutralMode(IdleMode mode) {
+    public void setIdleMode(IdleMode mode) {
         turretMot.setIdleMode(mode);
     }
 

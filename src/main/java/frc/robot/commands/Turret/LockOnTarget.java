@@ -41,7 +41,6 @@ public class LockOnTarget extends CommandBase {
 
         //Try here first to see how accurate it is
         updateLocation();
-        m_turret.enable();
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -98,7 +97,7 @@ public class LockOnTarget extends CommandBase {
                     ) * distanceChange > 0 ? -1 : 1;
             } else {
                 double angleChange = m_limelight.getAngleChange();
-                offset += angleChange;
+                offset += m_turret.convertToEncoder(angleChange);
             }
         }
 

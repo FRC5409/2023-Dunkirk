@@ -22,7 +22,6 @@ public class TurretGoTo extends CommandBase {
     public void initialize() {
         m_turret.setRefrence(position);
         m_turret.setMaxSpeed(kTurret.maxVolts);
-        m_turret.enable();
     }
 
     // Called every time the scheduler runs while the command is scheduled.

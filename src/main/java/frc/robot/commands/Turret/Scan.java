@@ -11,7 +11,7 @@ public class Scan extends CommandBase {
 
     private final Turret m_turret;
     private final Limelight m_limelight;
-    private double time;
+    // private double time;
 
     public Scan(Turret turrent, Limelight limelight) {
         // Use addRequirements() here to declare subsystem dependencies.
@@ -32,18 +32,17 @@ public class Scan extends CommandBase {
             
         m_turret.setState(State.kScaning);
 
-        time = 0;
+        // time = 0;
+
+        m_turret.setRefrence(kTurret.maxPosition * m_turret.getScanningDir().value);
 
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        time += (1.0 / kTurret.turretSpeed);
-
-        double position = Math.sin(time) * kTurret.maxPosition * m_turret.getScanningDir().value;
-
-        m_turret.setRefrence(position);
+        if (m_turret.getController().atGoal())
+            m_turret.setRefrence(m_turret.getController().getGoal().position * -1);
     }
 
     // Called once the command ends or is interrupted.
@@ -56,4 +55,13 @@ public class Scan extends CommandBase {
         return m_limelight.isVisable();
     }
 
+    /*
+        time += (1.0 / kTurret.turretSpeed);
+
+        double position = Math.sin(time) * kTurret.maxPosition * m_turret.getScanningDir().value;
+
+        m_turret.setRefrence(position);
+     */
+
 }
+

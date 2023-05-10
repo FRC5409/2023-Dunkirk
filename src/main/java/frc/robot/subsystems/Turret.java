@@ -3,16 +3,17 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import frc.robot.Constants.kConfig;
 import frc.robot.Constants.kTurret;
 import frc.robot.Constants.kTurret.State;
 
-public class Turret extends PIDSubsystem {
+public class Turret extends ProfiledPIDSubsystem {
 
     public enum ScanningDirection {
         kLeft(-1), kRight(1), kNotSelected(kTurret.defaultScanDir.value);
@@ -41,21 +42,31 @@ public class Turret extends PIDSubsystem {
     private final boolean debug = false;
 
     public Turret() {
-        super(new PIDController(kTurret.kP, kTurret.kI, kTurret.kD));
+        super(
+            new ProfiledPIDController(
+                kTurret.kP,
+                kTurret.kI,
+                kTurret.kD,
+                new TrapezoidProfile.Constraints(
+                    kTurret.maxSpeed,
+                    kTurret.maxAccel
+                    )
+                )
+            );
         turretMot = new CANSparkMax(kTurret.CANID, MotorType.kBrushless);
         getController().setTolerance(kTurret.encoderThreshold);
 
         turretMot.restoreFactoryDefaults();
 
+        zeroEncoder();
+
         turretMot.setIdleMode(IdleMode.kBrake);
+
         turretMot.setSmartCurrentLimit(kTurret.currentLimit);
-        // setPID(kTurret.kP, kTurret.kI, kTurret.kD);
 
         turretMot.burnFlash();
 
-        turretMot.getEncoder().setPosition(0);
-
-        offset     = 0;
+        offset = 0;
 
         if (debug || kConfig.masterDebug) {
             turretTab        = Shuffleboard.getTab("Turret");
@@ -94,7 +105,9 @@ public class Turret extends PIDSubsystem {
     }
 
     @Override
-    public void useOutput(double output, double setpoint) {
+    public void useOutput(double output, TrapezoidProfile.State setpoint) {
+        output *= 12;
+        
         if (output > maxSpeed)
             output = maxSpeed;
         if (output < -maxSpeed) 
@@ -137,7 +150,7 @@ public class Turret extends PIDSubsystem {
             pos = -kTurret.maxPosition;
 
         // turretMot.getPIDController().setReference(encoderPos, ControlType.kPosition);
-        setSetpoint(pos);
+        setGoal(pos);
 
         if (!isEnabled())
             enable();
@@ -150,6 +163,13 @@ public class Turret extends PIDSubsystem {
      */
     public double getPosition() {
         return turretMot.getEncoder().getPosition();
+    }
+
+    /**
+     * Zeros the encoder
+     */
+    public void zeroEncoder() {
+        turretMot.getEncoder().setPosition(0);
     }
 
     /**

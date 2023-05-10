@@ -120,27 +120,27 @@ public final class Constants {
 
         public final static int currentLimit             = 20;
 
-        public final static int maxScanOutput            = 3;   //in Volts
-        public final static int turretSpeed              = 20;  //bigger the number slower the movement
+        public final static int turretSpeed              = 22;  //bigger the number slower the movement
 
-        public final static int lockingSpeed             = 4;   //in volts
-
-        public final static double kP                    = 0.15;
+        public final static double kP                    = 0.14;
         public final static double kI                    = 0;
         public final static double kD                    = 0;
 
-        public final static double encoderThreshold      = 1;
-        public final static double angleThreshold        = 1.5;
+        public final static double maxSpeed              = 40;
+        public final static double maxAccel              = 5;
 
-        public final static double maxPosition           = 72.5;    // Encoder max position //TODO: Find the max position
-        public final static int maxAngle                 = 100;      // Angle max position
+        public final static double encoderThreshold      = 0.75;
+        public final static double angleThreshold        = 0.5;
 
-        public final static double maxVolts             = 10;
+        public final static double maxVolts              = 12;
 
         public final static double NinetyDegreePosition  = 72.5;
         public final static int    NinetyDegree          = 90;
         
-        public final static double angleToPosition = NinetyDegreePosition / NinetyDegree;
+        public final static double angleToPosition       = NinetyDegreePosition / NinetyDegree;
+
+        public final static int maxAngle                 = 100;
+        public final static double maxPosition           = maxAngle * angleToPosition;
 
         public final static double wrongCargoOffset      = 15;
 
@@ -155,16 +155,13 @@ public final class Constants {
     }
 
     public static class kFeeder {
+
         public final static int feederID = 9;
 
         public final static int currentLimit = 20;
 
-        public final static double feedSpeed = 0.4;
+        public final static double feedSpeed = 0.2;
 
-        public final static double kP = 0.00015;
-        public final static double kI = 0;
-        public final static double kD = 0;
-        public final static double kF = 0.0002;
     }
 
     public static class kIndexer {

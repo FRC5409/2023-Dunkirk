@@ -162,7 +162,7 @@ public class FiringCommand extends CommandBase {
      */
     public void stopFeeding() {
         if (isFeeding) {
-            m_feeder.stopFeeding();
+            m_feeder.stopMotor();
             m_indexer.stopIntaking();
             isFeeding = false;
         }

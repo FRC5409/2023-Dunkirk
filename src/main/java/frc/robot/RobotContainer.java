@@ -23,6 +23,7 @@ import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Gyroscope;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Pneumatics;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Limelight.LedMode;
@@ -49,6 +50,7 @@ public class RobotContainer {
     public final Feeder         sys_feeder;
     public final Indexer        sys_indexer;
     public final Limelight      sys_limelight;
+    public final Pneumatics     sys_pneumatics;
 
     // Controller
     private final CommandXboxController joystickMain;
@@ -69,6 +71,7 @@ public class RobotContainer {
         sys_feeder           = new Feeder();
         sys_indexer          = new Indexer();
         sys_limelight        = new Limelight();
+        sys_pneumatics       = new Pneumatics();
         
         // Controller
         joystickMain         = new CommandXboxController(0);
@@ -94,14 +97,14 @@ public class RobotContainer {
 
         /* Main Joystick Button Bindings */
 
-        joystickMain.leftBumper().and(() -> !sys_turret.isBeingUsed()).onTrue(
+        joystickMain.leftBumper().onTrue(
             new RepeatCommand(
                 new Scan(sys_turret, sys_limelight)
                 .andThen(new LockOnTarget(sys_turret, sys_limelight, false))
             )
         );
 
-        joystickMain.leftBumper().and(() -> sys_turret.isBeingUsed()).onTrue(
+        joystickMain.leftBumper().onFalse(
             new TurretGoTo(sys_turret, 0)
             .alongWith(
                 Commands.runOnce(() -> sys_limelight.setLedMode(LedMode.kModeOff)),
@@ -115,7 +118,7 @@ public class RobotContainer {
                 new FiringCommand(sys_shooter, sys_turret, sys_feeder, sys_indexer, sys_limelight)
             );
 
-        joystickMain.x().and(() -> sys_turret.isBeingUsed())
+        joystickMain.x().and(() -> sys_turret.getState() == State.kLocked || sys_turret.getState() == State.kLocking)
             .onTrue(
                 Commands.runOnce(() -> sys_turret.setTurretOffset(kTurret.wrongCargoOffset * (sys_turret.getPosition() >= 0 ? -1 : 1)))
             ).onFalse(
@@ -131,19 +134,16 @@ public class RobotContainer {
         joystickMain.povLeft()
             .onTrue(
                 Commands.runOnce(() -> sys_turret.setScanningDir(ScanningDirection.kLeft))
-                .alongWith(new TurretGoTo(sys_turret, -(kTurret.maxPosition / 2)))
             );
 
         joystickMain.povRight()
             .onTrue(
                 Commands.runOnce(() -> sys_turret.setScanningDir(ScanningDirection.kRight))
-                .alongWith(new TurretGoTo(sys_turret, (kTurret.maxPosition / 2)))
             );
 
-        joystickMain.povUp()
+        joystickMain.back()
             .onTrue(
-                Commands.runOnce(() -> sys_turret.setScanningDir(kTurret.defaultScanDir))
-                .alongWith(new TurretGoTo(sys_turret, 0))
+                Commands.runOnce(() -> sys_turret.zeroEncoder())
             );
 
         /* Secondary Joystick Button Bindings */

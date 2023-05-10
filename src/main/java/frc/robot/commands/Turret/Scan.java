@@ -32,9 +32,6 @@ public class Scan extends CommandBase {
             
         m_turret.setState(State.kScaning);
 
-        time = Math.round(Math.asin(m_turret.getPosition() / kTurret.maxPosition) * 100) / 100;
-        System.out.println(time);
-
         time = 0;
 
     }

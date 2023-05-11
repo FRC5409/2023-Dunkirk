@@ -56,7 +56,7 @@ public class Indexer extends SubsystemBase {
      * Reverses the indexer motor
      */
     public void reverseIntake() {
-        indexerMot.set(-kIndexer.indexerSpeed);
+        indexerMot.set(-kIndexer.reversingSpeed);
     }
 
     /**

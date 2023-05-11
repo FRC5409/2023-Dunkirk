@@ -16,8 +16,6 @@ public class LockOnTarget extends CommandBase {
 
     private int seeingTime = 0;
 
-    private final boolean updateLocation = true;
-
     private boolean guessDrive = false;
 
     public LockOnTarget(Turret turret, Limelight limelight, boolean driveBy) {
@@ -47,14 +45,10 @@ public class LockOnTarget extends CommandBase {
     @Override
     public void execute() {
         if (m_limelight.isVisable()) {
-            if (m_turret.getController().atSetpoint()) {
-                if (Math.abs(m_limelight.getXAngle()) >= kTurret.angleThreshold) {
-                    if (updateLocation) {
-                        updateLocation();
-                    }
-                } else {
-                    m_turret.setState(State.kLocked);
-                }
+            if (Math.abs(m_limelight.getXAngle()) >= kTurret.angleThreshold) {
+                updateLocation();
+            } else {
+                m_turret.setState(State.kLocked);
             }
         }
 

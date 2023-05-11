@@ -59,6 +59,10 @@ public class Feeder extends SubsystemBase {
         feederMot.set(kFeeder.feedSpeed);
     }
 
+    public void revsere() {
+        feederMot.set(kFeeder.reverseSpeed);
+    }
+
     /**
      * Stops the motor completly
      */

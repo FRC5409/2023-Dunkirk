@@ -130,7 +130,7 @@ public class Gyroscope extends SubsystemBase {
     public void periodic() {
         // This method will be called once per scheduler run
 
-        headingSpeed += getForwardAccel();
+        headingSpeed = getForwardAccel();
         
         if (debug || kConfig.masterDebug) {
             angleEntry      .setDouble(getAngle());

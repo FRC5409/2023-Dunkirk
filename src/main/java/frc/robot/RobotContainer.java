@@ -28,7 +28,6 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Limelight.LedMode;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -120,18 +119,57 @@ public class RobotContainer {
                 new FiringCommand(sys_shooter, sys_turret, sys_feeder, sys_indexer, sys_limelight)
             );
 
-        joystickMain.x().and(() -> sys_turret.getState() == State.kLocked || sys_turret.getState() == State.kLocking)
-            .onTrue(
-                Commands.runOnce(() -> sys_turret.setTurretOffset(kTurret.wrongCargoOffset * (sys_turret.getPosition() >= 0 ? -1 : 1)))
-            ).onFalse(
-                Commands.runOnce(() -> sys_turret.setTurretOffset(0))
-            );
-
         joystickMain.y()
             .whileTrue(new IntakeCargo(sys_indexer));
 
         joystickMain.start()
-            .whileTrue(new ReverseIndexer(sys_indexer));
+            .whileTrue(new ReverseIndexer(sys_indexer, sys_feeder));
+
+        joystickMain.povLeft()
+            .onTrue(
+                new ParallelCommandGroup(
+                    new TurretGoTo(sys_turret, -(kTurret.maxPosition / 3)),
+                    Commands.runOnce(() -> sys_turret.setScanningDir(ScanningDirection.kLeft))
+                )
+            );
+
+        joystickMain.povRight()
+            .onTrue(
+                new ParallelCommandGroup(
+                    new TurretGoTo(sys_turret,  (kTurret.maxPosition / 3)),
+                    Commands.runOnce(() -> sys_turret.setScanningDir(ScanningDirection.kRight))
+                )
+            );
+
+        joystickMain.back()
+            .onTrue(
+                Commands.runOnce(() -> sys_turret.zeroEncoder())
+            );
+
+        /* Secondary Joystick Button Bindings */
+
+        joystickMain.leftBumper().onTrue(
+            new RepeatCommand(
+                new Scan(sys_turret, sys_limelight)
+                .andThen(new LockOnTarget(sys_turret, sys_limelight, false))
+            )
+        );
+
+        joystickMain.leftBumper().onFalse(
+            Commands.runOnce(() -> sys_turret.setMaxSpeed(4)).andThen(
+                new TurretGoTo(sys_turret, 0)
+                .alongWith(
+                    Commands.runOnce(() -> sys_limelight.setLedMode(LedMode.kModeOff)),
+                    Commands.runOnce(() -> sys_turret.setState(State.kOff)),
+                    Commands.runOnce(() -> sys_shooter.stopMot(), sys_shooter)
+                )
+            )
+        );
+
+        joystickSecondary.rightBumper()
+            .and(() -> sys_turret.isBeingUsed()).whileTrue(
+                new FiringCommand(sys_shooter, sys_turret, sys_feeder, sys_indexer, sys_limelight)
+            );
 
         joystickMain.povLeft()
             .onTrue(
@@ -143,36 +181,12 @@ public class RobotContainer {
                 Commands.runOnce(() -> sys_turret.setScanningDir(ScanningDirection.kRight))
             );
 
-        joystickMain.back()
+        //Kinda works but not really
+        joystickMain.x()//.and(() -> sys_turret.getState() == State.kLocked || sys_turret.getState() == State.kLocking)
             .onTrue(
-                Commands.runOnce(() -> sys_turret.zeroEncoder())
-            );
-
-        /* Secondary Joystick Button Bindings */
-
-        joystickSecondary.leftBumper().onTrue(
-            new ConditionalCommand(
-                //if it's not scanning then start scanning
-                new RepeatCommand(
-                    new Scan(sys_turret, sys_limelight)
-                    .andThen(new LockOnTarget(sys_turret, sys_limelight, false))
-                ),
-
-                //if it's scanning then stop scanning and reset
-                new TurretGoTo(sys_turret, 0)
-                .alongWith(
-                    Commands.runOnce(() -> sys_limelight.setLedMode(LedMode.kModeOff)),
-                    Commands.runOnce(() -> sys_turret.setState(State.kOff)),
-                    Commands.runOnce(() -> sys_shooter.stopMot(), sys_shooter)
-                ),
-
-                () -> !sys_turret.isBeingUsed()
-            )
-        );
-
-        joystickSecondary.rightBumper()
-            .and(() -> sys_turret.isBeingUsed()).whileTrue(
-                new FiringCommand(sys_shooter, sys_turret, sys_feeder, sys_indexer, sys_limelight)
+                Commands.runOnce(() -> sys_turret.setTurretOffset(kTurret.wrongCargoOffset * (sys_turret.getPosition() >= 0 ? -1 : 1)))
+            ).onFalse(
+                Commands.runOnce(() -> sys_turret.setTurretOffset(0))
             );
 
 

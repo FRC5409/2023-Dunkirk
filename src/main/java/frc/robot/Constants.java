@@ -120,29 +120,27 @@ public final class Constants {
 
         public final static int currentLimit             = 20;
 
-        public final static int turretSpeed              = 22;  //bigger the number slower the movement
-
-        public final static double kP                    = 0.14;
+        public final static double kP                    = 0.13;
         public final static double kI                    = 0;
         public final static double kD                    = 0;
 
         public final static double maxSpeed              = 500;
         public final static double maxAccel              = 300;
 
-        public final static double encoderThreshold      = 0.75;
-        public final static double angleThreshold        = 0.5;
+        public final static double encoderThreshold      = 1;
+        public final static double angleThreshold        = 1;
 
         public final static double maxVolts              = 12;
 
         public final static double NinetyDegreePosition  = 72.5;
         public final static int    NinetyDegree          = 90;
         
-        public final static double angleToPosition       = NinetyDegreePosition / NinetyDegree;
+        public final static double angleToPosition       = NinetyDegree / NinetyDegreePosition;
 
-        public final static int maxAngle                 = 100;
-        public final static double maxPosition           = maxAngle * angleToPosition;
+        public final static int maxAngle                 = 105;
+        public final static double maxPosition           = maxAngle / angleToPosition;
 
-        public final static double wrongCargoOffset      = 15;
+        public final static double wrongCargoOffset      = 50;
 
         public final static int maxNotSeeingTargetTime   = 5;
 
@@ -160,7 +158,8 @@ public final class Constants {
 
         public final static int currentLimit = 20;
 
-        public final static double feedSpeed = 0.2;
+        public final static double feedSpeed     = 0.5;
+        public final static double reverseSpeed  = 0.5;
 
     }
 
@@ -169,7 +168,8 @@ public final class Constants {
 
         public final static int currentLimit = 20;
 
-        public final static double indexerSpeed = 0.4;
+        public final static double indexerSpeed      = 1;
+        public final static double reversingSpeed    = 0.4;
     }
 
     public static class kLimelight {

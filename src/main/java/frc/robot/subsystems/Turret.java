@@ -215,7 +215,7 @@ public class Turret extends ProfiledPIDSubsystem {
 
 
     /**
-     * Gets if it's on of off
+     * Gets if it's on or off
      * @return true if it's being used by something
      */
     public boolean isBeingUsed() {

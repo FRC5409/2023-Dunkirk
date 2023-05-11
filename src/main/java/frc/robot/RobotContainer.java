@@ -105,11 +105,13 @@ public class RobotContainer {
         );
 
         joystickMain.leftBumper().onFalse(
-            new TurretGoTo(sys_turret, 0)
-            .alongWith(
-                Commands.runOnce(() -> sys_limelight.setLedMode(LedMode.kModeOff)),
-                Commands.runOnce(() -> sys_turret.setState(State.kOff)),
-                Commands.runOnce(() -> sys_shooter.stopMot(), sys_shooter)
+            Commands.runOnce(() -> sys_turret.setMaxSpeed(4)).andThen(
+                new TurretGoTo(sys_turret, 0)
+                .alongWith(
+                    Commands.runOnce(() -> sys_limelight.setLedMode(LedMode.kModeOff)),
+                    Commands.runOnce(() -> sys_turret.setState(State.kOff)),
+                    Commands.runOnce(() -> sys_shooter.stopMot(), sys_shooter)
+                )
             )
         );
 

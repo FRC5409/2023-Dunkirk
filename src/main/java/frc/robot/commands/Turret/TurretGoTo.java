@@ -20,8 +20,8 @@ public class TurretGoTo extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        m_turret.setRefrence(position);
         m_turret.setMaxSpeed(kTurret.maxVolts);
+        m_turret.setRefrence(position);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -37,7 +37,7 @@ public class TurretGoTo extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return m_turret.getController().atSetpoint();
+        return m_turret.getController().atGoal();
     }
 
 }

@@ -126,8 +126,8 @@ public final class Constants {
         public final static double kI                    = 0;
         public final static double kD                    = 0;
 
-        public final static double maxSpeed              = 40;
-        public final static double maxAccel              = 5;
+        public final static double maxSpeed              = 500;
+        public final static double maxAccel              = 300;
 
         public final static double encoderThreshold      = 0.75;
         public final static double angleThreshold        = 0.5;

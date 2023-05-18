@@ -11,13 +11,13 @@ public class IntakeCargo extends CommandBase {
         // Use addRequirements() here to declare subsystem dependencies.
         m_indexer = indexer;
 
-        addRequirements(m_indexer);
+        // addRequirements(m_indexer);
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        m_indexer.startIntaking();
+        m_indexer.startIntaking(1);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -27,7 +27,7 @@ public class IntakeCargo extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        m_indexer.stopIntaking();
+        m_indexer.stopIntaking(1);
     }
 
     // Returns true when the command should end.

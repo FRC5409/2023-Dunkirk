@@ -152,7 +152,7 @@ public class FiringCommand extends CommandBase {
     public void feed() {
         if (!isFeeding) {
             m_feeder.feed();
-            m_indexer.startIntaking();
+            m_indexer.startIntaking(0);
             isFeeding = true;
         }
     }
@@ -163,7 +163,7 @@ public class FiringCommand extends CommandBase {
     public void stopFeeding() {
         if (isFeeding) {
             m_feeder.stopMotor();
-            m_indexer.stopIntaking();
+            m_indexer.stopIntaking(0);
             isFeeding = false;
         }
     }

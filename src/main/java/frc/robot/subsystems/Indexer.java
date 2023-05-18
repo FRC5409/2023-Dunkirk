@@ -12,6 +12,8 @@ public class Indexer extends SubsystemBase {
     private final CANSparkMax        indexerMot;
     private final RelativeEncoder    indexerEnc;
 
+    private boolean parallelCommands[] = {false, false};
+
     public Indexer() {
         indexerMot = new CANSparkMax(kIndexer.CANID, MotorType.kBrushless);
 
@@ -46,10 +48,32 @@ public class Indexer extends SubsystemBase {
     }
 
     /**
+     * Starts intaking with parallel usage
+     * @param index which command you are using
+     */
+    public void startIntaking(int index) {
+        if (!parallelCommands[0] && !parallelCommands[1]) {
+            startIntaking();
+        }
+        parallelCommands[index] = true;
+    }
+
+    /**
      * Stop intaking cargo
      */
     public void stopIntaking() {
         indexerMot.set(0);
+    }
+    
+    /**
+     * Stop intaking with parallel usage
+     * @param index which command you are using
+     */
+    public void stopIntaking(int index) {
+        parallelCommands[index] = false;
+        if (!parallelCommands[0] && !parallelCommands[1]) {
+            stopIntaking();
+        }
     }
 
     /**

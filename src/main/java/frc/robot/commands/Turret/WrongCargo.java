@@ -6,21 +6,18 @@ import frc.robot.Constants.kIndexer;
 import frc.robot.Constants.kTurret;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Indexer;
-import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 
 public class WrongCargo extends CommandBase {
 
     private final Turret     m_turret;
-    private final Shooter    m_shooter;
     private final Feeder     m_feeder;
     private final Indexer    m_indexer;
 
     private double prevPos = 0;
 
-    public WrongCargo(Turret turret, Shooter shooter, Feeder feeder, Indexer indexer) {
+    public WrongCargo(Turret turret,  Feeder feeder, Indexer indexer) {
         m_turret     = turret;
-        m_shooter    = shooter;
         m_feeder     = feeder;
         m_indexer    = indexer;
 
@@ -41,8 +38,8 @@ public class WrongCargo extends CommandBase {
             m_turret.setRefrence(prevPos + kTurret.wrongCargoOffset);
         }
 
-        m_indexer.forceFeed(kIndexer.indexerSpeed);
-        m_feeder.forceFeed(kFeeder.feedSpeed);
+        m_indexer.forceSpeed(kIndexer.indexerSpeed);
+        m_feeder.forceSpeed(kFeeder.feedSpeed);
     }
 
     // Called every time the scheduler runs while the command is scheduled.

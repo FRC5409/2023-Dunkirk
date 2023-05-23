@@ -77,7 +77,7 @@ public class FiringCommand extends CommandBase {
     public void execute() {
         double shooterSpeed = 2500; //Replace with interpolated data later
 
-        if (enableDriveBy) {
+        if (enableDriveBy && !m_indexer.isForced()) {
             if (guessDrive) {
                 int closestPoint = InterpolatedData.closestPoint(Math.abs(m_gyro.getForwardSpeed()), kShooter.kShooterData.driveBySteps);
                 double[] dataX = kShooterData.driveSpeedX;
@@ -108,16 +108,19 @@ public class FiringCommand extends CommandBase {
             }
         }
 
-        if (m_turret.getState() == State.kLocked) {
-            spinShooterAt((int) Math.round(shooterSpeed));
-            if (Math.abs(m_shooter.getAverageSpeed() - shooterSpeed) < kShooter.shooterRPMPlay) {
-                feed();
+        if (m_indexer.isForced()) {
+            spinShooterAt(kShooter.wrongCargoSpeed);
+        } else {
+            if (m_turret.getState() == State.kLocked) {
+                spinShooterAt((int) Math.round(shooterSpeed));
+                if (Math.abs(m_shooter.getAverageSpeed() - shooterSpeed) < kShooter.shooterRPMPlay) {
+                    feed();
+                } else {
+                    stopFeeding();
+                }
             } else {
                 stopFeeding();
             }
-        } else {
-            // spinShooterAt(kShooter.shooterPrepSpeed);
-            stopFeeding();
         }
     }
 

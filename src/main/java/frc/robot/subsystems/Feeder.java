@@ -92,14 +92,49 @@ public class Feeder extends SubsystemBase {
         return feederEnc.getVelocity();
     }
 
-    public void forceFeed(double speed) {
-        feederMot.set(speed);
+    /**
+     * Sets the speed of the feeder motor
+     * @param speed speed you want to give the motor
+     */
+    public void setSpeed(double speed) {
+        if (force) {
+            forceSpeed = speed;
+        } else {
+            feederMot.set(speed);
+        }
+    }
+
+    /**
+     * Starts force speed
+     */
+    public void forceSpeed(double speed) {
+        forceSpeed = getSpeedInput();
+        setSpeed(speed);
         force = true;
     }
 
+    /**
+     * Stops force speed and goes to the last used speed change
+     */
     public void stopForceSpeed() {
         force = false;
-        feederMot.set(forceSpeed);
+        setSpeed(forceSpeed);
+    }
+
+    /**
+     * Gets the last applied speed to the motor
+     * @return the last applied speed
+     */
+    public double getSpeedInput() {
+        return feederMot.getAppliedOutput();
+    }
+
+    /**
+     * Returns if the motor is being forced to go a certain speed
+     * @return true/false
+     */
+    public boolean isForced() {
+        return force;
     }
 
 }

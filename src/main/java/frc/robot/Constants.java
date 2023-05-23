@@ -72,6 +72,8 @@ public final class Constants {
 
         public final static int shooterPrepSpeed = 1000;
 
+        public final static int wrongCargoSpeed  = 2500;
+
         public static class kPID {
             public final static double kP = 0.42;
             public final static double kI = 0;

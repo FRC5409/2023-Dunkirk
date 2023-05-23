@@ -19,6 +19,9 @@ public class Feeder extends SubsystemBase {
     private ShuffleboardTab         feederTab;
     private GenericEntry            feederVelocityEntry;
 
+    private boolean force = false;
+    private double forceSpeed = 0;
+
     private final boolean debug = false;
 
     public Feeder() {
@@ -56,18 +59,30 @@ public class Feeder extends SubsystemBase {
      */
     public void feed() {
         // feederMot.getPIDController().setReference(kFeeder.feedSpeed, ControlType.kVelocity);
-        feederMot.set(kFeeder.feedSpeed);
+        if (force) {
+            forceSpeed = kFeeder.feedSpeed;
+        } else {
+            feederMot.set(kFeeder.feedSpeed);
+        }
     }
 
     public void revsere() {
-        feederMot.set(kFeeder.reverseSpeed);
+        if (force) {
+            forceSpeed = kFeeder.reverseSpeed;
+        } else {
+            feederMot.set(kFeeder.reverseSpeed);
+        }
     }
 
     /**
      * Stops the motor completly
      */
     public void stopMotor() {
-        feederMot.set(0);
+        if (force) {
+            forceSpeed = 0;
+        } else {
+            feederMot.set(0);
+        }
     }
 
     /**
@@ -75,6 +90,16 @@ public class Feeder extends SubsystemBase {
      */
     public double getEncoderVelocity() {
         return feederEnc.getVelocity();
+    }
+
+    public void forceFeed(double speed) {
+        feederMot.set(speed);
+        force = true;
+    }
+
+    public void stopForceSpeed() {
+        force = false;
+        feederMot.set(forceSpeed);
     }
 
 }

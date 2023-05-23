@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.kDriveTrain;
+import frc.robot.Constants.kDriveTrain.kSide;
 
 public class DriveTrain extends SubsystemBase {
 
@@ -122,6 +123,16 @@ public class DriveTrain extends SubsystemBase {
         m_motorLeft2.setNeutralMode(m_motorNeutralMode);
         m_motorRight1.setNeutralMode(m_motorNeutralMode);
         m_motorRight2.setNeutralMode(m_motorNeutralMode);
+    }
+
+    public void setNeutralSide(kSide side, NeutralMode mode) {
+        if (side == kSide.kRight) {
+            m_motorRight1.setNeutralMode(mode);
+            m_motorRight2.setNeutralMode(mode);
+        } else {
+            m_motorLeft1.setNeutralMode(mode);
+            m_motorLeft2.setNeutralMode(mode);
+        }
     }
 
     // CANCoders ----------

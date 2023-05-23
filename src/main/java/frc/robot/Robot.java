@@ -75,6 +75,10 @@ public class Robot extends TimedRobot {
     // Enable brake mode
     m_robotContainer.sys_driveTrain.setNeutralMode(NeutralMode.Brake);
     m_robotContainer.sys_turret.setIdleMode(IdleMode.kBrake);
+    
+    m_autonomousCommand = m_robotContainer.getAutoCommand();
+
+    m_autonomousCommand.schedule();
   }
 
   /** This function is called periodically during autonomous. */

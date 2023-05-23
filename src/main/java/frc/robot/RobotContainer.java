@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.Turret.ScanningDirection;
 import frc.robot.Constants.kTurret;
 import frc.robot.Constants.kTurret.State;
+import frc.robot.commands.Auto.Auto;
 import frc.robot.commands.Drive.DefaultDrive;
 import frc.robot.commands.Feeder.RunFeeder;
 import frc.robot.commands.Indexer.IntakeCargo;
@@ -209,6 +210,10 @@ public class RobotContainer {
                 )
             );
 
+    }
+
+    public Command getAutoCommand() {
+        return new Auto(sys_driveTrain).ignoringDisable(true);
     }
 
 }

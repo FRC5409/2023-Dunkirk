@@ -51,6 +51,11 @@ public final class Constants {
             public final static double kWheelDiameter = 0.09404; // m
             public final static double kWheelCircumference = Math.PI * kWheelDiameter; // m
         }
+
+        public enum kSide {
+            kRight,
+            kLeft
+        }
     }
 
     public static class kGyro {

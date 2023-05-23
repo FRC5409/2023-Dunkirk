@@ -21,6 +21,7 @@ public class TurretGoTo extends CommandBase {
     @Override
     public void initialize() {
         m_turret.setMaxSpeed(kTurret.maxVolts);
+        m_turret.configAccel(kTurret.maxScanningAccel);
         m_turret.setRefrence(position);
     }
 

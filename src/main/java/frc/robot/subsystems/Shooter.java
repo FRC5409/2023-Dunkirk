@@ -138,4 +138,8 @@ public class Shooter extends SubsystemBase {
         return shooterSpeedEntry.getDouble(0);
     }
 
+    public double getSetSpeed() {
+        return leftMot.get();
+    }
+
 }

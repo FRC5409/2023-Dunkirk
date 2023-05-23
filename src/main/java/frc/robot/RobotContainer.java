@@ -28,6 +28,7 @@ import frc.robot.subsystems.Pneumatics;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Limelight.LedMode;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
@@ -59,6 +60,8 @@ public class RobotContainer {
 
     // Commands
     private final DefaultDrive cmd_defaultDrive;
+    private final Command cmd_scanOnTrue;
+    private final Command cmd_scanOnFalse;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -83,6 +86,21 @@ public class RobotContainer {
 
         sys_driveTrain.setDefaultCommand(cmd_defaultDrive);
 
+        cmd_scanOnTrue = new RepeatCommand(
+                            new Scan(sys_turret, sys_limelight)
+                            .andThen(new LockOnTarget(sys_turret, sys_limelight, false))
+                        );
+
+        cmd_scanOnFalse = Commands.runOnce(() -> sys_turret.setMaxSpeed(4)).andThen(
+                            new TurretGoTo(sys_turret, 0)
+                            .alongWith(
+                                Commands.runOnce(() -> sys_limelight.setLedMode(LedMode.kModeOff)),
+                                Commands.runOnce(() -> sys_turret.setState(State.kOff)),
+                                Commands.runOnce(() -> sys_shooter.stopMot(), sys_shooter)
+                            )
+                        );
+        
+
         // Configure the button bindings
         configureButtonBindings();
     }
@@ -98,25 +116,14 @@ public class RobotContainer {
         /* Main Joystick Button Bindings */
 
         joystickMain.leftBumper().onTrue(
-            new RepeatCommand(
-                new Scan(sys_turret, sys_limelight)
-                .andThen(new LockOnTarget(sys_turret, sys_limelight, false))
-            )
+            cmd_scanOnTrue
         );
 
         joystickMain.leftBumper().onFalse(
-            Commands.runOnce(() -> sys_turret.setMaxSpeed(4)).andThen(
-                new TurretGoTo(sys_turret, 0)
-                .alongWith(
-                    Commands.runOnce(() -> sys_limelight.setLedMode(LedMode.kModeOff)),
-                    Commands.runOnce(() -> sys_turret.setState(State.kOff)),
-                    Commands.runOnce(() -> sys_shooter.stopMot(), sys_shooter)
-                )
-            )
+            cmd_scanOnFalse
         );
 
         joystickMain.rightBumper()
-            // .and(() -> sys_turret.isBeingUsed()).whileTrue(
             .whileTrue(
                 new FiringCommand(sys_shooter, sys_turret, sys_feeder, sys_indexer, sys_limelight)
             );
@@ -124,8 +131,17 @@ public class RobotContainer {
         joystickMain.x()
             .whileTrue(new IntakeCargo(sys_indexer));
 
-        joystickMain.x()
-            .whileTrue(new WrongCargo(sys_turret, sys_feeder, sys_indexer));
+        joystickMain.y().and(() -> sys_turret.isTargetting())
+            .whileTrue(
+                new WrongCargo(sys_turret, sys_feeder, sys_indexer, sys_shooter)
+            ).onFalse(
+                cmd_scanOnTrue
+            );
+
+        joystickMain.y().and(() -> !sys_turret.isBeingUsed())
+            .whileTrue(
+                new WrongCargo(sys_turret, sys_feeder, sys_indexer, sys_shooter)
+            );
 
         joystickMain.start()
             .whileTrue(new ReverseIndexer(sys_indexer, sys_feeder));
@@ -146,29 +162,14 @@ public class RobotContainer {
                 )
             );
 
-        joystickMain.back()
-            .onTrue(
-                Commands.runOnce(() -> sys_turret.zeroEncoder())
-            );
-
         /* Secondary Joystick Button Bindings */
 
         joystickMain.leftBumper().onTrue(
-            new RepeatCommand(
-                new Scan(sys_turret, sys_limelight)
-                .andThen(new LockOnTarget(sys_turret, sys_limelight, false))
-            )
+            cmd_scanOnTrue
         );
 
         joystickMain.leftBumper().onFalse(
-            Commands.runOnce(() -> sys_turret.setMaxSpeed(4)).andThen(
-                new TurretGoTo(sys_turret, 0)
-                .alongWith(
-                    Commands.runOnce(() -> sys_limelight.setLedMode(LedMode.kModeOff)),
-                    Commands.runOnce(() -> sys_turret.setState(State.kOff)),
-                    Commands.runOnce(() -> sys_shooter.stopMot(), sys_shooter)
-                )
-            )
+            cmd_scanOnFalse
         );
 
         joystickSecondary.rightBumper()

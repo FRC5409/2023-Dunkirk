@@ -49,7 +49,7 @@ public class Turret extends ProfiledPIDSubsystem {
                 kTurret.kD,
                 new TrapezoidProfile.Constraints(
                     kTurret.maxSpeed,
-                    kTurret.maxAccel
+                    kTurret.maxScanningAccel
                     )
                 )
             );
@@ -222,6 +222,10 @@ public class Turret extends ProfiledPIDSubsystem {
         return getState() != State.kOff;
     }
 
+    public boolean isTargetting() {
+        return getState() == State.kLocked || getState() == State.kLocking;
+    }
+
     /**
      * Set which way should be scanned
      * @param dir kLeft, kRight
@@ -260,6 +264,19 @@ public class Turret extends ProfiledPIDSubsystem {
      */
     public double getTurretOffset() {
         return offset;
+    }
+
+    /**
+     * Configers the max acceleration applied to the motor
+     * @param accel in units per second squared
+     */
+    public void configAccel(double accel) {
+        getController().setConstraints(
+            new TrapezoidProfile.Constraints(
+                kTurret.maxSpeed,
+                accel
+            )
+        );
     }
 
     @Override

@@ -126,7 +126,7 @@ public class Feeder extends SubsystemBase {
      * @return the last applied speed
      */
     public double getSpeedInput() {
-        return feederMot.getAppliedOutput();
+        return feederMot.get();
     }
 
     /**

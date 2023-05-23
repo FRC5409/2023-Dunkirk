@@ -32,6 +32,7 @@ public class LockOnTarget extends CommandBase {
     @Override
     public void initialize() {
         m_turret.setMaxSpeed(kTurret.maxVolts);
+        m_turret.configAccel(kTurret.maxTargetingAccel);
         seeingTime = 0;
 
         if (!m_limelight.isOn())

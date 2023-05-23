@@ -13,7 +13,7 @@ public class Indexer extends SubsystemBase {
     private final RelativeEncoder    indexerEnc;
 
     private boolean parallelCommands[] = {false, false};
-    
+
     private boolean force = false;
     private double forceSpeed = 0;
 
@@ -140,7 +140,7 @@ public class Indexer extends SubsystemBase {
      * @return the last applied speed
      */
     public double getSpeedInput() {
-        return indexerMot.getAppliedOutput();
+        return indexerMot.get();
     }
 
     /**

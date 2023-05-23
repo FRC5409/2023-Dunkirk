@@ -26,6 +26,7 @@ public class Scan extends CommandBase {
     @Override
     public void initialize() {
         m_turret.setMaxSpeed(kTurret.maxVolts);
+        m_turret.configAccel(kTurret.maxScanningAccel);
 
         if (!m_limelight.isOn())
             m_limelight.setLedMode(LedMode.kModeOn);

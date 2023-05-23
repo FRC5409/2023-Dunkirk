@@ -6,6 +6,7 @@ import frc.robot.Constants.kIndexer;
 import frc.robot.Constants.kTurret;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 
 public class WrongCargo extends CommandBase {
@@ -13,16 +14,16 @@ public class WrongCargo extends CommandBase {
     private final Turret     m_turret;
     private final Feeder     m_feeder;
     private final Indexer    m_indexer;
+    private final Shooter    m_shooter;
 
     private double prevPos = 0;
 
-    public WrongCargo(Turret turret,  Feeder feeder, Indexer indexer) {
+    public WrongCargo(Turret turret,  Feeder feeder, Indexer indexer, Shooter shooter) {
         m_turret     = turret;
         m_feeder     = feeder;
         m_indexer    = indexer;
-
-        super.withTimeout(kTurret.wrongCargoTime);
-
+        m_shooter    = shooter;
+        
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(m_turret);
         
@@ -32,6 +33,8 @@ public class WrongCargo extends CommandBase {
     @Override
     public void initialize() {
         prevPos = m_turret.getPosition();
+        m_turret.setMaxSpeed(kTurret.maxVolts);
+        m_turret.configAccel(kTurret.maxOffsetAccel);
         if (prevPos > 0) {
             m_turret.setRefrence(prevPos - kTurret.wrongCargoOffset);
         } else {
@@ -40,6 +43,8 @@ public class WrongCargo extends CommandBase {
 
         m_indexer.forceSpeed(kIndexer.indexerSpeed);
         m_feeder.forceSpeed(kFeeder.feedSpeed);
+
+        m_shooter.spinMotAtSpeed(2500);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -54,6 +59,7 @@ public class WrongCargo extends CommandBase {
         m_indexer.stopForceSpeed();
         m_feeder.stopForceSpeed();
 
+        m_shooter.stopMot();
     }
 
     // Returns true when the command should end.

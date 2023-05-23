@@ -122,15 +122,17 @@ public final class Constants {
 
         public final static int currentLimit             = 20;
 
-        public final static double kP                    = 0.13;
+        public final static double kP                    = 0.1;
         public final static double kI                    = 0;
         public final static double kD                    = 0;
 
         public final static double maxSpeed              = 500;
-        public final static double maxAccel              = 300;
+        public final static double maxScanningAccel      = 300;
+        public final static double maxTargetingAccel     = 400;
+        public final static double maxOffsetAccel        = 1000;
 
-        public final static double encoderThreshold      = 1;
-        public final static double angleThreshold        = 1;
+        public final static double encoderThreshold      = 3;
+        public final static double angleThreshold        = 1.5;
 
         public final static double maxVolts              = 12;
 
@@ -142,7 +144,7 @@ public final class Constants {
         public final static int maxAngle                 = 105;
         public final static double maxPosition           = maxAngle / angleToPosition;
 
-        public final static double wrongCargoOffset      = 50;
+        public final static double wrongCargoOffset      = 40;
 
         public final static int maxNotSeeingTargetTime   = 5;
 
@@ -153,7 +155,6 @@ public final class Constants {
 
         public final static double driveBySteps = driveOffsetX[1] - driveOffsetX[0];
 
-        public final static double wrongCargoTime        = 0.8;
     }
 
     public static class kFeeder {
@@ -162,7 +163,7 @@ public final class Constants {
 
         public final static int currentLimit = 20;
 
-        public final static double feedSpeed     = 0.5;
+        public final static double feedSpeed     = 0.4;
         public final static double reverseSpeed  = 0.5;
 
         public final static double wrongCargoFeederSpeed = 0.4;
@@ -174,7 +175,7 @@ public final class Constants {
 
         public final static int currentLimit = 20;
 
-        public final static double indexerSpeed      = 1;
+        public final static double indexerSpeed      = 0.4;
         public final static double reversingSpeed    = 0.4;
     }
 

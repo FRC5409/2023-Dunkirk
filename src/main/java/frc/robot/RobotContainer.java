@@ -18,6 +18,7 @@ import frc.robot.commands.Shooter.TrainingShooterCommand;
 import frc.robot.commands.Turret.LockOnTarget;
 import frc.robot.commands.Turret.Scan;
 import frc.robot.commands.Turret.TurretGoTo;
+import frc.robot.commands.Turret.WrongCargo;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Gyroscope;
@@ -122,6 +123,9 @@ public class RobotContainer {
 
         joystickMain.x()
             .whileTrue(new IntakeCargo(sys_indexer));
+
+        joystickMain.x()
+            .whileTrue(new WrongCargo(sys_turret, sys_feeder, sys_indexer));
 
         joystickMain.start()
             .whileTrue(new ReverseIndexer(sys_indexer, sys_feeder));

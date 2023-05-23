@@ -72,6 +72,8 @@ public final class Constants {
 
         public final static int shooterPrepSpeed = 1000;
 
+        public final static int wrongCargoSpeed  = 2500;
+
         public static class kPID {
             public final static double kP = 0.42;
             public final static double kI = 0;
@@ -150,6 +152,8 @@ public final class Constants {
         public final static double[] driveOffsetY = {0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45};//TODO: Tune these values
 
         public final static double driveBySteps = driveOffsetX[1] - driveOffsetX[0];
+
+        public final static double wrongCargoTime        = 0.8;
     }
 
     public static class kFeeder {
@@ -160,6 +164,8 @@ public final class Constants {
 
         public final static double feedSpeed     = 0.5;
         public final static double reverseSpeed  = 0.5;
+
+        public final static double wrongCargoFeederSpeed = 0.4;
 
     }
 

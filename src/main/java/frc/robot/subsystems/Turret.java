@@ -32,14 +32,16 @@ public class Turret extends ProfiledPIDSubsystem {
 
     private double offset;
 
-    private double maxSpeed = kTurret.maxVolts;
+    private double maxSpeed              = kTurret.maxVolts;
+
+    private double lastKnownPosition     = Double.POSITIVE_INFINITY;
 
     private ShuffleboardTab  turretTab;
     private GenericEntry     encoderPosEntry;
     private GenericEntry     angleEntry;
     private GenericEntry     stateEntry;
 
-    private final boolean debug = false;
+    private final boolean debug          = false;
 
     public Turret() {
         super(
@@ -277,6 +279,14 @@ public class Turret extends ProfiledPIDSubsystem {
                 accel
             )
         );
+    }
+
+    public void setLastKnownPosition(double position) {
+        lastKnownPosition = position;
+    }
+
+    public double getLastKnownPosition() {
+        return lastKnownPosition;
     }
 
     @Override

@@ -85,6 +85,10 @@ public class Gyroscope extends SubsystemBase {
         return m_pigeon.getAngle();
     }
 
+    public double getAbsoluteAngle() {
+        return getAngle() % 360 - 180;
+    }
+
     public double getRate() {
         // https://first.wpi.edu/wpilib/allwpilib/docs/release/java/edu/wpi/first/wpilibj/interfaces/Gyro.html#getRate()
         return m_pigeon.getRate();

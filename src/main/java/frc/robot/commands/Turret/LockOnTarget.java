@@ -48,6 +48,8 @@ public class LockOnTarget extends CommandBase {
         if (m_limelight.isVisable()) {
             if (Math.abs(m_limelight.getXAngle()) >= kTurret.angleThreshold) {
                 updateLocation();
+                if (m_turret.getController().atGoal())
+                    m_turret.setRefrence(m_turret.getController().getGoal().position * -1);
             } else {
                 m_turret.setState(State.kLocked);
             }

@@ -127,7 +127,7 @@ public final class Constants {
         public final static double kD                    = 0;
 
         public final static double maxSpeed              = 500;
-        public final static double maxScanningAccel      = 300;
+        public final static double maxScanningAccel      = 350;
         public final static double maxTargetingAccel     = 400;
         public final static double maxOffsetAccel        = 1000;
 

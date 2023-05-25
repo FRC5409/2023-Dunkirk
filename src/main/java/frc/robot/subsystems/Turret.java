@@ -34,6 +34,8 @@ public class Turret extends ProfiledPIDSubsystem {
 
     private double maxSpeed = kTurret.maxVolts;
 
+    private double lastKnownPosition = Double.NEGATIVE_INFINITY;
+
     private ShuffleboardTab  turretTab;
     private GenericEntry     encoderPosEntry;
     private GenericEntry     angleEntry;
@@ -187,6 +189,21 @@ public class Turret extends ProfiledPIDSubsystem {
      */
     public double convertToEncoder(double input) {
         return input * kTurret.angleToPosition;
+    }
+
+    /**
+     * sets the last know target position
+     * @param pos absolute position in degrees
+     */
+    public void setLastPosition(double pos) {
+        lastKnownPosition = pos;
+    }
+
+    /**
+     * Gets the last known targeted position
+     */
+    public double getLastPosition() {
+        return lastKnownPosition;
     }
 
     /**

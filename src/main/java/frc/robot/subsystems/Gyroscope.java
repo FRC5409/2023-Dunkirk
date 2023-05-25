@@ -8,6 +8,7 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.kConfig;
@@ -26,7 +27,7 @@ public class Gyroscope extends SubsystemBase {
     private double headingSpeed = 0;
 
     private ShuffleboardTab gyroTab;
-    private GenericEntry angleEntry, rateEntry, rotationEntry, yawEntry, pitchEntry, rollEntry, speedEntry;
+    private GenericEntry angleEntry, absoluteAngleEntry, rateEntry, rotationEntry, yawEntry, pitchEntry, rollEntry, speedEntry;
 
     private final boolean debug = false;
 
@@ -57,6 +58,8 @@ public class Gyroscope extends SubsystemBase {
 
         m_accelerometer = new BuiltInAccelerometer();
 
+        reset();
+
         if (debug || kConfig.masterDebug) {
 
             System.out.println("lets see if this happens twice");
@@ -64,6 +67,7 @@ public class Gyroscope extends SubsystemBase {
             gyroTab          = Shuffleboard.getTab("Pigeon Gyro Tab");
 
             angleEntry       = gyroTab.add("Pigeon Angle", 0).getEntry();
+            absoluteAngleEntry = gyroTab.add("Absolute Angle", 0).getEntry();
             rateEntry        = gyroTab.add("Pigeon Rate", 0).getEntry();
             rotationEntry    = gyroTab.add("Pigeon Rotation", 0).getEntry();
             yawEntry         = gyroTab.add("Pigeon Yaw", 0).getEntry();
@@ -83,6 +87,25 @@ public class Gyroscope extends SubsystemBase {
     public double getAngle() {
         // https://first.wpi.edu/wpilib/allwpilib/docs/release/java/edu/wpi/first/wpilibj/interfaces/Gyro.html#getAngle()
         return m_pigeon.getAngle();
+    }
+
+    public double getAbsoluteAngle() {
+        return (Math.abs(getAngle() + 180)) % 360 - 180;
+    }
+
+    /**
+     * Resets the gyro
+     */
+    public void reset() {
+        m_pigeon.reset();
+    }
+
+    /**
+     * Sets the angle of where the gyro is
+     * @param angle angle in degrees
+     */
+    public void setAngle(double angle) {
+        m_pigeon.setYaw(-angle);
     }
 
     public double getRate() {
@@ -134,12 +157,14 @@ public class Gyroscope extends SubsystemBase {
         
         if (debug || kConfig.masterDebug) {
             angleEntry      .setDouble(getAngle());
+            absoluteAngleEntry.setDouble(getAbsoluteAngle());
             rateEntry       .setDouble(getRate());
             rotationEntry   .setDouble(getRotation2d().getDegrees());
             yawEntry        .setDouble(getYaw());
             pitchEntry      .setDouble(getPitch());
             rollEntry       .setDouble(getRoll());
             speedEntry      .setDouble(getForwardSpeed());
+            SmartDashboard.putNumber("AbsoluteAngle", getAbsoluteAngle());
         }
     }
 

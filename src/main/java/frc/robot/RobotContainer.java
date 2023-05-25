@@ -15,7 +15,8 @@ import frc.robot.commands.Indexer.IntakeCargo;
 import frc.robot.commands.Indexer.ReverseIndexer;
 import frc.robot.commands.Shooter.FiringCommand;
 import frc.robot.commands.Shooter.TrainingShooterCommand;
-import frc.robot.commands.Turret.LockOnTarget;
+import frc.robot.commands.Turret.EnhancedLockOn;
+import frc.robot.commands.Turret.EnhancedScan;
 import frc.robot.commands.Turret.Scan;
 import frc.robot.commands.Turret.TurretGoTo;
 import frc.robot.commands.Turret.WrongCargo;
@@ -30,6 +31,7 @@ import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Limelight.LedMode;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -83,23 +85,35 @@ public class RobotContainer {
 
         // Commands
         cmd_defaultDrive     = new DefaultDrive(sys_driveTrain, joystickMain);
-
         sys_driveTrain.setDefaultCommand(cmd_defaultDrive);
 
-        cmd_scanOnTrue = new RepeatCommand(
-                            new Scan(sys_turret, sys_limelight)
-                            .andThen(new LockOnTarget(sys_turret, sys_limelight, false))
-                        );
+        cmd_scanOnTrue = 
+        new RepeatCommand(
+            new ConditionalCommand(
+                new Scan(sys_turret, sys_limelight),
+                new EnhancedScan(sys_turret, sys_limelight, sys_gyro),
+                () -> sys_turret.getLastPosition() == Double.NEGATIVE_INFINITY
+            )
+            .andThen(new EnhancedLockOn(sys_turret, sys_limelight, sys_gyro))
+        );
 
-        cmd_scanOnFalse = Commands.runOnce(() -> sys_turret.setMaxSpeed(4)).andThen(
-                            new TurretGoTo(sys_turret, 0)
-                            .alongWith(
-                                Commands.runOnce(() -> sys_limelight.setLedMode(LedMode.kModeOff)),
-                                Commands.runOnce(() -> sys_turret.setState(State.kOff)),
-                                Commands.runOnce(() -> sys_shooter.stopMot(), sys_shooter)
-                            )
-                        );
-        
+        // cmd_scanOnFalse = 
+        // Commands.runOnce(() -> sys_turret.setMaxSpeed(4)).andThen(
+        //     new TurretGoTo(sys_turret, 0)
+        //     .alongWith(
+        //         Commands.runOnce(() -> sys_limelight.setLedMode(LedMode.kModeOff)),
+        //         Commands.runOnce(() -> sys_turret.setState(State.kOff)),
+        //         Commands.runOnce(() -> sys_shooter.stopMot(), sys_shooter)
+        //     )
+        // );
+
+        cmd_scanOnFalse = 
+        new TurretGoTo(sys_turret, 0)
+        .alongWith(
+            Commands.runOnce(() -> sys_limelight.setLedMode(LedMode.kModeOff)),
+            Commands.runOnce(() -> sys_turret.setState(State.kOff)),
+            Commands.runOnce(() -> sys_shooter.stopMot(), sys_shooter)
+        );
 
         // Configure the button bindings
         configureButtonBindings();
@@ -179,12 +193,16 @@ public class RobotContainer {
 
         joystickMain.povLeft()
             .onTrue(
-                Commands.runOnce(() -> sys_turret.setScanningDir(ScanningDirection.kLeft))
+                Commands.runOnce(() -> sys_turret.setScanningDir(ScanningDirection.kLeft)).alongWith(
+                    Commands.runOnce(() -> sys_turret.setLastPosition(Double.NEGATIVE_INFINITY))
+                )
             );
 
         joystickMain.povRight()
             .onTrue(
-                Commands.runOnce(() -> sys_turret.setScanningDir(ScanningDirection.kRight))
+                Commands.runOnce(() -> sys_turret.setScanningDir(ScanningDirection.kRight)).alongWith(
+                    Commands.runOnce(() -> sys_turret.setLastPosition(Double.NEGATIVE_INFINITY))
+                )
             );
 
         //Kinda works but not really
